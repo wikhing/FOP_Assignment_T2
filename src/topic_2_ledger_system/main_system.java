@@ -10,22 +10,12 @@ import java.util.Scanner;
  *
  * @author Wong Ing Khing
  */
-public class Topic_2_Ledger_System {
+public class main_system {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
-    }
-    
-    private void loginRegister(){
-        System.out.println("== Khing's Ledger System ==");
-        System.out.println("Login or Register:");
-        System.out.println("1. Login");
-        System.out.println("2. Register");
-        System.out.println();
-        
         
     }
 }

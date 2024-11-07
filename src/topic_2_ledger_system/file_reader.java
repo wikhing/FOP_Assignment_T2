@@ -22,7 +22,7 @@ import java.util.stream.Stream;
  */
 public class file_reader {
     private final String[] filesPath = {/*all file path here*/};
-  //sim test//   
+  //sim tests//   
     private String convertToCSV(String[] data) {
         return Stream.of(data)
           .map(this::escapeSpecialCharacters)

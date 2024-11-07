@@ -8,7 +8,8 @@ import java.util.Scanner;
 
 /**
  *
- * @author Wong Ing Khing
+ * @author Teo Yik Kiat, Wong Ing Khing, Sim Pei Jun
+ *
  */
 public class main_system {
 

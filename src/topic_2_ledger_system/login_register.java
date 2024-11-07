@@ -46,19 +46,33 @@ public class login_register {
         
         System.out.println("Confirmation password: ");
         String confirmationPassword = input.nextLine();
+        
+        boolean passwordMatch = comfirmPassword(password, confirmationPassword);
+        if (passwordMatch == false)
+            password = incorrectPassword(password, confirmationPassword);
     }
     
-    private boolean confirmPassword(String password, String confirmationPassword) {
-        while (!confirmationPassword.equals(password) ){
-           System.out.println("Password: ");
-           password = input.nextLine();
-        
-           System.out.println("Confirmation password: ");
-           confirmationPassword = input.nextLine(); 
-            
-        
+    private static boolean comfirmPassword(String password, String confirmationPassword) {
+        if (password.equals(confirmationPassword)) {
+            return true;
+        } else {
+            return false;
+        }
     }
-        return true;
+    
+    private static String incorrectPassword(String password, String confirmationPassword) {
+        Scanner input = new Scanner(System.in);
+        while (!password.equals(confirmationPassword)) {
+            System.out.println("Password didn't match");
+            System.out.println("Password: ");
+            password = input.nextLine();
+        
+            System.out.println("Confirmation password: ");
+            confirmationPassword = input.nextLine();
+            
+                
+        }
+        return password;
     }
     
     private boolean validateEmail(String e_mail) {

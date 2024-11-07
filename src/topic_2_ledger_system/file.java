@@ -21,7 +21,8 @@ import java.util.stream.Stream;
 
 /**
  *
- * @author Wong Ing Khing
+ * @author Teo Yik Kiat, Wong Ing Khing, Sim Pei Jun
+ *
  */
 public class file {
     private static final Map<String, String> filesPath = new HashMap<>(Map.ofEntries(

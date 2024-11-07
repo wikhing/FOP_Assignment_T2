@@ -43,13 +43,26 @@ public class login_register {
         
         System.out.println("Password: ");
         String password = input.nextLine();
+        
+        System.out.println("Confirmation password: ");
+        String confirmationPassword = input.nextLine();
     }
     
     private boolean confirmPassword(String password, String confirmationPassword) {
+        while (!confirmationPassword.equals(password) ){
+           System.out.println("Password: ");
+           password = input.nextLine();
+        
+           System.out.println("Confirmation password: ");
+           confirmationPassword = input.nextLine(); 
+            
+        
+    }
         return true;
     }
     
     private boolean validateEmail(String e_mail) {
+        
         return true;
     }
 }

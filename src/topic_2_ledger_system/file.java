@@ -25,6 +25,7 @@ import java.util.stream.Stream;
  *
  */
 public class file {
+    // Constant file path here
     private static final Map<String, String> filesPath = new HashMap<>(Map.ofEntries(
             entry("user",           "src/topic_2_ledger_system/saved/user.csv"),
             entry("transactions",   "src/topic_2_ledger_system/saved/transactions.csv"),
@@ -33,13 +34,14 @@ public class file {
             entry("bank",           "src/topic_2_ledger_system/saved/bank.csv"),
             entry("accbalance",     "src/topic_2_ledger_system/saved/accbalance.csv")));
     
-    
+    // Convert data in arraylist to CSV format to be stored
     private static String convertToCSV(String[] data) {
         return Stream.of(data)
           .map(data1 -> escapeSpecialCharacters(data1))
           .collect(Collectors.joining(","));
     }
     
+    //remove special character , \ and '
     private static String escapeSpecialCharacters(String data) {
         if (data == null) {
             throw new IllegalArgumentException("Input data cannot be null");
@@ -52,6 +54,7 @@ public class file {
         return escapedData;
     }
     
+    // File writing
     private static void write(List<String[]> list, String filename) throws IOException {
         String path = filesPath.get(filename);
         File csvOutputFile = new File(path);
@@ -67,6 +70,7 @@ public class file {
         }
     }
     
+    // File reading
     private static ArrayList read(String filename) {
         String path = filesPath.get(filename);
         ArrayList<String[]> list = new ArrayList<>();
@@ -87,11 +91,16 @@ public class file {
     }
     
     
+    /*
+     * ----------------------------------------------------------------------------------
+     * Methods below are individual method to get the data from csv file and
+     * write new data to csv file
+     *
+     */
     
     private static List<String[]> user_csv = new ArrayList<>();
     public static List<String[]> get_user_csv(){
         user_csv = file.read("user");
-        
         return user_csv;
     }
     public static void set_user_csv(List<String[]> user_csv) throws IOException{
@@ -103,7 +112,6 @@ public class file {
     private static List<String[]> transactions_csv = new ArrayList<>();
     public static List<String[]> get_transactions_csv(){
         transactions_csv = file.read("transactions");
-        
         return transactions_csv;
     }
     public void set_transactions_csv(ArrayList<String[]> transactions_csv) throws IOException{
@@ -115,7 +123,6 @@ public class file {
     private static List<String[]> savings_csv = new ArrayList<>();
     public static List<String[]> get_savings_csv(){
         savings_csv = file.read("savings");
-        
         return savings_csv;
     }
     public void set_savings_csv(ArrayList<String[]> savings_csv) throws IOException{
@@ -127,7 +134,6 @@ public class file {
     private static List<String[]> loans_csv = new ArrayList<>();
     public static List<String[]> get_loans_csv(){
         loans_csv = file.read("loans");
-        
         return loans_csv;
     }
     public void set_loans_csv(ArrayList<String[]> loans_csv) throws IOException{
@@ -139,7 +145,6 @@ public class file {
     private static List<String[]> bank_csv = new ArrayList<>();
     public static List<String[]> get_bank_csv(){
         bank_csv = file.read("bank");
-        
         return bank_csv;
     }
     public void set_bank_csv(ArrayList<String[]> bank_csv) throws IOException{
@@ -151,7 +156,6 @@ public class file {
     private static List<String[]> accbalance_csv = new ArrayList<>();
     public static List<String[]> get_accbalance_csv(){
         accbalance_csv = file.read("accbalance");
-        
         return accbalance_csv;
     }
     public void set_accbalance_csv(ArrayList<String[]> accbalance_csv) throws IOException{

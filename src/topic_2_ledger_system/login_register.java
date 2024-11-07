@@ -87,13 +87,7 @@ public class login_register {
             }
         
         
-        if (password.length() >= minLength && upperCaseCount >= 1 && lowerCaseCount >=1 && numCount >= 1 && specialCharCount >=1){
-            return true;
-        }
-        else{
-            return false;
-                    
-        } 
+        return password.length() >= minLength && upperCaseCount >= 1 && lowerCaseCount >=1 && numCount >= 1 && specialCharCount >=1; 
         
     }
     
@@ -106,11 +100,7 @@ public class login_register {
     }
     
     private static boolean comfirmPassword(String password, String confirmationPassword) {
-        if (password.equals(confirmationPassword)) {
-            return true;
-        } else {
-            return false;
-        }
+        return password.equals(confirmationPassword);
     }
     
     private static String unmatchedPassword(String password, String confirmationPassword) {

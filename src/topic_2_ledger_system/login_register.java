@@ -7,7 +7,7 @@ package topic_2_ledger_system;
 import java.util.Scanner;
 /**
  *
- * @author Wong Ing Khing
+ * @author Teo Yik Kiat
  */
 public class login_register {
     private Scanner input = new Scanner(System.in);
@@ -44,6 +44,39 @@ public class login_register {
         System.out.println("Password: ");
         String password = input.nextLine();
         
+        System.out.println("Confirmation password: ");
+        String confirmationPassword = input.nextLine();
         
+        boolean passwordMatch = comfirmPassword(password, confirmationPassword);
+        if (passwordMatch == false)
+            password = incorrectPassword(password, confirmationPassword);
+    }
+    
+    private static boolean comfirmPassword(String password, String confirmationPassword) {
+        if (password.equals(confirmationPassword)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    private static String incorrectPassword(String password, String confirmationPassword) {
+        Scanner input = new Scanner(System.in);
+        while (!password.equals(confirmationPassword)) {
+            System.out.println("Password didn't match");
+            System.out.println("Password: ");
+            password = input.nextLine();
+        
+            System.out.println("Confirmation password: ");
+            confirmationPassword = input.nextLine();
+            
+                
+        }
+        return password;
+    }
+    
+    private boolean validateEmail(String e_mail) {
+        
+        return true;
     }
 }

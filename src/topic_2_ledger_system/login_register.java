@@ -6,8 +6,9 @@ package topic_2_ledger_system;
 
 import java.util.Scanner;
 /**
+ * 
+ * @author Teo Yik Kiat, Wong Ing Khing, Sim Pei Jun
  *
- * @author Teo Yik Kiat
  */
 public class login_register {
     private Scanner input = new Scanner(System.in);

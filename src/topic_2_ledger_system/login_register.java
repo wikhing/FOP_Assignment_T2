@@ -17,16 +17,15 @@ public class login_register {
         int typeOfUser = -1;
         promptUser(typeOfUser);
         
-        if(typeOfUser != 1 || typeOfUser != 2){
-            System.out.println("Error! Please login or register again!");
-            initialize();
+        while(typeOfUser != 1 || typeOfUser != 2){
+            System.out.println("Error! Please login or register again!\n");
+            promptUser(typeOfUser);
         }
-        
         
     }
     
     private int promptUser(int typeOfUser){
-        System.out.print("== Khing's Ledger System ==\nLogin or Register:\n1. Login\n2. Register\n\n>");
+        System.out.print("== The One Ledger System ==\nLogin or Register:\n1. Login\n2. Register\n\n>");
         
         typeOfUser = input.nextInt();
         
@@ -47,7 +46,7 @@ public class login_register {
         
         boolean passwordValid = passwordValidity(password);
         while (passwordValid == false){
-            invalidPassword(password);
+            invalidPassword(password);                  //reenter password
             passwordValid = passwordValidity(password);
         }    
         

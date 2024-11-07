@@ -41,25 +41,33 @@ public class login_register {
         System.out.println("Email: ");
         String e_mail = input.nextLine();
         
-        System.out.println("Password: ");
-        String password = input.nextLine();
-        
-        boolean passwordValid = passwordValidity(password);
-        while (passwordValid == false){
-            invalidPassword(password);                  //reenter password
-            passwordValid = passwordValidity(password);
-        }    
-        
-        System.out.println("Confirmation password: ");
-        String confirmationPassword = input.nextLine();
-        
-        boolean passwordMatch = comfirmPassword(password, confirmationPassword);
-        if (passwordMatch == false){
-            password = unmatchedPassword(password, confirmationPassword);
+        while (true) {
+            System.out.println("Password: ");
+            String password = input.nextLine();
+
+            System.out.println("Confirmation password: ");
+            String confirmationPassword = input.nextLine();
+            
+            boolean passwordMatch = confirmPassword(password, confirmationPassword);
+            boolean passwordIsValid = isPasswordComplex(password);
+            
+            if (passwordMatch && passwordIsValid) {
+                break;
+            } 
+            
+            if (!passwordMatch) {
+                continue;
+            }
+            
+            if (!passwordIsValid) {
+                System.out.println("Password is too simple.");
+                continue;
+            }
         }
+        
     }
     
-    private static boolean passwordValidity(String password) {
+    private static boolean isPasswordComplex(String password) {
         char pwdCheck;
         int upperCaseCount = 0, lowerCaseCount = 0, numCount = 0,specialCharCount = 0;
         int minLength = 8;
@@ -68,64 +76,31 @@ public class login_register {
         for (int i = 0; i< password.length(); ++i){
                 
             pwdCheck = password.charAt(i);
-                
-            if ( pwdCheck >= 'A' && pwdCheck <= 'Z'){
-                ++ upperCaseCount;
+            
+            if ( pwdCheck >= 'A' && pwdCheck <= 'Z') {
+                // Check for uppercase
+                ++upperCaseCount;
+            } else if ( pwdCheck >= 'a' && pwdCheck <= 'z') {
+                // Check for lowercase
+                ++lowerCaseCount;
+            } else if ( pwdCheck >= '0' && pwdCheck <= '9') {
+                // Check for numbers
+                ++numCount;
+            } else if ( (pwdCheck >= '!' && pwdCheck <= '~')) {
+                // Check for special characters
+                ++specialCharCount;
             }
-                
-            else if ( pwdCheck >= 'a' && pwdCheck <= 'z'){
-                    ++ lowerCaseCount;
-            }
-                
-            else if ( pwdCheck >= '0' && pwdCheck <= '9'){
-                    ++ numCount;
-            }
-                
-            else if ( (pwdCheck >= '!' && pwdCheck <= '~')){
-                    ++specialCharCount;
-            }
-            }
+            
+        }
         
-        
-        return password.length() >= minLength && upperCaseCount >= 1 && lowerCaseCount >=1 && numCount >= 1 && specialCharCount >=1; 
-        
+        return (password.length() >= minLength && upperCaseCount >= 1 && lowerCaseCount >=1 && numCount >= 1 && specialCharCount >=1);  
     }
     
-    private static String invalidPassword(String password){
-        Scanner input = new Scanner (System.in);
-        System.out.println("Invalid Password");
-        System.out.print("Password: ");
-        password = input.nextLine();
-        return password;
-    }
-    
-    private static boolean comfirmPassword(String password, String confirmationPassword) {
+    private static boolean confirmPassword(String password, String confirmationPassword) {
         return password.equals(confirmationPassword);
     }
     
-    private static String unmatchedPassword(String password, String confirmationPassword) {
-        Scanner input = new Scanner(System.in);
-        while (!password.equals(confirmationPassword)){
-            System.out.println("Password didn't match");
-            System.out.println("Password: ");
-            boolean passwordValid = passwordValidity(password);
-            while (passwordValid == false){
-                password = invalidPassword(password);
-                passwordValid = passwordValidity(password);
-            }
-        
-            password = input.nextLine();
-        
-            System.out.println("Confirmation password: ");
-            confirmationPassword = input.nextLine();
-        }
-            return password;
-    }
-    
- 
-    
-    private boolean validateEmail(String e_mail) {
-        
+    private boolean validateEmail(String e_mail) {   
         return true;
     }
 }

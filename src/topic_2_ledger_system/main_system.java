@@ -7,7 +7,7 @@ package topic_2_ledger_system;
 import java.io.IOException;
 
 /**
- *
+ * Write your name here
  * @author Teo Yik Kiat, Wong Ing Khing, Sim Pei Jun
  *
  */

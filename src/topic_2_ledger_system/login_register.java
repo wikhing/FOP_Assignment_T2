@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 /**
- * 
+ * Write your name here
  * @author Teo Yik Kiat, Wong Ing Khing, Sim Pei Jun
  *
  */

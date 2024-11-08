@@ -4,6 +4,8 @@
  */
 package topic_2_ledger_system;
 
+import java.io.IOException;
+
 /**
  *
  * @author Teo Yik Kiat, Wong Ing Khing, Sim Pei Jun
@@ -14,7 +16,7 @@ public class main_system {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args){
-        
+    public static void main(String[] args) throws IOException{
+        login_register.initialize();
     }
 }

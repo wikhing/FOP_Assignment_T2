@@ -67,6 +67,8 @@ public class file {
             list.stream()
               .map(data -> convertToCSV(data))
               .forEach(pw::println);
+            pw.flush();
+            pw.close();
         }
     }
     
@@ -86,7 +88,7 @@ public class file {
         while(fsc.hasNextLine()){
             list.add(fsc.nextLine().split(","));
         }
-        
+
         return list;
     }
     

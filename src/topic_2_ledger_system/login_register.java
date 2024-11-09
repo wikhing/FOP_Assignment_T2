@@ -28,7 +28,7 @@ public class login_register {
     }
     
     private static int promptUser(){
-        System.out.print("== The One Ledger System ==\nLogin or Register:\n1. Login\n2. Register\n\n> ");
+        System.out.print("\n== The One Ledger System ==\nLogin or Register:\n1. Login\n2. Register\n\n> ");
         
         int typeOfUser = input.nextInt();
         
@@ -38,34 +38,50 @@ public class login_register {
     private static void loginORregister(int typeOfUser) throws IOException{
         if(typeOfUser == 2){
             System.out.println("\n== Please fill in the form ==");
-        
+
             System.out.print("Name: ");
             input.nextLine();
             String user_name = input.nextLine();
-            
-            System.out.print("Email: ");
-            String e_mail = input.next();
+
+            String e_mail = "";
+            while(true){
+                System.out.print("Email: ");
+                e_mail = input.next();
+                
+                boolean validEmailFormat = validateEmail(e_mail);
+                
+                if(!validEmailFormat){
+                    System.out.println("\nInvalid e-mail format!");
+                    System.out.println("Please enter your e-mail again.\n");
+                    System.out.println("Name: " + user_name);
+                    continue;
+                }
+                
+                break;
+            }
             
             while (true) {
                 System.out.print("Password: ");
                 String password = input.next();
-                
+
                 boolean passwordIsValid = isPasswordComplex(password);
                 if (!passwordIsValid) {
                     System.out.println("\nPassword is too simple.\nMinimum password length is 8 include with uppercase, lowercase, number and special character\n");
+                    System.out.println("Name: " + user_name);
+                    System.out.println("Email: " + e_mail);
                     continue;
                 }
-                
+
                 System.out.print("Confirmation password: ");
                 String confirmationPassword = input.next();
-            
                 boolean passwordMatch = confirmPassword(password, confirmationPassword);
-                
                 if (!passwordMatch) {
                     System.out.println("\nPassword does not match! Please enter again.\n");
+                    System.out.println("Name: " + user_name);
+                    System.out.println("Email: " + e_mail);
                     continue;
                 }
-                
+
                 List<String[]> allUser = file.get_user_csv();
                 allUser.add(new String[]{"", user_name, e_mail, password});
                 file.set_user_csv(allUser);
@@ -74,19 +90,35 @@ public class login_register {
             }
         }else{
             System.out.println("\n== Please enter your email and password ==");
-            
-            System.out.print("Email: ");
-            String e_mail = input.nextLine();
-            input.next();
-            System.out.print("Password: ");
-            String password = input.nextLine();
-            
-            boolean hasAcc = compareUser(new String[]{e_mail, password});
-            
-            
-        }
 
-        
+            int handleEnter = 0;
+            boolean isUser = false;
+            do{
+                System.out.print("Email: ");
+                if(handleEnter == 0){
+                    input.nextLine();
+                    handleEnter++;
+                }
+                String e_mail = input.nextLine();
+                if(e_mail.equals("-1")){
+                    promptUser();
+                    break;
+                }
+
+                System.out.print("Password: ");
+                String password = input.nextLine();
+
+                isUser = compareUser(new String[]{e_mail, password});
+
+                if(!isUser){
+                    System.out.println("\nE-mail or Password is incorrect!");
+                    System.out.println("To exit to main menu, please enter -1\n");
+                    System.out.println("Please re-enter your email and password again.");
+                }
+            }while(!isUser);
+            
+            System.out.println("\nLogin Successful!\n");
+        }
     }
     
     private static boolean confirmPassword(String password, String confirmationPassword) {
@@ -121,11 +153,19 @@ public class login_register {
         return (password.length() >= minLength && upperCaseCount >= 1 && lowerCaseCount >= 1 && numCount >= 1 && specialCharCount >= 1);  
     }
     
-    private static boolean validateEmail(String e_mail) {   
-        return true;
+    private static boolean validateEmail(String e_mail) {
+        return !(!e_mail.contains("@") || !e_mail.contains(".com") || e_mail.indexOf("@") + 1 == e_mail.indexOf(".com"));
     }
     
-    private static boolean compareUser(String[] userLogin){
-        return true;
+    private static boolean compareUser(String[] loginInfo){
+        List<String[]> users = file.get_user_csv();
+
+        for(int i = 1; i < users.size(); i++){
+            if(users.get(i)[2].equals(loginInfo[0]) && users.get(i)[3].equals(loginInfo[1])){
+                return true;
+            }
+        }
+        
+        return false;
     }
 }

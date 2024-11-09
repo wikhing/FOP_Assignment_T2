@@ -100,18 +100,19 @@ public class file {
      *
      */
     
-    private static List<String[]> user_csv = new ArrayList<>();
-    public static List<String[]> get_user_csv(){
+    public static ArrayList<String[]> get_user_csv(){
+        List<String[]> user_csv = new ArrayList<>();
         user_csv = file.read("user");
+        
         if(user_csv.isEmpty()) user_csv.add(new String[0]);
-        return user_csv;
+        
+        return (ArrayList<String[]>) user_csv;
     }
     public static void set_user_csv(List<String[]> user_csv) throws IOException{
         //For loop to auto-increment the user_id
         for(int i = 1; i < user_csv.size(); i++){
             user_csv.get(i)[0] = String.valueOf(i);
         }
-        file.user_csv = user_csv;
         write(user_csv, "user");
     }
     

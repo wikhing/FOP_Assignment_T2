@@ -6,6 +6,7 @@ package topic_2_ledger_system;
  */
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -14,8 +15,6 @@ import java.util.List;
 import java.util.Map;
 import static java.util.Map.entry;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -73,17 +72,14 @@ public class file {
     }
     
     // File reading
-    private static ArrayList read(String filename) {
+    private static ArrayList read(String filename) throws FileNotFoundException, IOException {
         String path = filesPath.get(filename);
         ArrayList<String[]> list = new ArrayList<>();
         File file = new File(path);
         Scanner fsc = null;
-        try {
-            fsc = new Scanner(file);
-            if(!file.isFile()) file.createNewFile();
-        } catch (IOException ex) {
-            Logger.getLogger(file.class.getName()).log(Level.SEVERE, null, ex);
-        }
+                
+        fsc = new Scanner(file);
+        if(!file.isFile()) file.createNewFile();
         
         while(fsc.hasNextLine()){
             list.add(fsc.nextLine().split(","));
@@ -100,7 +96,7 @@ public class file {
      *
      */
     
-    public static ArrayList<String[]> get_user_csv(){
+    public static ArrayList<String[]> get_user_csv() throws IOException{
         List<String[]> user_csv = new ArrayList<>();
         user_csv = file.read("user");
         
@@ -118,7 +114,7 @@ public class file {
     
     
     private static List<String[]> transactions_csv = new ArrayList<>();
-    public static List<String[]> get_transactions_csv(){
+    public static List<String[]> get_transactions_csv() throws IOException{
         transactions_csv = file.read("transactions");
         return transactions_csv;
     }
@@ -129,7 +125,7 @@ public class file {
     
     
     private static List<String[]> savings_csv = new ArrayList<>();
-    public static List<String[]> get_savings_csv(){
+    public static List<String[]> get_savings_csv() throws IOException{
         savings_csv = file.read("savings");
         return savings_csv;
     }
@@ -140,7 +136,7 @@ public class file {
     
     
     private static List<String[]> loans_csv = new ArrayList<>();
-    public static List<String[]> get_loans_csv(){
+    public static List<String[]> get_loans_csv() throws IOException{
         loans_csv = file.read("loans");
         return loans_csv;
     }
@@ -151,7 +147,7 @@ public class file {
     
     
     private static List<String[]> bank_csv = new ArrayList<>();
-    public static List<String[]> get_bank_csv(){
+    public static List<String[]> get_bank_csv() throws IOException{
         bank_csv = file.read("bank");
         return bank_csv;
     }
@@ -162,7 +158,7 @@ public class file {
     
     
     private static List<String[]> accbalance_csv = new ArrayList<>();
-    public static List<String[]> get_accbalance_csv(){
+    public static List<String[]> get_accbalance_csv() throws IOException{
         accbalance_csv = file.read("accbalance");
         return accbalance_csv;
     }

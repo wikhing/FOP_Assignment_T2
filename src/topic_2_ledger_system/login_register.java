@@ -15,7 +15,7 @@ import java.util.Scanner;
 public class login_register {
     private static Scanner input = new Scanner(System.in);
     
-    public static void initialize() throws IOException{
+    public static int initialize() throws IOException{
         int typeOfUser = promptUser();
         
         while(typeOfUser != 1 && typeOfUser != 2){
@@ -23,8 +23,13 @@ public class login_register {
             typeOfUser = promptUser();
         }
         
-        loginORregister(typeOfUser);
-        
+        int user_id = -1;
+        while(user_id == -1){
+            user_id = loginORregister(typeOfUser);
+            
+            if(user_id == -1) typeOfUser = promptUser();
+        }
+        return user_id;
     }
     
     private static int promptUser(){
@@ -35,7 +40,7 @@ public class login_register {
         return typeOfUser;
     }
     
-    private static void loginORregister(int typeOfUser) throws IOException{
+    private static int loginORregister(int typeOfUser) throws IOException{
         if(typeOfUser == 2){
             System.out.println("\n== Please fill in the form ==");
 
@@ -92,7 +97,7 @@ public class login_register {
             System.out.println("\n== Please enter your email and password ==");
 
             int handleEnter = 0;
-            boolean isUser = false;
+            int isUser = -1;
             do{
                 System.out.print("Email: ");
                 if(handleEnter == 0){
@@ -110,15 +115,18 @@ public class login_register {
 
                 isUser = compareUser(new String[]{e_mail, password});
 
-                if(!isUser){
+                if(isUser == -1){
                     System.out.println("\nE-mail or Password is incorrect!");
                     System.out.println("To exit to main menu, please enter -1\n");
                     System.out.println("Please re-enter your email and password again.");
                 }
-            }while(!isUser);
+            }while(isUser == -1);
             
             System.out.println("\nLogin Successful!\n");
+            
+            return isUser;
         }
+        return -1;
     }
     
     private static boolean confirmPassword(String password, String confirmationPassword) {
@@ -157,15 +165,15 @@ public class login_register {
         return !(!e_mail.contains("@") || !e_mail.contains(".com") || e_mail.indexOf("@") + 1 == e_mail.indexOf(".com"));
     }
     
-    private static boolean compareUser(String[] loginInfo){
+    private static int compareUser(String[] loginInfo) throws IOException{
         List<String[]> users = file.get_user_csv();
 
         for(int i = 1; i < users.size(); i++){
             if(users.get(i)[2].equals(loginInfo[0]) && users.get(i)[3].equals(loginInfo[1])){
-                return true;
+                return Integer.parseInt(users.get(i)[0]);
             }
         }
         
-        return false;
+        return -1;
     }
 }

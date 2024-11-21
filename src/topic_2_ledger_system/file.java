@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import static java.util.Map.entry;
@@ -18,6 +19,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import java.util.ArrayList;
 
 /**
  * Write your name here
@@ -117,13 +120,48 @@ public class file {
     }
     
     
-    private static List<String[]> transactions_csv = new ArrayList<>();
-    public static List<String[]> get_transactions_csv(){
+    private static List<String[]> tempStore = new ArrayList<>();
+    public static List<String[]> get_transactions_csv(int user_id) throws IOException{//put in user_id to directly get transaction data of the user
+        List<String[]> transactions_csv = new ArrayList<>();
         transactions_csv = file.read("transactions");
-        return transactions_csv;
+        
+        if(transactions_csv.isEmpty()){
+            transactions_csv.add(new String[0]);
+            return transactions_csv;
+        }
+        if(user_id == -1){              //return full transaction list if user_id is -1
+            return transactions_csv;
+        }
+        
+        //look for transaction according to user_id and remove the transaction from transaction_csv
+        List<String[]> specificTransaction = new ArrayList<>();
+        Iterator<String[]> it = transactions_csv.iterator();
+        while(it.hasNext()){
+            String[] data = it.next();
+            
+            if(data.length == 1) continue;
+            if(Integer.parseInt(data[1]) == user_id){
+                specificTransaction.add(data);
+                it.remove();
+            }
+        }
+        tempStore = transactions_csv;
+        
+        return specificTransaction;
     }
-    public void set_transactions_csv(ArrayList<String[]> transactions_csv) throws IOException{
-        file.transactions_csv = transactions_csv;
+    public static void set_transactions_csv(List<String[]> specificTransaction) throws IOException{
+        List<String[]> transactions_csv = new ArrayList<>();
+        transactions_csv = tempStore;
+        
+        //add specificTransaction back to whole transaction_csv
+        for(int i = 0; i < specificTransaction.size(); i++){
+            transactions_csv.add(specificTransaction.get(i));
+        }
+        
+        //For loop to auto-increment the transactions_id
+        for(int i = 1; i < transactions_csv.size(); i++){
+            transactions_csv.get(i)[0] = String.valueOf(i);
+        }
         write(transactions_csv, "transactions");
     }
     

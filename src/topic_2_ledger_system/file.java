@@ -25,7 +25,7 @@ import java.util.ArrayList;
 
 /**
  * Write your name here
- * @author Teo Yik Kiat, Wong Ing Khing, Sim Pei Jun
+ * @author Teo Yik Kiat, Wong Ing Khing, Sim Pei Jun, Cheng Kai Huang
  *
  */
 public class file {

@@ -1,0 +1,2 @@
+"%-20s %-15s %-10s %-10s %-20s %-15s\n", "Transaction ID", "User ID", "Type", "Amount", "Description", "Date"
+3                    2               debit      2000       Salary               11/11/2024          

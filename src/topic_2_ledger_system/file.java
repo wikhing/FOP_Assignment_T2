@@ -347,6 +347,11 @@ public class file {
     // Define the file path 
     String filePath = "src/topic_2_ledger_system/exported/" + fileName + ".csv";
     File file = new File(filePath);
+    // Ensure the directory exists
+    File parentDir = file.getParentFile();
+    if (!parentDir.exists()) {
+        parentDir.mkdirs();  // Create the directory if it doesn't exist
+    }
 
     // Write to the CSV file
     try (PrintWriter writer = new PrintWriter(file)) {
@@ -428,12 +433,12 @@ public class file {
     }
     }  
     }
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         file.viewFullTransactionHistory();
         System.out.println("");
         viewAndExportTransactions(2, "11/2024");
-    }*/
-    //this main only for testing so far functioning just lacking directory issue and not sure how to call specific user's user_id
+    }
+    //this main only for testing not sure how to call specific user's user_id
 
 
 }

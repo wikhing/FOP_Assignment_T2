@@ -9,6 +9,7 @@ import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Write your name here
@@ -22,5 +23,6 @@ public class main_system {
      */
     public static void main(String[] args) throws IOException{
         login_register.initialize();
+
     }
 }

@@ -21,7 +21,7 @@ public class main_system {
     /**
      * @param args the command line arguments
      */
-    
+    private static int user_id;
     
     
     public static void printMenu(String username, double balance, double saving, double loan) {
@@ -43,8 +43,7 @@ public class main_system {
             System.out.print("\n7. Logout");
             System.out.print("\n>");
     }
-    
-    
+
     private static void debit() {
         
     }
@@ -54,7 +53,16 @@ public class main_system {
     }
     
     private static void history() {
+        Scanner sc = new Scanner (System.in);
+        System.out.print ("Enter the month and year (eg. MM-YYYY): ");
+        String monthYear = sc.nextLine();
         
+        // In case of invalid month/year input
+        if (!monthYear.matches("\\d{2}/\\d{4}")) {
+            System.out.println("Invalid format. Please use MM/YYYY.");
+            return;
+        }
+        view_export_csv.viewAndExportTransactions(user_id, monthYear);
     }
     
     private static void saving() {
@@ -139,8 +147,7 @@ public class main_system {
     
     
     public static void main(String[] args) throws IOException{
-        
-        int user_id = login_register.initialize();
+        user_id = login_register.initialize();
         
         loginPage(user_id);
         

@@ -45,6 +45,68 @@ public class main_system {
     }
     
     
+    private static void debit() {
+        
+    }
+    
+    private static void credit() {
+        
+    }
+    
+    private static void history() {
+        
+    }
+    
+    private static void saving() {
+        
+    }
+    
+    private static void creditLoan() {
+        
+    }
+    
+    private static void depositInterestPredictor() {
+        
+    }
+    
+    private static void logOut() {
+        
+    }
+    
+    
+    
+    
+    private static void optionHandler(int option) {
+        
+        switch(option) {  
+            case 1:
+                debit();
+                break;
+            case 2:
+                credit();
+                break; 
+            case 3:
+                history();
+                break;
+            case 4:
+                saving();
+                break;
+            case 5:
+                creditLoan();
+                break;
+            case 6:
+                depositInterestPredictor();
+                break;
+            case 7:
+                logOut();
+                break;
+            default:
+                break;
+        }
+    }
+    
+    
+    
     public static void loginPage(int user_id) {
         ArrayList<String[]> user_csv = file.get_user_csv();
         String username = user_csv.get(user_id)[1];
@@ -55,7 +117,7 @@ public class main_system {
         
         while (true) {
             System.out.print(">");
-            String rawOption = sc.nextLine();
+            String rawOption = sc.next();
             int option;
             
             try {
@@ -65,6 +127,8 @@ public class main_system {
                     System.out.println("Invalid option, please retry.");
                     continue;
                 }
+                
+                optionHandler(option);
                 
                 break;
             } catch (Exception e) {

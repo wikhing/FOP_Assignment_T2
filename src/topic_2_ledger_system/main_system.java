@@ -48,7 +48,35 @@ public class main_system {
             System.out.print("\n\n>");
     }
 
-    private static void debit() {
+    private static void debit(double balance) {
+           
+        while (true) {
+            System.out.println("== Debit ==");
+            System.out.print("Enter amount: ");
+
+            double amount = sc.nextDouble();
+
+            if (amount > 0 && amount < (Math.pow(10, 9))) {
+                balance += amount;
+            } else {
+                System.out.println("Invalid input, please retry");
+                continue;
+            }
+
+            // Automatically get date
+            LocalDate date = LocalDate.now();
+            DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String dateToday = date.format(pattern);
+
+            System.out.print("Enter description: ");
+            String description = sc.next();
+            if (description.length() > 100){
+                System.out.println("Error: Description exceeds 100 characters, please retry. ");
+            } else {
+                System.out.print("\nDebit Successfully Recorded!!!");
+                break;
+            }
+        }
         
     }
     

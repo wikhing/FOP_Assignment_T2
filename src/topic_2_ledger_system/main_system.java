@@ -37,18 +37,46 @@ public class main_system {
             System.out.print("\nLoan: ");
             System.out.printf("%.2f",loan);
 
-            System.out.print("\n\n== Transaction ==");
-            System.out.print("\n1. Debit");
-            System.out.print("\n2. Credit");
-            System.out.print("\n3. History");
-            System.out.print("\n4. Savings");
-            System.out.print("\n5. Credit Loan");
-            System.out.print("\n6. Deposit Interest Predictor");
-            System.out.print("\n7. Logout");
-            System.out.print("\n\n>");
+            System.out.println("\n\n== Transaction ==");
+            System.out.println("1. Debit");
+            System.out.println("2. Credit");
+            System.out.println("3. History");
+            System.out.println("4. Savings");
+            System.out.println("5. Credit Loan");
+            System.out.println("6. Deposit Interest Predictor");
+            System.out.println("7. Logout\n\n");
+            System.out.print(">");
     }
 
-    private static void debit() {
+    private static void debit(double balance) {
+           
+        while (true) {
+            System.out.println("== Debit ==");
+            System.out.print("Enter amount: ");
+
+            double amount = sc.nextDouble();
+
+            if (amount > 0 && amount < (Math.pow(10, 9))) {
+                balance += amount;
+            } else {
+                System.out.println("Invalid input, please retry");
+                continue;
+            }
+
+            // Automatically get date
+            LocalDate date = LocalDate.now();
+            DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String dateToday = date.format(pattern);
+
+            System.out.print("Enter description: ");
+            String description = sc.next();
+            if (description.length() > 100){
+                System.out.println("Error: Description exceeds 100 characters, please retry. ");
+            } else {
+                System.out.print("\nDebit Successfully Recorded!!!");
+                break;
+            }
+        }
         
     }
     
@@ -163,95 +191,124 @@ public class main_system {
     }
     
     private static void creditLoan() {
+        
+        // Automatically get date
+        LocalDate date = LocalDate.now();
+        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String dateToday = date.format(pattern);
+
+        while (true) {
             System.out.println("\n---- Credit Loan System ----");
             System.out.println("1. Apply Loan");
             System.out.println("2. Repay Loan");
             System.out.println("3. Exit");
             System.out.print("Enter your choice: ");
             int choices = sc.nextInt();
+            
+            double totalamount = 0;
+            int period = 0;
+            double balanced;
+            boolean activeloan = false;
+            
+            if (choices == 1) {
+                
+                if (activeloan) {
+                    System.out.println("You already have an active loan. Please repay it before applying for another.");
+                    continue;
+                }   
 
-        double totalamount = 0;
-        int period = 0;
-        double balanced;
-        if (choices == 1) {
-            if (activeloan) {
-                System.out.println("You already have an active loan. Please repay it before applying for another.");
+                System.out.print("Enter principal amount: ");
+                double principal = sc.nextDouble();
+                System.out.print("Enter annual interest rate (in %): ");
+                double rate = sc.nextDouble();
+                System.out.print("Enter repayment period (in months): ");
+                period = sc.nextInt();
+
+                if (!(principal > 0 && rate > 0 && period > 0)) {
+                    System.out.println("Invalid input, please retry");
+                    continue;
+                }
+
+                totalamount = principal + (principal * (rate / 100) * (period / 12.0));
+                double monthlypayment = totalamount / period;
+                balanced = totalamount;
+
+                activeloan = true;
+
+                System.out.println("Loan approved!");
+                System.out.println("Total repayment amount: " + totalamount);
+                System.out.println("Monthly repayment amount: " + monthlypayment);
+                System.out.println("Repayment period: " + period + " months");
+                System.out.println("Loan start date: " + dateToday);
+                break;
+
+            } else if (choices == 2) {
+
+                if (!activeloan) {
+                    System.out.println("No active loan to repay.");
+                    continue;
+                }   
+
+
+                if (date.isAfter(date.plusMonths(period))) {
+                    System.out.println("Loan repayment period has ended. Further debits and credits are not allowed.");
+                    activeloan = false; // Mark the loan as inactive to prevent further actions
+                    continue;
+                }   
+
+
+                System.out.println("Enter loan ID: ");
+                int loan_id = sc.nextInt();
+                System.out.println("Enter payment amount: ");
+                double paymentAmount = sc.nextDouble();
+
+                if (paymentAmount <= 0) {
+                    System.out.println("Invalid input, please retry.");
+                    continue;
+                }
+
+                balanced = totalamount - paymentAmount;
+                System.out.println("Payment successful! ----" + dateToday);
+                System.out.println("Remaining balance: " + balanced);
+
+                if (balanced <= 0) {
+                    System.out.println("Loan fully repaid. Thank you!");
+                    activeloan = false; // Mark loan as fully repaid
+                }   
+
+            } else if (choices == 3) {
+                System.out.println("Exiting the system. Thank you!");
+                break;
+            } else {
+                System.out.println("Invalid input, please retry.");
                 continue;
             }
-
-            System.out.print("Enter principal amount: ");
-            double principal = sc.nextDouble();
-            System.out.print("Enter annual interest rate (in %): ");
-            double rate = sc.nextDouble();
-            System.out.print("Enter repayment period (in months): ");
-            period = sc.nextInt();
-
-            totalamount = principal + (principal * (rate / 100) * (period / 12.0));
-            double monthlypayment = totalamount / period;
-            balanced = totalamount;
-            loanStartDate = LocalDate.now();
-            activeloan = true;
-
-            System.out.println("Loan approved!");
-            System.out.println("Total repayment amount: " + totalamount);
-            System.out.println("Monthly repayment amount: " + monthlypayment);
-            System.out.println("Repayment period: " + period + " months");
-            System.out.println("Loan start date: " + loanStartDate);
-
-        }else if (choices == 2) {
-
-            if (!activeloan) {
-                System.out.println("No active loan to repay.");
-                continue;
-            }
-
-            LocalDate currentDate = LocalDate.now();
-            LocalDate repaymentEndDate = loanStartDate.plusMonths(period);
-            if (currentDate.isAfter(repaymentEndDate)) {
-                System.out.println("Loan repayment period has ended. Further debits and credits are not allowed.");
-                activeloan = false; // Mark the loan as inactive to prevent further actions
-                continue;
-            }
-
-            System.out.println("Enter loan ID: ");
-            int loanid = sc.nextInt();
-            System.out.println("Enter payment amount: ");
-            double paymentamount = sc.nextDouble();
-            balanced = totalamount - paymentamount;
-            System.out.println("Payment successful! ----"+date);
-            System.out.println("Remaining balance: "+balanced);
-
-            if (balance <= 0) {
-                System.out.println("Loan fully repaid. Thank you!");
-                activeloan = false; // Mark loan as fully repaid
-            }
-            break;
-
-        }else if (choices == 3){
-            System.out.println("Exiting the system. Thank you!");
-            break;
-        } 
+        }
+        
     }
     
     private static void depositInterestPredictor() {
         
     }
     
-    private static void logOut() {
-        
+    private static int logOut() {
+        System.out.println("User successfully logged out.");
+        return -1;
     }
     
     
     
     
-    private static void optionHandler(int option) {
+    private static int optionHandler(int option) {
+        
+        int info = 0;
         
         switch(option) {  
             case 1:
-                debit();
+                debit(0);
                 break;
             case 2:
-                credit();
+                credit(0);
                 break; 
             case 3:
                 history();
@@ -266,11 +323,13 @@ public class main_system {
                 depositInterestPredictor();
                 break;
             case 7:
-                logOut();
+                info = logOut();
                 break;
             default:
                 break;
         }
+        
+        return info;
     }
     
     
@@ -280,11 +339,9 @@ public class main_system {
         String username = user_csv.get(user_id)[1];
         String email = user_csv.get(user_id)[2];
         
-        printMenu(username, file.get_accbalance_csv(user_id), 0, 0);
-        Scanner sc = new Scanner(System.in);
         
         while (true) {
-            System.out.print(">");
+            printMenu(username, file.get_accbalance_csv(user_id), 0, 0);
             String rawOption = sc.next();
             int option;
             
@@ -296,9 +353,10 @@ public class main_system {
                     continue;
                 }
                 
-                optionHandler(option);
+                if (optionHandler(option) == -1) {
+                    break;
+                }
                 
-                break;
             } catch (Exception e) {
                 System.out.println("Invalid option, please retry.");
             } 
@@ -310,6 +368,8 @@ public class main_system {
         user_id = login_register.initialize();
         
         loginPage(user_id);
+        
+        System.out.println("Thank you for using Ledger System.");
         
         
         

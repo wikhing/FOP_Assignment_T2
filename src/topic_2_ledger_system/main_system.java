@@ -24,6 +24,8 @@ public class main_system {
      * @param args the command line arguments
      */
     
+    
+    // Need to set up user acc when user register, add savings and acc balance
     private static Scanner sc = new Scanner(System.in);
     private static int user_id;
     
@@ -48,13 +50,16 @@ public class main_system {
         System.out.print(">");
     }
 
-    private static void debit(double balance) {
-           
+    private static void debit() {
+        double balance = file.get_accbalance_csv(user_id);
+        
+        double amount = 0;
+        String description = "", dateToday = "";
         while (true) {
             System.out.println("== Debit ==");
             System.out.print("Enter amount: ");
 
-            double amount = sc.nextDouble();
+            amount = sc.nextDouble();
 
             if (amount > 0 && amount < (Math.pow(10, 9))) {
                 balance += amount;
@@ -65,11 +70,11 @@ public class main_system {
 
             // Automatically get date
             LocalDate date = LocalDate.now();
-            DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            String dateToday = date.format(pattern);
+            DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            dateToday = date.format(pattern);
 
             System.out.print("Enter description: ");
-            String description = sc.next();
+            description = sc.next();
             if (description.length() > 100){
                 System.out.println("Error: Description exceeds 100 characters, please retry. ");
             } else {
@@ -78,6 +83,11 @@ public class main_system {
             }
         }
         
+        List<String[]> transaction = file.get_transactions_csv(user_id);
+        transaction.add(new String[]{"", String.valueOf(user_id), "debit", String.valueOf(amount), description, dateToday});
+        file.set_transactions_csv(transaction);
+        
+        file.set_accbalance_csv(user_id, balance);
     }
     
     private static void credit() {
@@ -115,7 +125,7 @@ public class main_system {
         
         // Automatically get date
         LocalDate date = LocalDate.now();
-        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String dateToday = date.format(pattern);
         
         List<String[]> transaction = file.get_transactions_csv(user_id);
@@ -126,7 +136,8 @@ public class main_system {
     }
     
     private static void history() {
-        System.out.print("Enter the month and year (eg. MM-YYYY): ");
+        System.out.print("Enter the month and year (eg. MM/YYYY): ");
+        sc.nextLine();
         String monthYear = sc.nextLine();
         
         // In case of invalid month/year input
@@ -225,7 +236,7 @@ public class main_system {
     }
     
     private static int logOut() {
-        System.out.println("User successfully logged out.");
+        System.out.println("\nUser successfully logged out.");
         return -1;
     }
     
@@ -238,7 +249,7 @@ public class main_system {
         
         switch(option) {  
             case 1:
-                debit(0);
+                debit();
                 break;
             case 2:
                 credit();

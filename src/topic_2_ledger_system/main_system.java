@@ -7,6 +7,7 @@ package topic_2_ledger_system;
 import java.io.IOException;
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -45,6 +46,111 @@ public class main_system {
     }
     
     
+    private static void debit(double balance) {
+        Scanner sc = new Scanner(System.in);
+        
+        while (true) {
+            System.out.println("== Debit ==");
+            System.out.print("Enter amount: ");
+            double amount = sc.nextDouble();
+            if (amount > 0 && amount < (Math.pow(10, 9)))
+                balance += amount;
+            else{
+                System.out.print("Enter again the amount: ");
+                amount = sc.nextDouble();
+            }
+
+            System.out.print("\nEnter transaction date(yyy-mm-dd): ");
+            sc.nextLine();
+            String dateInput = sc.nextLine();
+            LocalDate transactionDate;
+
+            try {
+                transactionDate = LocalDate.parse(dateInput);
+            } catch (Exception e){
+                System.out.println("Error: Invalid date.");
+                continue;
+            }
+
+            LocalDate today = LocalDate.now();
+            if(transactionDate.isAfter(today)){
+                System.out.print("\nError: Transaction date cannot be in the future.");
+                continue;
+            }
+
+            System.out.print("Enter description: ");
+            sc.nextLine();
+            String description = sc.nextLine();
+            if (description.length() >100){
+                System.out.println("Error: Description exceeds 100 characters. ");
+                System.out.print("\nEnter description: ");
+                description = sc.nextLine();
+                System.out.print("\nDebit Successfully Recorded!!!");
+            } else {
+                System.out.print("\nDebit Successfully Recorded!!!");
+            }
+        }
+        
+    }
+    
+    private static void credit() {
+        
+    }
+    
+    private static void history() {
+        
+    }
+    
+    private static void saving() {
+        
+    }
+    
+    private static void creditLoan() {
+        
+    }
+    
+    private static void depositInterestPredictor() {
+        
+    }
+    
+    private static void logOut() {
+        
+    }
+    
+    
+    
+    
+    private static void optionHandler(int option) {
+        
+        switch(option) {  
+            case 1:
+                debit();
+                break;
+            case 2:
+                credit();
+                break; 
+            case 3:
+                history();
+                break;
+            case 4:
+                saving();
+                break;
+            case 5:
+                creditLoan();
+                break;
+            case 6:
+                depositInterestPredictor();
+                break;
+            case 7:
+                logOut();
+                break;
+            default:
+                break;
+        }
+    }
+    
+    
+    
     public static void loginPage(int user_id) {
         ArrayList<String[]> user_csv = file.get_user_csv();
         String username = user_csv.get(user_id)[1];
@@ -65,6 +171,8 @@ public class main_system {
                     System.out.println("Invalid option, please retry.");
                     continue;
                 }
+                
+                optionHandler(option);
                 
                 break;
             } catch (Exception e) {

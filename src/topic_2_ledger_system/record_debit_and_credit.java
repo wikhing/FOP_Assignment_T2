@@ -54,25 +54,86 @@ public class record_debit_and_credit {
                     if (amount >0 && amount < (Math.pow(10, 9)))
                         balance = balance + amount;
                     else{
-                        System.out.print("Enter agian the amount: ");
+                        System.out.print("Enter again the amount: ");
                         amount = sc.nextDouble();
                     }
+                    
+                    System.out.print("\nEnter transaction date(yyy-mm-dd): ");
+                    sc.nextLine();
+                    String dateInput = sc.nextLine();
+                    LocalDate transactionDate;
+                    
+                    try{
+                        transactionDate = LocalDate.parse(dateInput);
+                    }catch (Exception e){
+                        System.out.println("Error: Invalid date.");
+                        return;
+                    }
+                    
+                    LocalDate today = LocalDate.now();
+                    if(transactionDate.isAfter(today)){
+                        System.out.print("\nError: Transaction date cannot be in the future.");
+                        return;
+                    }
+                    
                     System.out.print("Enter description: ");
                     sc.nextLine();
                     String description = sc.nextLine();
-                    System.out.print("\nDebit Successfully Recorded!!!");
-                    break;
+                    if (description.length() >100){
+                        System.out.println("Error: Description exceeds 100 characters. ");
+                        System.out.print("\nEnter description: ");
+                        description = sc.nextLine();
+                        System.out.print("\nDebit Successfully Recorded!!!");
+                        break;}
+                    
+                    else{
+                        System.out.print("\nDebit Successfully Recorded!!!");
+                        break;}
                 }
                 case 2: {
                     System.out.print("== Credit ==");
                     System.out.print("\nEnter amount: ");
                     double credit_amount = sc.nextDouble();
-                    balance = balance - credit_amount;
+                    
+                    if(credit_amount >0 && credit_amount< balance){
+                        balance = balance - credit_amount;
+                    }
+                    else{
+                        System.out.print("Enter amount again: ");
+                        credit_amount = sc.nextDouble();
+                    }
+                    
+                    System.out.print("\nEnter transaction date (yyy-mm-dd) : ");
+                    sc.nextLine();
+                    String dateInput = sc.nextLine();
+                    LocalDate transactionDate;
+                    
+                    try{
+                        transactionDate = LocalDate.parse(dateInput);
+                    }catch (Exception e){
+                        System.out.print("Error: Invalid date.");
+                        return;
+                    }
+                    LocalDate today = LocalDate.now();
+                    if(transactionDate.isAfter(today)){
+                        System.out.print("\nError: Transaction date cannot be in the future.");
+                        return;
+                    }
+                    
                     System.out.print("Enter description: ");
                     sc.nextLine();
                     String credit_description = sc.nextLine();
-                    System.out.print("\nCredit Successfully Recorded!!!");
-                    break;
+                    if(credit_description.length()>100){
+                        System.out.print("Error:Description exceeds 100 characters. ");
+                        System.out.print("\nEnter description: ");
+                        credit_description = sc.nextLine();
+                        System.out.print("\nCredit Successfully Recorded!!!");
+                        break;
+                        
+                    }
+                    else{
+                        System.out.print("\nCredit Successfully Recorded!!!");
+                        break;}
                 }
                 case 3: {
                     break;

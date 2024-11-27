@@ -50,7 +50,27 @@ public class main_system {
         String username = user_csv.get(user_id)[1];
         String email = user_csv.get(user_id)[2];
         
-        printMenu(username, file.get_accbalance_csv(user_id), get_saving, get_loan)
+        printMenu(username, file.get_accbalance_csv(user_id), 0, 0);
+        Scanner sc = new Scanner(System.in);
+        
+        while (true) {
+            System.out.print(">");
+            String rawOption = sc.nextLine();
+            int option;
+            
+            try {
+                option = Integer.parseInt(rawOption);
+                
+                if (!(option >= 1 && option <= 7)) {
+                    System.out.println("Invalid option, please retry.");
+                    continue;
+                }
+                
+                break;
+            } catch (Exception e) {
+                System.out.println("Invalid option, please retry.");
+            } 
+        }
     }
     
     
@@ -61,18 +81,6 @@ public class main_system {
         loginPage(user_id);
         
         
-        //Call the method for Transaction History
-        try {
-            // Initialize login or registration process
-            user_id = login_register.initialize();
-
-            // Get the month and year from the user
-            Scanner scanner = new Scanner(System.in);
-            System.out.print("Enter the month and year (MM-YYYY): ");
-            String monthYear = scanner.nextLine();
-            view_export_csv.viewAndExportTransactions(user_id, monthYear);
-        } catch (IOException e) {
-            System.err.println("An error occurred: " + e.getMessage());
-        }
+        
     }
 }

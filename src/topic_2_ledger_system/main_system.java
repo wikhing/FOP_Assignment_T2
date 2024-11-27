@@ -52,7 +52,7 @@ public class main_system {
         
     }
     
-    private static void credit(int user_id) {
+    private static void credit() {
         double balance = file.get_accbalance_csv(user_id);
         
         System.out.println("== Credit ==");
@@ -78,7 +78,7 @@ public class main_system {
             credit_description = sc.nextLine();
             
             if(credit_description.length() <= 100){
-                System.out.println("\n\nCredit Successfully Recorded!!!\n\n");
+                System.out.println("\n\nCredit Successfully Recorded!!!\n");
                 break;
             }
             
@@ -98,8 +98,7 @@ public class main_system {
     }
     
     private static void history() {
-        Scanner sc = new Scanner (System.in);
-        System.out.print ("Enter the month and year (eg. MM-YYYY): ");
+        System.out.print("Enter the month and year (eg. MM-YYYY): ");
         String monthYear = sc.nextLine();
         
         // In case of invalid month/year input
@@ -111,23 +110,56 @@ public class main_system {
     }
     
     private static void saving() {
-        System.out.print("\n== Savings ==");
-        System.out.print("Are you sure you want to activare it? (Y/N) : ");
-        char choice = sc.next().charAt(0);
+        System.out.println("\n== Savings ==");
+        
+        char choice;
+        boolean isActive = false;
+        int percentage = 0;
+        while(true){
+            System.out.print("Are you sure you want to activare it? (Y/N) : ");
+            choice = sc.next().charAt(0);
+            
+            if(choice == 'Y' || choice == 'y'){
+                isActive = true;
+                while(true){
+                    System.out.print("Please enter the percentage you wish to deduct from the next debit: ");
+                    percentage = sc.nextInt();
 
-        if(choice == 'Y' || choice == 'y'){
-            System.out.print("Please enter the percentage you wish to deduct from the next debit: ");
-            int percentage = sc.nextInt();
-
-            if (percentage<0 || percentage>100){
-                System.out.println("Please enter again");}
-            else
-                System.out.println("\n\nSavings Settings added successfully!!!");
-        }
-        else if(choice == 'N'|| choice == 'n')
-            System.out.println("\n\nSavings Settings added successfully!!!");
-        else
+                    if (percentage >= 0 && percentage <= 100){
+                        System.out.println("\n\nSavings Setting added successfully!!!\n");
+                        break;
+                    }
+                    
+                    System.out.println("Please enter valid percentage!");
+                }
+                break;
+            }else if(choice == 'N'|| choice == 'n'){
+                isActive = false;
+                System.out.println("\n\nSavings Setting is not added!!!");
+                break;
+            }
+            
             System.out.println("Invalid! Please enter Y or N");
+        }
+        
+        String[] savings = file.get_savings_csv(user_id);
+        if(isActive){
+            savings[2] = "active";
+            savings[3] = String.valueOf(percentage);
+        }else if(!isActive){
+            savings[2] = "inactive";
+            savings[3] = "0";
+            if(savings[4] != "0"){
+                double balance = file.get_accbalance_csv(user_id);
+                balance += Double.parseDouble(savings[4]);
+                
+                file.set_accbalance_csv(user_id, balance);
+            }
+            savings[4] = "0";
+        }
+        file.set_savings_csv(savings);
+        
+        
     }
     
     private static void creditLoan() {

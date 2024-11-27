@@ -187,29 +187,24 @@ public class file {
     
     // Array format: {"", user_id, status, percentage, saving_balance}
     private static List<String[]> tempSavings = new ArrayList<>();
-    public static List<String[]> get_savings_csv(int user_id){
+    public static String[] get_savings_csv(int user_id){
         List<String[]> savings_csv = new ArrayList<>();
         savings_csv = file.read("savings");
         
         if(savings_csv.isEmpty()){
             savings_csv.add(new String[0]);
-            return savings_csv;
-        }
-        
-        //return full transaction list if user_id is -1, but not recommended to use this
-        if(user_id == -1){
-            return savings_csv;
+            write(savings_csv, "savings");
         }
         
         //look for savings according to user_id and remove the savings from savings_csv
-        List<String[]> specificSaving = new ArrayList<>();
+        String[] specificSaving = new String[5];
         Iterator<String[]> it = savings_csv.iterator();
         while(it.hasNext()){
             String[] data = it.next();
             
             if(data.length == 1) continue;
             if(Integer.parseInt(data[1]) == user_id){
-                specificSaving.add(data);
+                specificSaving = data;
                 it.remove();
             }
         }
@@ -217,14 +212,12 @@ public class file {
         
         return specificSaving;
     }
-    public static void set_savings_csv(List<String[]> specificSaving){
+    public static void set_savings_csv(String[] specificSaving){
         List<String[]> savings_csv = new ArrayList<>();
         savings_csv = tempSavings;
         
         //add specificSaving back to whole savings_csv
-        for(int i = 0; i < specificSaving.size(); i++){
-            savings_csv.add(specificSaving.get(i));
-        }
+        savings_csv.add(specificSaving);
         
         //For loop to auto-increment the savings_id
         for(int i = 1; i < savings_csv.size(); i++){

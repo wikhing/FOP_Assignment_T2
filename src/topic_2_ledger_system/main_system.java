@@ -29,23 +29,23 @@ public class main_system {
     
     
     public static void printMenu(String username, double balance, double saving, double loan) {
-            System.out.println("\n\n== Welcome, " + username + " ==");
-            System.out.print("Balance: " );
-            System.out.printf("%.2f",balance);
-            System.out.print("\nSavings: ");
-            System.out.printf("%.2f", saving);
-            System.out.print("\nLoan: ");
-            System.out.printf("%.2f",loan);
+        System.out.println("\n\n== Welcome, " + username + " ==");
+        System.out.print("Balance: " );
+        System.out.printf("%.2f",balance);
+        System.out.print("\nSavings: ");
+        System.out.printf("%.2f", saving);
+        System.out.print("\nLoan: ");
+        System.out.printf("%.2f",loan);
 
-            System.out.println("\n\n== Transaction ==");
-            System.out.println("1. Debit");
-            System.out.println("2. Credit");
-            System.out.println("3. History");
-            System.out.println("4. Savings");
-            System.out.println("5. Credit Loan");
-            System.out.println("6. Deposit Interest Predictor");
-            System.out.println("7. Logout\n\n");
-            System.out.print(">");
+        System.out.println("\n\n== Transaction ==");
+        System.out.println("1. Debit");
+        System.out.println("2. Credit");
+        System.out.println("3. History");
+        System.out.println("4. Savings");
+        System.out.println("5. Credit Loan");
+        System.out.println("6. Deposit Interest Predictor");
+        System.out.println("7. Logout\n\n");
+        System.out.print(">");
     }
 
     private static void debit(double balance) {
@@ -190,7 +190,7 @@ public class main_system {
         
     }
     
-    private static void creditLoan() {
+    private static void creditLoan(int user_id) {
         
         // Automatically get date
         LocalDate date = LocalDate.now();
@@ -205,83 +205,16 @@ public class main_system {
             System.out.print("Enter your choice: ");
             int choices = sc.nextInt();
             
-            double totalamount = 0;
-            int period = 0;
-            double balanced;
-            boolean activeloan = false;
             
             if (choices == 1) {
-                
-                if (activeloan) {
-                    System.out.println("You already have an active loan. Please repay it before applying for another.");
-                    continue;
-                }   
-
-                System.out.print("Enter principal amount: ");
-                double principal = sc.nextDouble();
-                System.out.print("Enter annual interest rate (in %): ");
-                double rate = sc.nextDouble();
-                System.out.print("Enter repayment period (in months): ");
-                period = sc.nextInt();
-
-                if (!(principal > 0 && rate > 0 && period > 0)) {
-                    System.out.println("Invalid input, please retry");
-                    continue;
-                }
-
-                totalamount = principal + (principal * (rate / 100) * (period / 12.0));
-                double monthlypayment = totalamount / period;
-                balanced = totalamount;
-
-                activeloan = true;
-
-                System.out.println("Loan approved!");
-                System.out.println("Total repayment amount: " + totalamount);
-                System.out.println("Monthly repayment amount: " + monthlypayment);
-                System.out.println("Repayment period: " + period + " months");
-                System.out.println("Loan start date: " + dateToday);
-                break;
-
+                credit_loan.applyLoan(user_id, dateToday); 
             } else if (choices == 2) {
-
-                if (!activeloan) {
-                    System.out.println("No active loan to repay.");
-                    continue;
-                }   
-
-
-                if (date.isAfter(date.plusMonths(period))) {
-                    System.out.println("Loan repayment period has ended. Further debits and credits are not allowed.");
-                    activeloan = false; // Mark the loan as inactive to prevent further actions
-                    continue;
-                }   
-
-
-                System.out.println("Enter loan ID: ");
-                int loan_id = sc.nextInt();
-                System.out.println("Enter payment amount: ");
-                double paymentAmount = sc.nextDouble();
-
-                if (paymentAmount <= 0) {
-                    System.out.println("Invalid input, please retry.");
-                    continue;
-                }
-
-                balanced = totalamount - paymentAmount;
-                System.out.println("Payment successful! ----" + dateToday);
-                System.out.println("Remaining balance: " + balanced);
-
-                if (balanced <= 0) {
-                    System.out.println("Loan fully repaid. Thank you!");
-                    activeloan = false; // Mark loan as fully repaid
-                }   
-
+                credit_loan.repayLoan(user_id, dateToday, date);   
             } else if (choices == 3) {
                 System.out.println("Exiting the system. Thank you!");
                 break;
             } else {
                 System.out.println("Invalid input, please retry.");
-                continue;
             }
         }
         
@@ -299,7 +232,7 @@ public class main_system {
     
     
     
-    private static int optionHandler(int option) {
+    private static int optionHandler(int option, int user_id) {
         
         int info = 0;
         
@@ -317,7 +250,7 @@ public class main_system {
                 saving();
                 break;
             case 5:
-                creditLoan();
+                creditLoan(user_id);
                 break;
             case 6:
                 depositInterestPredictor();
@@ -353,7 +286,7 @@ public class main_system {
                     continue;
                 }
                 
-                if (optionHandler(option) == -1) {
+                if (optionHandler(option, user_id) == -1) {
                     break;
                 }
                 

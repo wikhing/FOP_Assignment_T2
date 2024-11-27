@@ -288,7 +288,7 @@ public class main_system {
     }
     
     private static void depositInterestPredictor() {
-        
+        deposit_interest_predictor.depositInterestPredictor(user_id);
     }
     
     private static int logOut() {
@@ -308,7 +308,7 @@ public class main_system {
                 debit(0);
                 break;
             case 2:
-                credit(0);
+                credit();
                 break; 
             case 3:
                 history();

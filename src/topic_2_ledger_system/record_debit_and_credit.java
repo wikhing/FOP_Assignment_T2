@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package topic_2_ledger_system;
+import java.time.LocalDate;
 import java.util.Scanner;
 /**
  *
@@ -10,6 +11,7 @@ import java.util.Scanner;
  */
 public class record_debit_and_credit {
     public static void main(String[] args){
+        LocalDate date = LocalDate.now();
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter your name: ");
         String user_name = sc.nextLine();
@@ -20,6 +22,8 @@ public class record_debit_and_credit {
         System.out.print("Enter Loan: ");
         double loan = sc.nextDouble();
         int num = 0;
+        boolean activeloan = false;
+        LocalDate loanStartDate = null;
         
         
         while(num !=7){
@@ -93,6 +97,76 @@ public class record_debit_and_credit {
                         System.out.println("Invalid! Please enter Y or N");
                 }
                 case 5:
+                    while (true){
+                        System.out.println("\n---- Credit Loan System ----");
+                        System.out.println("1. Apply Loan");
+                        System.out.println("2. Repay Loan");
+                        System.out.println("3. Exit");
+                        System.out.print("Enter your choice: ");
+                        int choices = sc.nextInt();
+                    
+                    double totalamount = 0;
+                    int period = 0;
+                    double balanced;
+                    if (choices == 1) {
+                        if (activeloan) {
+                            System.out.println("You already have an active loan. Please repay it before applying for another.");
+                            continue;
+                        }
+                        
+                        System.out.print("Enter principal amount: ");
+                        double principal = sc.nextDouble();
+                        System.out.print("Enter annual interest rate (in %): ");
+                        double rate = sc.nextDouble();
+                        System.out.print("Enter repayment period (in months): ");
+                        period = sc.nextInt();
+                        
+                        totalamount = principal + (principal * (rate / 100) * (period / 12.0));
+                        double monthlypayment = totalamount / period;
+                        balanced = totalamount;
+                        loanStartDate = LocalDate.now();
+                        activeloan = true;
+                        
+                        System.out.println("Loan approved!");
+                        System.out.println("Total repayment amount: " + totalamount);
+                        System.out.println("Monthly repayment amount: " + monthlypayment);
+                        System.out.println("Repayment period: " + period + " months");
+                        System.out.println("Loan start date: " + loanStartDate);
+
+                    }else if (choices == 2) {
+                        
+                        if (!activeloan) {
+                            System.out.println("No active loan to repay.");
+                            continue;
+                        }
+                        
+                        LocalDate currentDate = LocalDate.now();
+                        LocalDate repaymentEndDate = loanStartDate.plusMonths(period);
+                        if (currentDate.isAfter(repaymentEndDate)) {
+                            System.out.println("Loan repayment period has ended. Further debits and credits are not allowed.");
+                            activeloan = false; // Mark the loan as inactive to prevent further actions
+                            continue;
+                        }
+                        
+                        System.out.println("Enter loan ID: ");
+                        int loanid = sc.nextInt();
+                        System.out.println("Enter payment amount: ");
+                        double paymentamount = sc.nextDouble();
+                        balanced = totalamount - paymentamount;
+                        System.out.println("Payment successful! ----"+date);
+                        System.out.println("Remaining balance: "+balanced);
+                        
+                        if (balance <= 0) {
+                            System.out.println("Loan fully repaid. Thank you!");
+                            activeloan = false; // Mark loan as fully repaid
+                        }
+                        break;
+                        
+                    }else if (choices == 3){
+                        System.out.println("Exiting the system. Thank you!");
+                        break;
+                    } 
+                }
                     break;
                 case 6:
                     break;

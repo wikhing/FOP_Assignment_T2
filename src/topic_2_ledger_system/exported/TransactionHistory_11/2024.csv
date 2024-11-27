@@ -1,2 +1,3 @@
 Transaction ID", "User ID", "Type", "Amount", "Description", "Date"
 3, 2, debit, 2000, Salary, 11/11/2024
+4, 2, credit, 1000.0, Rent, 27/11/2024

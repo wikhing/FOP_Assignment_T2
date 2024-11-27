@@ -22,7 +22,7 @@ public class deposit_interest_predictor {
         System.out.println("Available Banks: ");
         System.out.println("===================");
         for (String[] bank : banks){
-            System.out.printf("%s-%s:%.2f%%\n",bank[0],bank[1],Double.parseDouble(bank[2]));
+            System.out.printf("%s-%-18s:%.2f%%\n",bank[0],bank[1],Double.parseDouble(bank[2]));
             // bank[0] = bank_id
             // bank[1] = bank_name
             // bank[2] = interest_rate(as a String, needs to be parsed into Double)
@@ -61,7 +61,7 @@ public class deposit_interest_predictor {
         }
     
         System.out.print("\nDeposit amount: ");
-        double deposit = file.get_accbalance_csv(user_id);// Retrieves user's deposit balance
+        double deposit = file.get_accbalance_csv(user_id);  // Retrieves user's deposit balance
     
         System.out.println("");
     

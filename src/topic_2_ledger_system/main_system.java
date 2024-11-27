@@ -25,6 +25,8 @@ public class main_system {
      */
     
     private static Scanner sc = new Scanner(System.in);
+    private static int user_id;
+    
     
     public static void printMenu(String username, double balance, double saving, double loan) {
             System.out.println("\n\n== Welcome, " + username + " ==");
@@ -45,50 +47,8 @@ public class main_system {
             System.out.print("\n7. Logout");
             System.out.print("\n\n>");
     }
-    
-    
-    private static void debit(double balance) {        
-        while (true) {
-            System.out.println("== Debit ==");
-            System.out.print("Enter amount: ");
-            double amount = sc.nextDouble();
-            if (amount > 0 && amount < (Math.pow(10, 9)))
-                balance += amount;
-            else{
-                System.out.print("Enter again the amount: ");
-                amount = sc.nextDouble();
-            }
 
-            System.out.print("\nEnter transaction date(yyy-mm-dd): ");
-            sc.nextLine();
-            String dateInput = sc.nextLine();
-            LocalDate transactionDate;
-
-            try {
-                transactionDate = LocalDate.parse(dateInput);
-            } catch (Exception e){
-                System.out.println("Error: Invalid date.");
-                continue;
-            }
-
-            LocalDate today = LocalDate.now();
-            if(transactionDate.isAfter(today)){
-                System.out.print("\nError: Transaction date cannot be in the future.");
-                continue;
-            }
-
-            System.out.print("Enter description: ");
-            sc.nextLine();
-            String description = sc.nextLine();
-            if (description.length() >100){
-                System.out.println("Error: Description exceeds 100 characters. ");
-                System.out.print("\nEnter description: ");
-                description = sc.nextLine();
-                System.out.print("\nDebit Successfully Recorded!!!");
-            } else {
-                System.out.print("\nDebit Successfully Recorded!!!");
-            }
-        }
+    private static void debit() {
         
     }
     
@@ -125,6 +85,7 @@ public class main_system {
             System.out.println("\nError: Description exceeds 100 characters. ");
         }
         
+        // Automatically get date
         LocalDate date = LocalDate.now();
         DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String dateToday = date.format(pattern);
@@ -137,7 +98,16 @@ public class main_system {
     }
     
     private static void history() {
+        Scanner sc = new Scanner (System.in);
+        System.out.print ("Enter the month and year (eg. MM-YYYY): ");
+        String monthYear = sc.nextLine();
         
+        // In case of invalid month/year input
+        if (!monthYear.matches("\\d{2}/\\d{4}")) {
+            System.out.println("Invalid format. Please use MM/YYYY.");
+            return;
+        }
+        view_export_csv.viewAndExportTransactions(user_id, monthYear);
     }
     
     private static void saving() {
@@ -305,8 +275,7 @@ public class main_system {
     
     
     public static void main(String[] args) throws IOException{
-        
-        int user_id = login_register.initialize();
+        user_id = login_register.initialize();
         
         loginPage(user_id);
         

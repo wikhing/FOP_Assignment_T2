@@ -71,7 +71,12 @@ public class view_export_csv {
     
     public static void viewAndExportTransactions(int user_id, String monthYear) {
     List<String[]> transactions = getTransactionsByMonth(user_id, monthYear);
-
+    
+    // In case no transaction history for specific user at that certain session
+    if (transactions.isEmpty()) {
+        System.out.println("No transactions found for the given month and year.");
+        return;
+    }
     // Get transaction history
     System.out.println("Transaction History");
     System.out.println("===================");

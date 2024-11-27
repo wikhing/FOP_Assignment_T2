@@ -328,7 +328,7 @@ public class bcrypt {
 	 * @param d	the byte array to encode
 	 * @param len	the number of bytes to encode
 	 * @return	base64-encoded string
-	 * @exception IllegalArgumentException if the length is invalid
+	 * @exception   IllegalArgumentException if the length is invalid
 	 */
 	private static String encode_base64(byte d[], int len)
 		throws IllegalArgumentException {
@@ -379,10 +379,10 @@ public class bcrypt {
 	 * Decode a string encoded using bcrypt's base64 scheme to a
 	 * byte array. Note that this is *not* compatible with
 	 * the standard MIME-base64 encoding.
-	 * @param s	the string to decode
-	 * @param maxolen	the maximum number of bytes to decode
-	 * @return	an array containing the decoded bytes
-	 * @throws IllegalArgumentException if maxolen is invalid
+	 * @param s         the string to decode
+	 * @param maxolen   the maximum number of bytes to decode
+	 * @return          an array containing the decoded bytes
+	 * @throws          IllegalArgumentException if maxolen is invalid
 	 */
 	private static byte[] decode_base64(String s, int maxolen)
 		throws IllegalArgumentException {
@@ -456,9 +456,9 @@ public class bcrypt {
 
 	/**
 	 * Cycically extract a word of key material
-	 * @param data	the string to extract the data from
-	 * @param offp	a "pointer" (as a one-entry array) to the
-	 * current offset into data
+	 * @param data  the string to extract the data from
+	 * @param offp  a "pointer" (as a one-entry array) to the
+	 * current      offset into data
 	 * @return	the next word of material from data
 	 */
 	private static int streamtoword(byte data[], int offp[]) {
@@ -546,11 +546,10 @@ public class bcrypt {
 	 * Perform the central password hashing step in the
 	 * bcrypt scheme
 	 * @param password	the password to hash
-	 * @param salt	the binary salt to hash with the password
-	 * @param log_rounds	the binary logarithm of the number
-	 * of rounds of hashing to apply
+	 * @param salt          the binary salt to hash with the password
+	 * @param log_rounds	the binary logarithm of the number of rounds of hashing to apply
 	 * @param cdata         the plaintext to encrypt
-	 * @return	an array containing the binary hashed password
+	 * @return              an array containing the binary hashed password
 	 */
 	public byte[] crypt_raw(byte password[], byte salt[], int log_rounds,
 	    int cdata[]) {
@@ -644,11 +643,9 @@ public class bcrypt {
 
 	/**
 	 * Generate a salt for use with the BCrypt.hashpw() method
-	 * @param log_rounds	the log2 of the number of rounds of
-	 * hashing to apply - the work factor therefore increases as
-	 * 2**log_rounds.
-	 * @param random		an instance of SecureRandom to use
-	 * @return	an encoded salt value
+	 * @param log_rounds	the log2 of the number of rounds of hashing to apply - the work factor therefore increases as 2**log_rounds.
+	 * @param random	an instance of SecureRandom to use
+	 * @return              an encoded salt value
 	 */
 	public static String gensalt(int log_rounds, SecureRandom random) {
 		StringBuffer rs = new StringBuffer();
@@ -671,10 +668,8 @@ public class bcrypt {
 
 	/**
 	 * Generate a salt for use with the BCrypt.hashpw() method
-	 * @param log_rounds	the log2 of the number of rounds of
-	 * hashing to apply - the work factor therefore increases as
-	 * 2**log_rounds.
-	 * @return	an encoded salt value
+	 * @param log_rounds	the log2 of the number of rounds of hashing to apply - the work factor therefore increases as 2**log_rounds.
+	 * @return              an encoded salt value
 	 */
 	public static String gensalt(int log_rounds) {
 		return gensalt(log_rounds, new SecureRandom());
@@ -695,7 +690,7 @@ public class bcrypt {
 	 * one
 	 * @param plaintext	the plaintext password to verify
 	 * @param hashed	the previously-hashed password
-	 * @return	true if the passwords match, false otherwise
+	 * @return              true if the passwords match, false otherwise
 	 */
 	public static boolean checkpw(String plaintext, String hashed) {
 		byte hashed_bytes[];

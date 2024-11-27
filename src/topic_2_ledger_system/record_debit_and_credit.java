@@ -11,41 +11,7 @@ import java.util.Scanner;
  */
 public class record_debit_and_credit {
     public static void main(String[] args){
-        LocalDate date = LocalDate.now();
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Enter your name: ");
-        String user_name = sc.nextLine();
-        System.out.print("Enter balance: ");
-        double balance = sc.nextDouble();
-        System.out.print("Enter Savings: ");
-        double saving = sc.nextDouble();
-        System.out.print("Enter Loan: ");
-        double loan = sc.nextDouble();
-        int num = 0;
-        boolean activeloan = false;
-        LocalDate loanStartDate = null;
         
-        
-        while(num !=7){
-            System.out.println("\n\n== Welcome, " + user_name + " ==");
-            System.out.print("Balance: " );
-            System.out.printf("%.2f",balance);
-            System.out.print("\nSavings: ");
-            System.out.printf("%.2f", saving);
-            System.out.print("\nLoan: ");
-            System.out.printf("%.2f",loan);
-
-            System.out.print("\n\n== Transaction ==");
-            System.out.print("\n1. Debit");
-            System.out.print("\n2. Credit");
-            System.out.print("\n3. History");
-            System.out.print("\n4. Savings");
-            System.out.print("\n5. Credit Loan");
-            System.out.print("\n6. Deposit Interest Predictor");
-            System.out.print("\n7. Logout");
-            System.out.print("\n>");
-            num = sc.nextInt();
-            
             switch(num){
                 case 1: {
                     System.out.print("\n== Debit ==");

@@ -185,7 +185,7 @@ public class file {
     }
     
     
-    // Array format: {"", user_id, status, percentage}
+    // Array format: {"", user_id, status, percentage, saving_balance}
     private static List<String[]> tempSavings = new ArrayList<>();
     public static List<String[]> get_savings_csv(int user_id){
         List<String[]> savings_csv = new ArrayList<>();

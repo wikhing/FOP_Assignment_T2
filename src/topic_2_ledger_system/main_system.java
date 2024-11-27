@@ -41,7 +41,7 @@ public class main_system {
             System.out.print("\n5. Credit Loan");
             System.out.print("\n6. Deposit Interest Predictor");
             System.out.print("\n7. Logout");
-            System.out.print("\n>");
+            System.out.print("\n\n>");
     }
     
     
@@ -55,7 +55,7 @@ public class main_system {
         
         while (true) {
             System.out.print(">");
-            String rawOption = sc.nextLine();
+            String rawOption = sc.next();
             int option;
             
             try {

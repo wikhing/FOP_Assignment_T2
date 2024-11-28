@@ -25,12 +25,11 @@ public class main_system {
      */
     
     
-    // Need to set up user acc when user register, add savings and acc balance
     private static Scanner sc = new Scanner(System.in);
     private static int user_id;
     
     
-    public static void printMenu(String username, double balance, double saving, double loan) { //balance, savings and loan cannot put in parameter cause it will
+    public static void printMenu(String username, double balance, double saving, double loan) {
         System.out.println("\n\n== Welcome, " + username + " ==");
         System.out.print("Balance: " );
         System.out.printf("%.2f",balance);
@@ -50,10 +49,11 @@ public class main_system {
         System.out.print("> ");
     }
 
-    private static void debit() {       // Remember to connect with savings
+    private static void debit() {
         double balance = file.get_accbalance_csv(user_id);
+        String[] savings = file.get_savings_csv(user_id);
         
-        double amount = 0;
+        double amount = 0, toSave = 0;
         String description = "", dateToday = "";
         while (true) {
             System.out.println("== Debit ==");
@@ -61,8 +61,12 @@ public class main_system {
 
             amount = sc.nextDouble();
 
+            if(savings[2].equals("active")){
+                toSave = amount * Integer.parseInt(savings[3]) / 100.0;
+            }
+            
             if (amount > 0 && amount < (Math.pow(10, 9))) {
-                balance += amount;
+                balance += amount - toSave;
             } else {
                 System.out.println("Invalid input, please retry");
                 continue;
@@ -88,6 +92,9 @@ public class main_system {
         file.set_transactions_csv(transaction);
         
         file.set_accbalance_csv(user_id, balance);
+        
+        savings[4] = String.valueOf(Double.parseDouble(savings[4]) + toSave);
+        file.set_savings_csv(savings);
     }
     
     private static void credit() {

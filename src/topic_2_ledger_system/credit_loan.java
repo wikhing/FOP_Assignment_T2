@@ -30,7 +30,8 @@ public class credit_loan {
     }
     
     public static double getBalance(int user_id) {
-        return file.get_accbalance_csv(user_id);
+        String[] loan_csv = file.get_loans_csv(user_id);
+        return Double.parseDouble(loan_csv[5]);
     }
     
     public static void updateLoan(int user_id, double totalAmount, double monthlyPayment, int period, boolean activeLoan, String dateToday, double interestRate) {
@@ -44,11 +45,24 @@ public class credit_loan {
                         (activeLoan ? "active" : "inactive"), 
                         dateToday};
         
-//        file.get_loans_csv(user_id);
         file.set_loans_csv(loan);
     }
     
-    public static void updateLoan(int user_id, double totalAmount, double period, boolean activeLoan) {
+    public static void updateLoan(int user_id, double balance, int period, boolean activeLoan) {
+        
+        String[] loan_csv = file.get_loans_csv(user_id);
+        
+        String[] loan = {"", 
+                        String.valueOf(user_id), 
+                        loan_csv[2], 
+                        loan_csv[3], 
+                        String.valueOf(period), 
+                        String.valueOf(balance), 
+                        (activeLoan ? "active" : "inactive"), 
+                        loan_csv[7]};
+        
+        
+        file.set_loans_csv(loan);
         
     }
     
@@ -69,10 +83,29 @@ public class credit_loan {
 
         System.out.print("Enter principal amount: ");
         double principal = sc.nextDouble();
-        System.out.print("Enter annual interest rate (in %): ");
-        double rate = sc.nextDouble();
-        System.out.print("Enter repayment period (in months): ");
-        int period = sc.nextInt();
+        System.out.println("====Choose your repayment plan====");
+        System.out.println("1. Interest rate : 4%, Period : 12 months");
+        System.out.println("2. Interest rate : 6%, Period : 16 months");
+        System.out.println("3. Interest rate : 8%, Period : 24 months");
+        
+        int planChoice = sc.nextInt();
+        double rate = -1;
+        int period = -1;
+        
+        if (planChoice == 1) {
+            rate = 4;
+            period = 12;
+        } else if (planChoice == 2) {
+            rate = 6;
+            period = 12;
+        } else if (planChoice == 3) {
+            rate = 8;
+            period = 24;
+        } else {
+            System.out.println("Invalid input, please retry.");
+            return -1;
+        }
+        
 
         if (!(principal > 0 && rate > 0 && period > 0)) {
             System.out.println("Invalid input, please retry");
@@ -100,7 +133,7 @@ public class credit_loan {
         boolean activeLoan = getActiveLoan(user_id);
         int period = getPeriod(user_id);
         double balance = getBalance(user_id);
-        
+                
         if (!activeLoan) {
             System.out.println("No active loan to repay.");
             return -1;
@@ -111,7 +144,7 @@ public class credit_loan {
             return -1;
         }   
 
-        System.out.println("Enter payment amount: ");
+        System.out.print("Enter payment amount: ");
         double paymentAmount = sc.nextDouble();
 
         if (paymentAmount <= 0) {

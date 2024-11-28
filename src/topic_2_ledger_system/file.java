@@ -109,6 +109,16 @@ public class file {
         return list;
     }
     
+    //Method to setup user account
+    public static void new_user_acc_setup(int user_id){
+        //Setup acc balance
+        file.get_accbalance_csv(user_id);
+        file.set_accbalance_csv(user_id, 0);
+        //Setup savings
+        file.get_savings_csv(user_id);
+        file.set_savings_csv(new String[]{"", String.valueOf(user_id), "inactive", "0", "0"});
+        //Setup loan?? One user can only have one loan or multiple loan???
+    }
     
     /*
      * ----------------------------------------------------------------------------------
@@ -118,6 +128,7 @@ public class file {
      *
      */
     
+    // Need get first then set
     // Array format: {"", name, email, password}
     public static ArrayList<String[]> get_user_csv(){
         List<String[]> user_csv = new ArrayList<>();
@@ -136,6 +147,7 @@ public class file {
     }
     
     
+    // Need get first then set
     // Array format: {"", user_id, transaction_type, amount, description, date}
     private static List<String[]> tempTransactions = new ArrayList<>();
     public static List<String[]> get_transactions_csv(int user_id){//put in user_id to directly get transaction data of the user
@@ -185,6 +197,7 @@ public class file {
     }
     
     
+    // Need get first then set
     // Array format: {"", user_id, status, percentage, saving_balance}
     private static List<String[]> tempSavings = new ArrayList<>();
     public static String[] get_savings_csv(int user_id){
@@ -202,7 +215,7 @@ public class file {
         while(it.hasNext()){
             String[] data = it.next();
             
-            if(data.length == 1) continue;
+            if(data.length == 1 || data.length == 0) continue;
             if(Integer.parseInt(data[1]) == user_id){
                 specificSaving = data;
                 it.remove();
@@ -227,6 +240,7 @@ public class file {
     }
     
     
+    // Need get first then set
     // Array format: {"", user_id, principal_amount, interest_rate, repayment_period, outstanding_balance, status, created_at}
     private static List<String[]> tempLoans = new ArrayList<>();
     public static List<String[]> get_loans_csv(int user_id){
@@ -276,6 +290,7 @@ public class file {
     }
     
     
+    
     // Bank is read-only, no need to change anything
     // Array format: {bank_id, bank_name, interest_rate}
     public static List<String[]> get_bank_csv(){
@@ -283,7 +298,7 @@ public class file {
     }
 
     
-    
+    // Need get first then set
     // No need to use List to get or set accbalance
     // Array format: {user_id, balance}
     private static List<String[]> tempAccBalance = new ArrayList<>();
@@ -302,7 +317,7 @@ public class file {
         while(it.hasNext()){
             String[] data = it.next();
             
-            if(data.length == 1) continue;
+            if(data.length == 1 || data.length == 0) continue;
             if(Integer.parseInt(data[0]) == user_id){
                 acc_balance = Double.parseDouble(data[1]);
                 it.remove();

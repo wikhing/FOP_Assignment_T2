@@ -30,7 +30,7 @@ public class main_system {
     private static int user_id;
     
     
-    public static void printMenu(String username, double balance, double saving, double loan) {
+    public static void printMenu(String username, double balance, double saving, double loan) { //balance, savings and loan cannot put in parameter cause it will
         System.out.println("\n\n== Welcome, " + username + " ==");
         System.out.print("Balance: " );
         System.out.printf("%.2f",balance);
@@ -46,11 +46,11 @@ public class main_system {
         System.out.println("4. Savings");
         System.out.println("5. Credit Loan");
         System.out.println("6. Deposit Interest Predictor");
-        System.out.println("7. Logout\n\n");
-        System.out.print(">");
+        System.out.println("7. Logout\n");
+        System.out.print("> ");
     }
 
-    private static void debit() {
+    private static void debit() {       // Remember to connect with savings
         double balance = file.get_accbalance_csv(user_id);
         
         double amount = 0;
@@ -278,14 +278,29 @@ public class main_system {
     
     
     
-    public static void loginPage(int user_id) {
-        ArrayList<String[]> user_csv = file.get_user_csv();
-        String username = user_csv.get(user_id)[1];
-        String email = user_csv.get(user_id)[2];
-        
-        
+    private static void loginPage(int user_id) {
         while (true) {
-            printMenu(username, file.get_accbalance_csv(user_id), 0, 0);
+            // Get basic info of user
+            ArrayList<String[]> user_csv = file.get_user_csv();
+            String username = user_csv.get(user_id)[1];
+            String email = user_csv.get(user_id)[2];
+
+            // Get other info of user
+            double balance = file.get_accbalance_csv(user_id);
+
+            String[] savings_data = file.get_savings_csv(user_id);
+            double user_saving = Double.parseDouble(savings_data[4]);
+
+            List<String[]> loans_data = file.get_loans_csv(user_id);
+            double totalLoans = 0, loansThisMonth = 0;
+            for(String[] loans : loans_data){
+                if(loans.length == 0) continue;
+
+                totalLoans += Double.parseDouble(loans[5]);
+                loansThisMonth += Double.parseDouble(loans[5]) / Double.parseDouble(loans[4]);  //Not sure need this or not, for reminder?
+            }
+        
+            printMenu(username, balance, user_saving, totalLoans);
             String rawOption = sc.next();
             int option;
             

@@ -29,6 +29,7 @@ public class login_register {
             
             if(user_id == -1) typeOfUser = promptUser();
         }
+        
         return user_id;
     }
     
@@ -91,6 +92,7 @@ public class login_register {
                 String hashedPassword = bcrypt.hashpw(password, bcrypt.gensalt());
                 allUser.add(new String[]{"", user_name, e_mail, hashedPassword});
                 file.set_user_csv(allUser);
+                file.new_user_acc_setup(allUser.size() - 1);
                 System.out.println("\nRegister successful!");
                 break;
             }

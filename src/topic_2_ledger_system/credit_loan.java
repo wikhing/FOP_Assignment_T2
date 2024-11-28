@@ -5,6 +5,7 @@
 package topic_2_ledger_system;
 import java.util.Scanner;
 import java.time.LocalDate;
+import java.util.List;
 /**
  *
  * @author USER
@@ -14,7 +15,8 @@ public class credit_loan {
     private static Scanner sc = new Scanner(System.in);
     
     public static boolean getActiveLoan(int user_id) {
-        return false;
+        List<String[]> loan_csv = file.get_loans_csv(user_id);        
+        return loan_csv.get(0)[6].equals("active");
     }
     
     public static double getBalance(int user_id) {

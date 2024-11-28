@@ -258,7 +258,7 @@ public class file {
         while(it.hasNext()){
             String[] data = it.next();
             
-            if(data.length == 1) continue;
+            if(data.length == 1 || data.length == 0) continue;
             if(Integer.parseInt(data[1]) == user_id){
                 specificLoan = data;
                 it.remove();

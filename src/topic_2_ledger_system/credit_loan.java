@@ -20,8 +20,8 @@ public class credit_loan {
         boolean isActive = false;
         
         try {
-            List<String[]> loan_csv = file.get_loans_csv(user_id);
-            isActive = loan_csv.get(0)[6].equals("active");
+            String[] loan_csv = file.get_loans_csv(user_id);
+            isActive = loan_csv[6].equals("active");
         } catch (Exception e) {
             return false;
         }
@@ -44,7 +44,7 @@ public class credit_loan {
                         (activeLoan ? "active" : "inactive"), 
                         dateToday};
         
-        
+//        file.get_loans_csv(user_id);
         file.set_loans_csv(loan);
     }
     
@@ -53,8 +53,8 @@ public class credit_loan {
     }
     
     public static int getPeriod(int user_id) {
-        List<String[]> loan_csv = file.get_loans_csv(user_id);
-        return Integer.parseInt(loan_csv.get(0)[4]);
+        String[] loan_csv = file.get_loans_csv(user_id);
+        return Integer.parseInt(loan_csv[4]);
     }
     
     public static int applyLoan(int user_id, String dateToday) {

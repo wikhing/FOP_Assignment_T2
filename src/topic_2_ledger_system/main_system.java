@@ -315,11 +315,14 @@ public class main_system {
     
     
     public static void main(String[] args) throws IOException{
-        user_id = login_register.initialize();
+        User.load();
         
-        loginPage(user_id);
+//        user_id = login_register.initialize();
         
-        System.out.println("Thank you for using Ledger System.");
+//        loginPage(user_id);
+        
+//        System.out.println("Thank you for using Ledger System.");
+        
         
         
         

@@ -110,15 +110,15 @@ public class file {
     }
     
     //Method to setup user account
-    public static void new_user_acc_setup(int user_id){
-        //Setup acc balance
-        file.get_accbalance_csv(user_id);
-        file.set_accbalance_csv(user_id, 0);
-        //Setup savings
-        file.get_savings_csv(user_id);
-        file.set_savings_csv(new String[]{"", String.valueOf(user_id), "inactive", "0", "0"});
-        //Setup loan?? One user can only have one loan or multiple loan???
-    }
+//    public static void new_user_acc_setup(int user_id){
+//        //Setup acc balance
+//        file.get_accbalance_csv(user_id);
+//        file.set_accbalance_csv(user_id, 0);
+//        //Setup savings
+//        file.get_savings_csv(user_id);
+//        file.set_savings_csv(new String[]{"", String.valueOf(user_id), "inactive", "0", "0"});
+//        //Setup loan?? One user can only have one loan or multiple loan???
+//    }
     
     /*
      * ----------------------------------------------------------------------------------
@@ -199,8 +199,7 @@ public class file {
     
     // Need get first then set
     // Array format: {"", user_id, status, percentage, saving_balance}
-    private static List<String[]> tempSavings = new ArrayList<>();
-    public static String[] get_savings_csv(int user_id){
+    public static List<String[]> get_savings_csv(){
         List<String[]> savings_csv = new ArrayList<>();
         savings_csv = file.read("savings");
         
@@ -209,25 +208,10 @@ public class file {
             write(savings_csv, "savings");
         }
         
-        //look for savings according to user_id and remove the savings from savings_csv
-        String[] specificSaving = new String[5];
-        Iterator<String[]> it = savings_csv.iterator();
-        while(it.hasNext()){
-            String[] data = it.next();
-            
-            if(data.length == 1 || data.length == 0) continue;
-            if(Integer.parseInt(data[1]) == user_id){
-                specificSaving = data;
-                it.remove();
-            }
-        }
-        tempSavings = savings_csv;
-        
-        return specificSaving;
+        return savings_csv;
     }
     public static void set_savings_csv(String[] specificSaving){
         List<String[]> savings_csv = new ArrayList<>();
-        savings_csv = tempSavings;
         
         //add specificSaving back to whole savings_csv
         savings_csv.add(specificSaving);
@@ -242,8 +226,7 @@ public class file {
     
     // Need get first then set
     // Array format: {"", user_id, principal_amount, interest_rate, repayment_period, outstanding_balance, status, created_at}
-    private static List<String[]> tempLoans = new ArrayList<>();
-    public static String[] get_loans_csv(int user_id){
+    public static List<String[]> get_loans_csv(){
         List<String[]> loans_csv = new ArrayList<>();
         loans_csv = file.read("loans");
         
@@ -252,25 +235,10 @@ public class file {
             write(loans_csv, "loans");
         }
         
-        //look for loans according to loans_id and remove the loans from loans_csv
-        String[] specificLoan = new String[8];
-        Iterator<String[]> it = loans_csv.iterator();
-        while(it.hasNext()){
-            String[] data = it.next();
-            
-            if(data.length == 1 || data.length == 0) continue;
-            if(Integer.parseInt(data[1]) == user_id){
-                specificLoan = data;
-                it.remove();
-            }
-        }
-        tempLoans = loans_csv;
-        
-        return specificLoan;
+        return loans_csv;
     }
     public static void set_loans_csv(String[] specificLoan){
         List<String[]> loans_csv = new ArrayList<>();
-        loans_csv = tempLoans;
         
         //add specificLoan back to whole loans_csv
         loans_csv.add(specificLoan);
@@ -295,8 +263,7 @@ public class file {
     // Need get first then set
     // No need to use List to get or set accbalance
     // Array format: {user_id, balance}
-    private static List<String[]> tempAccBalance = new ArrayList<>();
-    public static double get_accbalance_csv(int user_id){
+    public static List<String[]> get_accbalance_csv(){
         List<String[]> accbalance_csv = new ArrayList<>();
         accbalance_csv = file.read("accbalance");
         
@@ -305,25 +272,10 @@ public class file {
             write(accbalance_csv, "accbalance");
         }
         
-        //look for loans according to loans_id and remove the loans from loans_csv
-        double acc_balance = 0;
-        Iterator<String[]> it = accbalance_csv.iterator();
-        while(it.hasNext()){
-            String[] data = it.next();
-            
-            if(data.length == 1 || data.length == 0) continue;
-            if(Integer.parseInt(data[0]) == user_id){
-                acc_balance = Double.parseDouble(data[1]);
-                it.remove();
-            }
-        }
-        tempAccBalance = accbalance_csv;
-        
-        return acc_balance;
+        return accbalance_csv;
     }
     public static void set_accbalance_csv(int user_id, double acc_balance){
         List<String[]> accbalance_csv = new ArrayList<>();
-        accbalance_csv = tempAccBalance;
         accbalance_csv.add(new String[]{String.valueOf(user_id), String.valueOf(acc_balance)});
         
         write(accbalance_csv, "accbalance");

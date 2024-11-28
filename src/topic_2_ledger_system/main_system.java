@@ -255,29 +255,15 @@ public class main_system {
         int info = 0;
         
         switch(option) {  
-            case 1:
-                debit();
-                break;
-            case 2:
-                credit();
-                break; 
-            case 3:
-                history();
-                break;
-            case 4:
-                saving();
-                break;
-            case 5:
-                creditLoan(user_id);
-                break;
-            case 6:
-                depositInterestPredictor();
-                break;
-            case 7:
-                info = logOut();
-                break;
-            default:
-                break;
+            case 1 -> debit();
+            case 2 -> credit();
+            case 3 -> history();
+            case 4 -> saving();
+            case 5 -> creditLoan(user_id);
+            case 6 -> depositInterestPredictor();
+            case 7 -> info = logOut();
+            default -> {
+            }
         }
         
         return info;

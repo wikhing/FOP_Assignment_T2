@@ -273,14 +273,13 @@ public class file {
         
         return specificLoan;
     }
-    public static void set_loans_csv(List<String[]> specificLoan){
+    public static void set_loans_csv(String[] specificLoan){
         List<String[]> loans_csv = new ArrayList<>();
         loans_csv = tempLoans;
         
         //add specificLoan back to whole loans_csv
-        for(int i = 0; i < specificLoan.size(); i++){
-            loans_csv.add(specificLoan.get(i));
-        }
+        loans_csv.add(specificLoan);
+        
         
         //For loop to auto-increment the loans_id
         for(int i = 1; i < loans_csv.size(); i++){

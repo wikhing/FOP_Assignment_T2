@@ -5,6 +5,8 @@
 package topic_2_ledger_system;
 import java.util.Scanner;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.ArrayList;
 /**
  *
  * @author USER
@@ -14,15 +16,36 @@ public class credit_loan {
     private static Scanner sc = new Scanner(System.in);
     
     public static boolean getActiveLoan(int user_id) {
-        return false;
+        
+        boolean isActive = false;
+        
+        try {
+            List<String[]> loan_csv = file.get_loans_csv(user_id);
+            isActive = loan_csv.get(0)[6].equals("active");
+        } catch (Exception e) {
+            return false;
+        }
+                
+        return isActive;
     }
     
     public static double getBalance(int user_id) {
-        return 0;
+        return file.get_accbalance_csv(user_id);
     }
     
-    public static void updateLoan(int user_id, double totalAmount, double monthlyPayment, double period, boolean activeLoan) {
+    public static void updateLoan(int user_id, double totalAmount, double monthlyPayment, int period, boolean activeLoan, String dateToday, double interestRate) {
         
+        String[] loan = {"", 
+                        String.valueOf(user_id), 
+                        String.valueOf(totalAmount), 
+                        String.valueOf(interestRate), 
+                        String.valueOf(period), 
+                        String.valueOf(totalAmount), 
+                        (activeLoan ? "active" : "inactive"), 
+                        dateToday};
+        
+        
+        file.set_loans_csv(loan);
     }
     
     public static void updateLoan(int user_id, double totalAmount, double period, boolean activeLoan) {
@@ -30,11 +53,13 @@ public class credit_loan {
     }
     
     public static int getPeriod(int user_id) {
-        return 0;
+        List<String[]> loan_csv = file.get_loans_csv(user_id);
+        return Integer.parseInt(loan_csv.get(0)[4]);
     }
     
     public static int applyLoan(int user_id, String dateToday) {
         
+                
         boolean activeLoan = getActiveLoan(user_id);
         
         if (activeLoan) {
@@ -44,9 +69,6 @@ public class credit_loan {
 
         System.out.print("Enter principal amount: ");
         double principal = sc.nextDouble();
-        
-        
-        
         System.out.print("Enter annual interest rate (in %): ");
         double rate = sc.nextDouble();
         System.out.print("Enter repayment period (in months): ");
@@ -68,7 +90,8 @@ public class credit_loan {
         System.out.println("Repayment period: " + period + " months");
         System.out.println("Loan start date: " + dateToday);
 
-        updateLoan(user_id, totalAmount, monthlyPayment, period, activeLoan);
+        updateLoan(user_id, totalAmount, monthlyPayment, period, activeLoan, dateToday, rate);
+       
         return 0;
     }
     

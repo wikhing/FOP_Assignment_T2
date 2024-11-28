@@ -255,7 +255,7 @@ public class main_system {
         int info = 0;
         
         if (option == 1 || option == 2) {
-            if (!credit_loan.getActiveLoan(user_id)) {
+            if (!credit_loan.getActiveLoan(user_id) && credit_loan.getBalance(user_id) != 0) {
                 System.out.println("Loan unpaid, please pay your loan.");
                 return -1;
             }

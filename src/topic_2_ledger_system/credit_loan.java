@@ -30,8 +30,13 @@ public class credit_loan {
     }
     
     public static double getBalance(int user_id) {
-        String[] loan_csv = file.get_loans_csv(user_id);
-        return Double.parseDouble(loan_csv[5]);
+        try {
+            String[] loan_csv = file.get_loans_csv(user_id);
+            return Double.parseDouble(loan_csv[5]);
+        } catch (Exception e) {
+            return 0;
+        }
+        
     }
     
     public static void updateLoan(int user_id, double totalAmount, double monthlyPayment, int period, boolean activeLoan, String dateToday, double interestRate) {

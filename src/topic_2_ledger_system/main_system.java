@@ -254,6 +254,13 @@ public class main_system {
         
         int info = 0;
         
+        if (option == 1 || option == 2) {
+            if (!credit_loan.getActiveLoan(user_id)) {
+                System.out.println("Loan unpaid, please pay your loan.");
+                return -1;
+            }
+        }
+        
         switch(option) {  
             case 1 -> debit();
             case 2 -> credit();

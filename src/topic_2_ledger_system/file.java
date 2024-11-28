@@ -243,29 +243,24 @@ public class file {
     // Need get first then set
     // Array format: {"", user_id, principal_amount, interest_rate, repayment_period, outstanding_balance, status, created_at}
     private static List<String[]> tempLoans = new ArrayList<>();
-    public static List<String[]> get_loans_csv(int user_id){
+    public static String[] get_loans_csv(int user_id){
         List<String[]> loans_csv = new ArrayList<>();
         loans_csv = file.read("loans");
         
         if(loans_csv.isEmpty()){
             loans_csv.add(new String[0]);
-            return loans_csv;
-        }
-        
-        //return full transaction list if user_id is -1, but not recommended to use this
-        if(user_id == -1){
-            return loans_csv;
+            write(loans_csv, "loans");
         }
         
         //look for loans according to loans_id and remove the loans from loans_csv
-        List<String[]> specificLoan = new ArrayList<>();
+        String[] specificLoan = new String[8];
         Iterator<String[]> it = loans_csv.iterator();
         while(it.hasNext()){
             String[] data = it.next();
             
-            if(data.length == 1) continue;
+            if(data.length == 1 || data.length == 0) continue;
             if(Integer.parseInt(data[1]) == user_id){
-                specificLoan.add(data);
+                specificLoan = data;
                 it.remove();
             }
         }

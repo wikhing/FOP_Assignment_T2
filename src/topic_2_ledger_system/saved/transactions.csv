@@ -5,7 +5,11 @@
 4,1,debit,1000.0,Salary,28/11/2024
 5,1,debit,1000.0,Salary,28/11/2024
 6,1,debit,1000.0,Salary,28/11/2024
+<<<<<<< HEAD
 7,1,debit,1000.0,new,28/11/2024
 8,1,debit,1000.0,new,28/11/2024
 9,1,credit,2.0,new credit,28/11/2024
 10,3,debit,1000.0,abc,28/11/2024
+=======
+7,1,debit,1000.0,Salary,28/11/2024
+>>>>>>> origin/master

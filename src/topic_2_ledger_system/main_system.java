@@ -291,16 +291,14 @@ public class main_system {
             String[] savings_data = file.get_savings_csv(user_id);
             double user_saving = Double.parseDouble(savings_data[4]);
 
-            List<String[]> loans_data = file.get_loans_csv(user_id);
-            double totalLoans = 0, loansThisMonth = 0;
-            for(String[] loans : loans_data){
-                if(loans.length == 0) continue;
-
-                totalLoans += Double.parseDouble(loans[5]);
-                loansThisMonth += Double.parseDouble(loans[5]) / Double.parseDouble(loans[4]);  //Not sure need this or not, for reminder?
+            String[] loans_data = file.get_loans_csv(user_id);
+            double loans = 0, loansThisMonth = 0;
+            if(loans_data[5] != null){
+                loans = Double.parseDouble(loans_data[5]);
+                loansThisMonth = Double.parseDouble(loans_data[5]) / Double.parseDouble(loans_data[4]);//Not sure need this or not, for reminder?
             }
         
-            printMenu(username, balance, user_saving, totalLoans);
+            printMenu(username, balance, user_saving, loans);
             String rawOption = sc.next();
             int option;
             

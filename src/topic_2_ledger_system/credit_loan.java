@@ -20,8 +20,8 @@ public class credit_loan {
         boolean isActive = false;
         
         try {
-            List<String[]> loan_csv = file.get_loans_csv(user_id);
-            isActive = loan_csv.get(0)[6].equals("active");
+            String[] loan_csv = file.get_loans_csv(user_id);
+            isActive = loan_csv[6].equals("active");
         } catch (Exception e) {
             return false;
         }
@@ -30,8 +30,8 @@ public class credit_loan {
     }
     
     public static double getBalance(int user_id) {
-        List<String[]> loan_csv = file.get_loans_csv(user_id);
-        return Double.parseDouble(loan_csv.get(0)[5]);
+        String[] loan_csv = file.get_loans_csv(user_id);
+        return Double.parseDouble(loan_csv[5]);
     }
     
     public static void updateLoan(int user_id, double totalAmount, double monthlyPayment, int period, boolean activeLoan, String dateToday, double interestRate) {
@@ -51,16 +51,16 @@ public class credit_loan {
     
     public static void updateLoan(int user_id, double balance, int period, boolean activeLoan) {
         
-        List<String[]> loan_csv = file.get_loans_csv(user_id);
+        String[] loan_csv = file.get_loans_csv(user_id);
         
         String[] loan = {"", 
                         String.valueOf(user_id), 
-                        loan_csv.get(0)[2], 
-                        loan_csv.get(0)[3], 
+                        loan_csv[2], 
+                        loan_csv[3], 
                         String.valueOf(period), 
                         String.valueOf(balance), 
                         (activeLoan ? "active" : "inactive"), 
-                        loan_csv.get(0)[7]};
+                        loan_csv[7]};
         
         
         file.set_loans_csv(loan);
@@ -68,8 +68,8 @@ public class credit_loan {
     }
     
     public static int getPeriod(int user_id) {
-        List<String[]> loan_csv = file.get_loans_csv(user_id);
-        return Integer.parseInt(loan_csv.get(0)[4]);
+        String[] loan_csv = file.get_loans_csv(user_id);
+        return Integer.parseInt(loan_csv[4]);
     }
     
     public static int applyLoan(int user_id, String dateToday) {

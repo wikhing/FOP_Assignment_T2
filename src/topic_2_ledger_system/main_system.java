@@ -26,7 +26,6 @@ public class main_system {
      */
     
     
-    // Need to set up user acc when user register, add savings and acc balance
     private static Scanner sc = new Scanner(System.in);
     private static int user_id;
     
@@ -47,14 +46,15 @@ public class main_system {
         System.out.println("4. Savings");
         System.out.println("5. Credit Loan");
         System.out.println("6. Deposit Interest Predictor");
-        System.out.println("7. Logout\n\n");
-        System.out.print(">");
+        System.out.println("7. Logout\n");
+        System.out.print("> ");
     }
 
     private static void debit() {
         double balance = file.get_accbalance_csv(user_id);
+        String[] savings = file.get_savings_csv(user_id);
         
-        double amount = 0;
+        double amount = 0, toSave = 0;
         String description = "", dateToday = "";
         while (true) {
             System.out.println("== Debit ==");
@@ -62,8 +62,12 @@ public class main_system {
 
             amount = sc.nextDouble();
 
+            if(savings[2].equals("active")){
+                toSave = amount * Integer.parseInt(savings[3]) / 100.0;
+            }
+            
             if (amount > 0 && amount < (Math.pow(10, 9))) {
-                balance += amount;
+                balance += amount - toSave;
             } else {
                 System.out.println("Invalid input, please retry");
                 continue;
@@ -89,6 +93,9 @@ public class main_system {
         file.set_transactions_csv(transaction);
         
         file.set_accbalance_csv(user_id, balance);
+        
+        savings[4] = String.valueOf(Double.parseDouble(savings[4]) + toSave);
+        file.set_savings_csv(savings);
     }
     
     private static void credit() {
@@ -598,14 +605,17 @@ public class main_system {
         
         int info = 0;
         
+        if (option == 1 || option == 2) {
+            if (!credit_loan.getActiveLoan(user_id) && credit_loan.getBalance(user_id) != 0) {
+                System.out.println("Loan unpaid, please pay your loan.");
+                return -1;
+            }
+        }
+        
         switch(option) {  
-            case 1:
-                debit();
-                break;
-            case 2:
-                credit();
-                break; 
-            case 3:
+            case 1 -> debit();
+            case 2 -> credit();
+            case 3 -> {
                 history();
                 System.out.println("Would you like to:");
                 System.out.println("1. Filter transactions");
@@ -616,32 +626,22 @@ public class main_system {
                 sc.nextLine();  // Consume newline
 
                 if (choice == 1) {
-                    // Filter transactions
                     filterhistory(transactions);
                 } else if (choice == 2) {
-                    // Sort transactions
                     sortinghistory();
-                }else if (choice == 3){
+                } else if (choice == 3) {
                     break;
                 } else {
                     System.out.println("Invalid option! Please choose either 1, 2 or 3.");
                 }
                 break;
-
-            case 4:
-                saving();
-                break;
-            case 5:
-                creditLoan(user_id);
-                break;
-            case 6:
-                depositInterestPredictor();
-                break;
-            case 7:
-                info = logOut();
-                break;
-            default:
-                break;
+            }
+            case 4 -> saving();
+            case 5 -> creditLoan(user_id);
+            case 6 -> depositInterestPredictor();
+            case 7 -> info = logOut();
+            default -> {
+            }
         }
         
         return info;
@@ -656,8 +656,28 @@ public class main_system {
         
         List<String[]> transactions = file.get_transactions_csv(user_id);
         
+
+    //private static void loginPage(int user_id) {
         while (true) {
-            printMenu(username, file.get_accbalance_csv(user_id), 0, 0);
+            // Get basic info of user
+            //ArrayList<String[]> user_csv = file.get_user_csv();
+            //String username = user_csv.get(user_id)[1];
+            //String email = user_csv.get(user_id)[2];
+
+            // Get other info of user
+            double balance = file.get_accbalance_csv(user_id);
+
+            String[] savings_data = file.get_savings_csv(user_id);
+            double user_saving = Double.parseDouble(savings_data[4]);
+
+            String[] loans_data = file.get_loans_csv(user_id);
+            double loans = 0, loansThisMonth = 0;
+            if(loans_data[5] != null){
+                loans = Double.parseDouble(loans_data[5]);
+                loansThisMonth = Double.parseDouble(loans_data[5]) / Double.parseDouble(loans_data[4]);//Not sure need this or not, for reminder?
+            }
+        
+            printMenu(username, balance, user_saving, loans);
             String rawOption = sc.next();
             int option;
             

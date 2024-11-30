@@ -36,12 +36,14 @@ public class login_register {
         login.setVisible(false);
         register.setVisible(false);
         main_btn.setVisible(true);
+        back_btn.setVisible(false);
     }
     
     @FXML 
     private void toLogin() throws IOException{      //go to login form
         main_btn.setVisible(false);
         login.setVisible(true);
+        back_btn.setVisible(true);
         loginFX();
     }
     
@@ -49,6 +51,7 @@ public class login_register {
     private void toRegister() throws IOException {  //go to registerform
         main_btn.setVisible(false);
         register.setVisible(true);
+        back_btn.setVisible(true);
         registerFX();
     }
     
@@ -61,21 +64,22 @@ public class login_register {
         email_login.setPromptText("eg. johndoe@gmail.com"); //prompt text
         email_login.getParent().requestFocus();             //prompt text disappear when clicked on textfield
                 
-        submit_login.setOnMouseClicked(new EventHandler<MouseEvent>() { //event to do when button clicked
-            @Override
-            public void handle(MouseEvent e) {
-                String email = email_login.getText();
-                String password = pass_login.getText();
+        submit_login.setOnMouseClicked((MouseEvent e) -> {  //event to do when button clicked
+            String email = email_login.getText();
+            String password = pass_login.getText();
+            
+            try {
+                int user_id = login(email, password);
                 
-                try {
-                    int user_id = login(email, password);
+                if(user_id != -1){
+                    System.out.println("Login Succesful" + user_id);
                     
-                    if(user_id != -1){
-                        System.out.println("Login Succesful" + user_id);
-                    }
-                } catch (IOException ex) {
-                    error("login");
+                    menu.set_user(user_id);
+                    main_system.setScene("menu");
                 }
+                
+            } catch (IOException ex) {
+                error("login");
             }
         });
     }
@@ -106,6 +110,10 @@ public class login_register {
                 if(user_id != -1){
                     System.out.println("Register and login successful" + user_id);
                 }
+                
+                menu.set_user(user_id);
+                main_system.setScene("menu");
+                
             } catch (IOException ex) {
                 error("register");
             }
@@ -194,8 +202,10 @@ public class login_register {
         int user_id = -1;
         if(passwordMatch && validEmailFormat && passwordIsValid){
             List<String[]> allUser = file.get_user_csv();
-            allUser.add(new String[]{"", name, e_mail, password});
+            String hashedPassword = bcrypt.hashpw(password, bcrypt.gensalt());
+            allUser.add(new String[]{"", name, e_mail, hashedPassword});
             file.set_user_csv(allUser);
+            file.new_user_acc_setup(allUser.size() - 1);
             
             user_id = allUser.size() - 1;
         }
@@ -271,8 +281,10 @@ public class login_register {
                 }
 
                 List<String[]> allUser = file.get_user_csv();
-                allUser.add(new String[]{"", user_name, e_mail, password});
+                String hashedPassword = bcrypt.hashpw(password, bcrypt.gensalt());
+                allUser.add(new String[]{"", user_name, e_mail, hashedPassword});
                 file.set_user_csv(allUser);
+                file.new_user_acc_setup(allUser.size() - 1);
                 System.out.println("\nRegister successful!");
                 break;
             }
@@ -353,7 +365,7 @@ public class login_register {
         List<String[]> users = file.get_user_csv();
 
         for(int i = 1; i < users.size(); i++){
-            if(users.get(i)[2].equals(loginInfo[0]) && users.get(i)[3].equals(loginInfo[1])){
+            if(users.get(i)[2].equals(loginInfo[0]) && bcrypt.checkpw(loginInfo[1], users.get(i)[3])){
                 return Integer.parseInt(users.get(i)[0]);
             }
         }

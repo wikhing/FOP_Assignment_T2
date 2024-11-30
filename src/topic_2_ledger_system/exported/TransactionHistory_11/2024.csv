@@ -1,0 +1,2 @@
+Transaction ID", "User ID", "Type", "Amount", "Description", "Date"
+10, 3, debit, 1000.0, abc, 28/11/2024

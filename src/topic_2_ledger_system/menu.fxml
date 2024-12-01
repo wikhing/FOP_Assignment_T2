@@ -26,11 +26,18 @@
     <children>
         <StackPane GridPane.rowIndex="0" GridPane.rowSpan="3" GridPane.columnIndex="0" minWidth="300" prefWidth="320" maxWidth="340">
             <GridPane hgap="10" vgap="10">
-                <Label text="Welcome to The Ledger System" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                <Label text="USERNAME" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <Label text="Welcome to The Ledger System" GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+                <Label fx:id="username" text="USERNAME" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                
                 <Label text="Balance:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <Label fx:id="balancefx" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                
                 <Label text="Saving:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <Label fx:id="savingfx" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                
                 <Label text="Loan:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                <Label fx:id="loanfx" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+                
                 <Button text="Logout" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
             </GridPane>
         </StackPane>
@@ -42,8 +49,8 @@
         <StackPane GridPane.rowIndex="4" GridPane.columnIndex="0" minWidth="300" prefWidth="320" maxWidth="340">
             <GridPane hgap="10" vgap="10">
                 <Label text="Transaction Record Form" GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="3"/>
-                <TextField promptText="Amount(RM)" GridPane.rowIndex="1" GridPane.columnIndex="0" prefWidth="100"/>
-                <ChoiceBox value="Debit" GridPane.rowIndex="2" GridPane.columnIndex="0" prefWidth="100">
+                <TextField fx:id="record_amount" promptText="Amount(RM)" GridPane.rowIndex="1" GridPane.columnIndex="0" prefWidth="100"/>
+                <ChoiceBox fx:id="record_choice" value="Debit" GridPane.rowIndex="2" GridPane.columnIndex="0" prefWidth="100">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
                             <String fx:value="Debit" />
@@ -51,9 +58,9 @@
                         </FXCollections>
                     </items>
                 </ChoiceBox>
-                <TextArea promptText="Write your transaction description less than 100 characters" wrapText="true" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.rowSpan="4" GridPane.columnSpan="2" minWidth="190" prefWidth="210" maxWidth="220" minHeight="100" prefHeight="120" maxHeight="130"/>
-                <Button text="Submit" GridPane.rowIndex="4" GridPane.columnIndex="0" prefWidth="100"/>
-                <Label GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.columnSpan="3"/>
+                <TextArea fx:id="record_descp" promptText="Write your transaction description less than 100 characters" wrapText="true" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.rowSpan="4" GridPane.columnSpan="2" minWidth="190" prefWidth="210" maxWidth="220" minHeight="100" prefHeight="120" maxHeight="130"/>
+                <Button text="Submit" GridPane.rowIndex="4" GridPane.columnIndex="0" prefWidth="100" onAction="#toTransaction"/>
+                <Label fx:id="trans_info" GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.columnSpan="3"/>
             </GridPane>
         </StackPane>
     </children>
@@ -64,14 +71,14 @@
         <StackPane GridPane.rowIndex="0" GridPane.columnIndex="2">
             <GridPane hgap="10" vgap="10">
                 <Label text="Saving" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                <CheckBox text="Enable Saving Setting" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <CheckBox fx:id="user_choice" text="Enable Saving Setting" GridPane.rowIndex="1" GridPane.columnIndex="0" onAction="#saving_setting"/>
                 <Label text="Percentage to be Deducted(%):" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                <Spinner GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="70">
+                <Spinner fx:id="sav_percentage" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="70">
                     <valueFactory>
                         <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="100"/>
                     </valueFactory>
                 </Spinner>
-                <Label />
+                <Label fx:id="sav_info" GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
             </GridPane>
         </StackPane>
     </children>
@@ -92,7 +99,7 @@
                 <Label text="Deposit Interest Predictor" GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
                 
                 <Label text="Type of Bank:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                <ChoiceBox value="Choose a Bank" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="120">
+                <ChoiceBox fx:id="bank_list" value="Choose a Bank" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="170" onAction="#depositInterestPredictor">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
                             <String fx:value="RHB                          - 2.6%"/>
@@ -106,7 +113,7 @@
                 </ChoiceBox>
                 
                 <Label text="Period:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                <ChoiceBox value="Choose a Period" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="120">
+                <ChoiceBox fx:id="period_list" value="Choose a Period" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="170" onAction="#depositInterestPredictor">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
                             <String fx:value="Daily"/>
@@ -117,6 +124,8 @@
                 </ChoiceBox>
                 
                 <Label text="Interest:" wrapText="true" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <Label fx:id="interest" GridPane.rowIndex="3" GridPane.columnIndex="1" wrapText="true"/>
+                <Label fx:id="interest_info" GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
             </GridPane>
         </StackPane>
     </children>

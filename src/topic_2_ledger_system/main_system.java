@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import javafx.application.Application;
@@ -34,7 +35,7 @@ public class main_system extends Application{
     @Override
     public void start(Stage stage) throws IOException {
         primStage = stage;
-        mainScene = new Scene(loadFXML("menu"), 1170, 400);
+        mainScene = new Scene(loadFXML("menu"), 1170, 420);
         scene = new Scene(loadFXML("login_register"), 640, 480);
         stage.setScene(mainScene);
         stage.show();

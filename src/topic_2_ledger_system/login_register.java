@@ -76,6 +76,7 @@ public class login_register {
                     
                     menu.set_user(user_id);
                     main_system.setScene("menu");
+//                    menu.update_account_info();
                 }
                 
             } catch (IOException ex) {

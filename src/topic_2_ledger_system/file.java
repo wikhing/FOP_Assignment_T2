@@ -34,6 +34,7 @@ public class file {
             entry("user",           "src/topic_2_ledger_system/saved/user.csv"),
             entry("transactions",   "src/topic_2_ledger_system/saved/transactions.csv"),
             entry("savings",        "src/topic_2_ledger_system/saved/savings.csv"),
+            entry("savHis",        "src/topic_2_ledger_system/saved/savHis.csv"),
             entry("loans",          "src/topic_2_ledger_system/saved/loans.csv"),
             entry("bank",           "src/topic_2_ledger_system/saved/bank.csv"),
             entry("accbalance",     "src/topic_2_ledger_system/saved/accbalance.csv")));
@@ -118,6 +119,8 @@ public class file {
         file.get_savings_csv(user_id);
         file.set_savings_csv(new String[]{"", String.valueOf(user_id), "inactive", "0", "0"});
         //Setup loan?? One user can only have one loan or multiple loan???
+        file.get_loans_csv(user_id);
+        file.set_loans_csv(new String[]{"", String.valueOf(user_id), "0.0", "0.0", "0", "0.0", "inactive", "00/00/0000"});
     }
     
     /*
@@ -237,6 +240,50 @@ public class file {
             savings_csv.get(i)[0] = String.valueOf(i);
         }
         write(savings_csv, "savings");
+    }
+    
+    // Need get first then set
+    // Array format: {"", user_id, savedBalance, date}
+    private static List<String[]> tempSavHistory = new ArrayList<>();
+    public static List<String[]> get_savHistory_csv(int user_id){
+        List<String[]> savings_csv = new ArrayList<>();
+        savings_csv = file.read("savHis");
+        
+        if(savings_csv.isEmpty()){
+            savings_csv.add(new String[0]);
+            write(savings_csv, "savHis");
+        }
+        
+        //look for savings according to user_id and remove the savings from savings_csv
+        List<String[]> specificSaving = new ArrayList<>();
+        Iterator<String[]> it = savings_csv.iterator();
+        while(it.hasNext()){
+            String[] data = it.next();
+            
+            if(data.length == 1 || data.length == 0) continue;
+            if(Integer.parseInt(data[1]) == user_id){
+                specificSaving.add(data);
+                it.remove();
+            }
+        }
+        tempSavHistory = savings_csv;
+        
+        return specificSaving;
+    }
+    public static void set_savHistory_csv(List<String[]> specificSaving){
+        List<String[]> savings_csv = new ArrayList<>();
+        savings_csv = tempSavHistory;
+        
+        //add specificSaving back to whole savings_csv
+        for(int i = 0; i < specificSaving.size(); i++){
+            savings_csv.add(specificSaving.get(i));
+        }
+        
+        //For loop to auto-increment the savings_id
+        for(int i = 1; i < savings_csv.size(); i++){
+            savings_csv.get(i)[0] = String.valueOf(i);
+        }
+        write(savings_csv, "savHis");
     }
     
     

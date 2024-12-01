@@ -327,8 +327,5 @@ public class main_system {
         loginPage(user_id);
         
         System.out.println("Thank you for using Ledger System.");
-        
-        
-        
     }
 }

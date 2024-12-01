@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package topic_2_ledger_system;
+
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -16,6 +16,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -198,94 +199,94 @@ public class menu {
     
     @FXML ChoiceBox bank_list = new ChoiceBox();
     
-//    public void depositInterestPredictor() {
-//        // Retrieve all bank data from CSV
-//        List<String[]> banks = file.get_bank_csv();
-//    
-//        //Prompt user to select a bank with bank ID provided
-//        //Loop to ensure valid bank ID input
-//        int bank_id = -1;
-//        double selectedBankIntRate = 0.0;
-//        String selectedBank = "";
-//        
-//        switch(bank_list.getValue().toString()){
-//            case "RHB                          - 2.6%" -> {}
-//            case "Maybank                  - 2.5%" -> {}
-//            case "Hong Leong             - 2.3%" -> {}
-//            case "Alliance                    - 2.85%" -> {}
-//            case "AmBank                   - 2.55%" -> {}
-//            case "Standard Chartered - 2.65%" -> {}
-//            default -> {}
-//        }
-//            try {
-//                bank_id = sc.nextInt();
-//                boolean validBankID = false;
-//                for (String[] bank : banks){
-//                    if (Integer.parseInt(bank[0]) == bank_id){ 
-//                        selectedBank = bank[1];
-//                        selectedBankIntRate = Double.parseDouble(bank[2]);
-//                        validBankID = true;
-//                        break;
-//                    }
-//                }
-//            
-//                if (!validBankID){
-//                    System.out.println("Invalid bank ID selected. Please re-enter!");
-//                    continue;
-//                }
-//            
-//                System.out.println("You have selected "+selectedBank+" with interest rate of "+selectedBankIntRate+"% ");
-//                break;// Exit the loop once valid bank ID is entered
-//            } catch (InputMismatchException exc) {// Identifier exc holds the exception object
-//                System.out.println("Invalid input. Please enter a valid integer for bank ID!");
-//                sc.next();// Clear invalid input
-//            }
-//        }
-//    
-//        System.out.print("\nDeposit amount: ");
-//        double deposit = file.get_accbalance_csv(user_id);  // Retrieves user's deposit balance
-//    
-//        System.out.println("");
-//    
-//        // Loop to ensure period input
-//        int period = -1;
-//        while (true){
-//            System.out.println("Interest earned over a period of: ");
-//            System.out.println("1. Daily");
-//            System.out.println("2. Monthly");
-//            System.out.println("3. Annually");
-//            System.out.print("\nPick a period: ");
-//            try{
-//                period = sc.nextInt();
-//                // Check if the period is valid
-//                if (period < 1 || period > 3) {
-//                    System.out.println("Invalid period selected. Please re-enter!");
-//                    continue; // Allow user to re-enter the selection
-//                }
-//            
-//                // Calculate interest earned for valid input
-//                double interestEarned = 0.0;
-//                switch (period){
-//                    case 1:
-//                        interestEarned = (deposit*(selectedBankIntRate/100))/365;
-//                        System.out.printf("Daily Interest: %.2f\n",interestEarned);
-//                        break;
-//                    case 2:
-//                        interestEarned = (deposit*(selectedBankIntRate/100))/12;
-//                        System.out.printf("Monthly Interest: %.2f\n",interestEarned);
-//                        break;
-//                    case 3: 
-//                        interestEarned = deposit*(selectedBankIntRate/100);
-//                        System.out.printf("Annually Interest: %.2f\n",interestEarned);
-//                        break;
-//                }
-//                break;// Exit the loop after valid period
-//            } catch(InputMismatchException exc){
-//                System.out.println("Invalid input. Please enter a valid integer for period!");
-//                sc.next();// Clear invalid input
-//            }
-//        }
-//    }
+    public void depositInterestPredictor() {
+        // Retrieve all bank data from CSV
+        List<String[]> banks = file.get_bank_csv();
+    
+        //Prompt user to select a bank with bank ID provided
+        //Loop to ensure valid bank ID input
+        int bank_id = -1;
+        double selectedBankIntRate = 0.0;
+        String selectedBank = "";
+        
+        switch(bank_list.getValue().toString()){
+            case "RHB                          - 2.6%" -> {}
+            case "Maybank                  - 2.5%" -> {}
+            case "Hong Leong             - 2.3%" -> {}
+            case "Alliance                    - 2.85%" -> {}
+            case "AmBank                   - 2.55%" -> {}
+            case "Standard Chartered - 2.65%" -> {}
+            default -> {}
+        }
+            try {
+                bank_id = sc.nextInt();
+                boolean validBankID = false;
+                for (String[] bank : banks){
+                    if (Integer.parseInt(bank[0]) == bank_id){ 
+                        selectedBank = bank[1];
+                        selectedBankIntRate = Double.parseDouble(bank[2]);
+                        validBankID = true;
+                        break;
+                    }
+                }
+            
+                if (!validBankID){
+                    System.out.println("Invalid bank ID selected. Please re-enter!");
+                    continue;
+                }
+            
+                System.out.println("You have selected "+selectedBank+" with interest rate of "+selectedBankIntRate+"% ");
+                break;// Exit the loop once valid bank ID is entered
+            } catch (InputMismatchException exc) {// Identifier exc holds the exception object
+                System.out.println("Invalid input. Please enter a valid integer for bank ID!");
+                sc.next();// Clear invalid input
+            }
+        }
+    
+        System.out.print("\nDeposit amount: ");
+        double deposit = file.get_accbalance_csv(user_id);  // Retrieves user's deposit balance
+    
+        System.out.println("");
+    
+        // Loop to ensure period input
+        int period = -1;
+        while (true){
+            System.out.println("Interest earned over a period of: ");
+            System.out.println("1. Daily");
+            System.out.println("2. Monthly");
+            System.out.println("3. Annually");
+            System.out.print("\nPick a period: ");
+            try{
+                period = sc.nextInt();
+                // Check if the period is valid
+                if (period < 1 || period > 3) {
+                    System.out.println("Invalid period selected. Please re-enter!");
+                    continue; // Allow user to re-enter the selection
+                }
+            
+                // Calculate interest earned for valid input
+                double interestEarned = 0.0;
+                switch (period){
+                    case 1:
+                        interestEarned = (deposit*(selectedBankIntRate/100))/365;
+                        System.out.printf("Daily Interest: %.2f\n",interestEarned);
+                        break;
+                    case 2:
+                        interestEarned = (deposit*(selectedBankIntRate/100))/12;
+                        System.out.printf("Monthly Interest: %.2f\n",interestEarned);
+                        break;
+                    case 3: 
+                        interestEarned = deposit*(selectedBankIntRate/100);
+                        System.out.printf("Annually Interest: %.2f\n",interestEarned);
+                        break;
+                }
+                break;// Exit the loop after valid period
+            } catch(InputMismatchException exc){
+                System.out.println("Invalid input. Please enter a valid integer for period!");
+                sc.next();// Clear invalid input
+            }
+        }
+    }
     
 //    private static void history() {
 //        System.out.print("Enter the month and year (eg. MM/YYYY): ");

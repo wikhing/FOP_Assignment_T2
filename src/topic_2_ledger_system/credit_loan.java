@@ -90,7 +90,8 @@ public class credit_loan {
         System.out.print("Enter principal amount: ");
         double principal = sc.nextDouble();
         System.out.println("====Choose your repayment plan====");
-        System.out.println("1. Interest rate : 4%, Period : 12 months");
+        System.out.println("11"
+                + ". Interest rate : 4%, Period : 12 months");
         System.out.println("2. Interest rate : 6%, Period : 16 months");
         System.out.println("3. Interest rate : 8%, Period : 24 months");
         

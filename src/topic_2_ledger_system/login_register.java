@@ -60,7 +60,7 @@ public class login_register {
     @FXML Button submit_login = new Button();
     
     @FXML
-    private void loginFX() throws IOException {               //login for fxml form
+    private void loginFX() throws IOException {             //login for fxml form
         email_login.setPromptText("eg. johndoe@gmail.com"); //prompt text
         email_login.getParent().requestFocus();             //prompt text disappear when clicked on textfield
                 
@@ -76,6 +76,7 @@ public class login_register {
                     
                     menu.set_user(user_id);
                     main_system.setScene("menu");
+//                    menu.update_account_info();
                 }
                 
             } catch (IOException ex) {

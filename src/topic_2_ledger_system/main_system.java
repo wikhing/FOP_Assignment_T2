@@ -56,10 +56,16 @@ public class main_system {
     private static void debit() {
         double balance = file.get_accbalance_csv(user_id);
         String[] savings = file.get_savings_csv(user_id);
+        List<String[]> savHis = file.get_savHistory_csv(user_id);
         
         double amount = 0, toSave = 0;
         String description = "", dateToday = "";
         while (true) {
+            // Automatically get date
+            LocalDate date = LocalDate.now();
+            DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            dateToday = date.format(pattern);
+            
             System.out.println("== Debit ==");
             System.out.print("Enter amount: ");
 
@@ -67,6 +73,11 @@ public class main_system {
 
             if(savings[2].equals("active")){
                 toSave = amount * Integer.parseInt(savings[3]) / 100.0;
+                if(!savHis.isEmpty()){
+                    savHis.add(new String[]{"", String.valueOf(user_id), String.valueOf(toSave), String.valueOf(Double.parseDouble(savHis.get(savHis.size()-1)[3]) + toSave), dateToday});
+                }else{
+                    savHis.add(new String[]{"", String.valueOf(user_id), String.valueOf(toSave), String.valueOf(toSave), dateToday});
+                }
             }
             
             if (amount > 0 && amount < (Math.pow(10, 9))) {
@@ -76,13 +87,8 @@ public class main_system {
                 continue;
             }
 
-            // Automatically get date
-            LocalDate date = LocalDate.now();
-            DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            dateToday = date.format(pattern);
-
             System.out.print("Enter description: ");
-            description = sc.next();
+            description = sc.nextLine();
             if (description.length() > 100){
                 System.out.println("Error: Description exceeds 100 characters, please retry. ");
             } else {
@@ -99,6 +105,8 @@ public class main_system {
         
         savings[4] = String.valueOf(Double.parseDouble(savings[4]) + toSave);
         file.set_savings_csv(savings);
+        
+        file.set_savHistory_csv(savHis);
     }
     
     private static void credit() {

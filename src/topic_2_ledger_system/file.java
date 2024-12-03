@@ -36,6 +36,7 @@ public class file {
             entry("savings",        "src/topic_2_ledger_system/saved/savings.csv"),
             entry("savHis",        "src/topic_2_ledger_system/saved/savHis.csv"),
             entry("loans",          "src/topic_2_ledger_system/saved/loans.csv"),
+            entry("loanHis",          "src/topic_2_ledger_system/saved/loanHis.csv"),
             entry("bank",           "src/topic_2_ledger_system/saved/bank.csv"),
             entry("accbalance",     "src/topic_2_ledger_system/saved/accbalance.csv")));
     
@@ -243,7 +244,7 @@ public class file {
     }
     
     // Need get first then set
-    // Array format: {"", user_id, savedBalance, date}
+    // Array format: {"", user_id, savedBalance, cumulativeSaved, date}
     private static List<String[]> tempSavHistory = new ArrayList<>();
     public static List<String[]> get_savHistory_csv(int user_id){
         List<String[]> savings_csv = new ArrayList<>();
@@ -328,6 +329,50 @@ public class file {
             loans_csv.get(i)[0] = String.valueOf(i);
         }
         write(loans_csv, "loans");
+    }
+    
+    // Need get first then set
+    // Array format: {"", user_id, loanPaid, cumulativeLoanPaid, date}
+    private static List<String[]> tempLoanHistory = new ArrayList<>();
+    public static List<String[]> get_loanHistory_csv(int user_id){
+        List<String[]> loans_csv = new ArrayList<>();
+        loans_csv = file.read("loanHis");
+        
+        if(loans_csv.isEmpty()){
+            loans_csv.add(new String[0]);
+            write(loans_csv, "loanHis");
+        }
+        
+        //look for savings according to user_id and remove the savings from savings_csv
+        List<String[]> specificSaving = new ArrayList<>();
+        Iterator<String[]> it = loans_csv.iterator();
+        while(it.hasNext()){
+            String[] data = it.next();
+            
+            if(data.length == 1 || data.length == 0) continue;
+            if(Integer.parseInt(data[1]) == user_id){
+                specificSaving.add(data);
+                it.remove();
+            }
+        }
+        tempLoanHistory = loans_csv;
+        
+        return specificSaving;
+    }
+    public static void set_loanHistory_csv(List<String[]> specificSaving){
+        List<String[]> loans_csv = new ArrayList<>();
+        loans_csv = tempLoanHistory;
+        
+        //add specificSaving back to whole savings_csv
+        for(int i = 0; i < specificSaving.size(); i++){
+            loans_csv.add(specificSaving.get(i));
+        }
+        
+        //For loop to auto-increment the savings_id
+        for(int i = 1; i < loans_csv.size(); i++){
+            loans_csv.get(i)[0] = String.valueOf(i);
+        }
+        write(loans_csv, "loanHis");
     }
     
     

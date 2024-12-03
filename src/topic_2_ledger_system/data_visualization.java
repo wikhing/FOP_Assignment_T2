@@ -4,13 +4,6 @@
  */
 package topic_2_ledger_system;
 
-
-
-
-
-
-
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -22,6 +15,8 @@ import org.jfree.chart.axis.NumberTickUnit;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import java.util.Scanner;
 public class data_visualization extends ApplicationFrame {
@@ -72,6 +67,7 @@ public class data_visualization extends ApplicationFrame {
         }
         return monthStr;
     }
+    
 
     public static double getDebitbyMonthYear(int user_id, String monthYear) {
         List<String[]> allTransactions = file.get_transactions_csv(user_id);
@@ -123,6 +119,7 @@ public class data_visualization extends ApplicationFrame {
         
         for (int i = 0; i < 12; i++){
             String monthYear = getStrMonth(month) + " " + year;
+            System.out.println(monthYear);
             xAxisMonthYear.add(monthYear);
             month++;
             
@@ -130,7 +127,8 @@ public class data_visualization extends ApplicationFrame {
                 month = 1;
                 year++;
             }
-            System.out.println(monthYear);
+            
+            
         }
         return xAxisMonthYear;
         
@@ -178,37 +176,34 @@ public class data_visualization extends ApplicationFrame {
         chartPanel.setPreferredSize(new java.awt.Dimension(1200, 1000));
         setContentPane(chartPanel);
     }
-   /* public static double getDebitbyMonthYear(int user_id, String monthYear) {
-        List<String[]> allTransactions = file.get_transactions_csv(user_id);
-        Double debitMonthYear = 0.0;
+   public static double getSavingsByMonthYear(int user_id, String monthYear) {
+        List<String[]> allSavingsHis = file.get_savHistory_csv(user_id);
+        double SavingsMonthYear = 0.0;
         
-        for (String[] transaction : allTransactions) {
-            if (transaction.length < 6){
+        for (String[] savingsHis: allSavingsHis) {
+
+            if (savingsHis.length < 4){
                 continue;
             }
             
-            if (transaction[5].endsWith(monthYear) && transaction[2].equalsIgnoreCase("debit")) {
-                debitMonthYear += Double.parseDouble(transaction[3]);
+            double savings = Double.parseDouble(savingsHis[2]);
+            System.out.println(savingsHis[2]);
+            if (savingsHis[3].endsWith(monthYear)){
+                if (savings > SavingsMonthYear){
+                    SavingsMonthYear = savings;
+                }
             }
         }
-        return debitMonthYear;
+        return SavingsMonthYear;
     }
-    public static List<Double> savingBalances(int user_id, int month, int year) {
-        List<String[]> allTransactions = file.get_transactions_csv(user_id);
-        
-        List<Double> savingBalances = new ArrayList<>();
+    public static List<Double> getmonthlySavingsFor12Months(int user_id, int month, int year) {
+
+        List<Double> monthlySavings = new ArrayList<>();
         
         for (int i = 0; i < 12; i++) { 
-            String monthYear = String.format("%02d/%4d", month, year);
-        for (String[] transaction : allTransactions) {
-            if (transaction.length < 6){
-                continue;
-            }
-            
-            if (transaction[5].endsWith(monthYear) && transaction[2].equalsIgnoreCase("debit")) {
-                debitMonthYear += Double.parseDouble(transaction[3]);
-            }
-            monthlyDebit.add(getDebitbyMonthYear(user_id, monthYear));
+            String monthYear = String.format("%02d/%04d", month, year);
+            monthlySavings.add(getSavingsByMonthYear(user_id, monthYear));
+            System.out.println(getSavingsByMonthYear(user_id, monthYear));
             month++;
             
             if(month > 12 ){
@@ -216,38 +211,58 @@ public class data_visualization extends ApplicationFrame {
                 year++;
             }
         }
-        return monthlyDebit;
+        return monthlySavings;
     }
     
-    public void displaySavingsGrowth(int user_id, List<Double> savingsBalances, List<String> months) {
+    
+    public void displaySavingsGrowth(int user_id, int month, int year) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        // Populate the dataset with savings balances and corresponding months
-        for (int i = 0; i < savingsBalances.size(); i++) {
-            dataset.addValue(savingsBalances.get(i), "Savings", months.get(i));
+        List<String> xAxisMonthYear = getXAxisMonthYear (month, year);
+        List<Double> monthlySavingsFor12Months = getmonthlySavingsFor12Months(user_id, month, year);
+        
+        Map<String, Double> savingsData = new HashMap<>();
+        
+        for (int i = 0; i < xAxisMonthYear.size(); i++){
+            if (monthlySavingsFor12Months.get(i) > 0){
+                savingsData.put(xAxisMonthYear.get(i), monthlySavingsFor12Months.get(i));
+            }
         }
+   
+
+        for (String monthYear : xAxisMonthYear) {
+            Double savings = savingsData.get(monthYear); 
+            if (savings != null) {
+                dataset.addValue(savings, "Savings", monthYear); 
+            } else {
+                dataset.addValue(null, "Savings", monthYear); 
+            }
+        }
+
+       
 
         // Create the line chart
         JFreeChart lineChart = ChartFactory.createLineChart(
                 "Savings Growth Over Time",  // Chart title
                 "Month",                     // X-axis label
-                "Savings Balance (RM)",      // Y-axis label
+                "Savings (RM)",      // Y-axis label
                 dataset                      // Dataset
         );
 
         // Create a chart panel and set it as the content pane
         ChartPanel chartPanel = new ChartPanel(lineChart);
-        chartPanel.setPreferredSize(new java.awt.Dimension(800, 600));
+        chartPanel.setPreferredSize(new java.awt.Dimension(1200, 1000));
         setContentPane(chartPanel);
     }
 
-  */
+  
     public static void dataVisualization (int user_id) {
         
         Scanner sc = new Scanner(System.in);
         
         System.out.println("\n\n== Data visualization ==");
         System.out.println("Data for the next 12 months will be displayed.");  
+        
         
         String monthYear;
         
@@ -300,6 +315,17 @@ public class data_visualization extends ApplicationFrame {
                 dataVisualization.pack();        
                 dataVisualization.setVisible(true); 
             }
+            case 2 -> {
+                data_visualization dataVisualization = new data_visualization("Saving Growth Over 12 Months");
+                dataVisualization.displaySavingsGrowth(user_id, month, year);
+                dataVisualization.pack();        
+                dataVisualization.setVisible(true); 
+            }
+            
+            case 3 -> {
+                
+            }
         }
+            
     }
 }

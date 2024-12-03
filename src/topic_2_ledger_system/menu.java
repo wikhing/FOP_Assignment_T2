@@ -39,6 +39,7 @@ public class menu {
         update_account_info();
         
         sav_percentage.valueProperty().addListener((obs, oldVal, newVal) -> saving_setting());
+        loan_choice.valueProperty().addListener((obs, oldVal, newVal) -> creditLoan(user_id));
     }
     
     
@@ -79,11 +80,7 @@ public class menu {
     @FXML Button record_submit = new Button();
     
     public void toTransaction(){
-        try{
-            transaction_record();
-        }catch(RuntimeException e){
-            trans_info.setText("Please fill in all the section of the form.");
-        }
+        transaction_record();
     }
     
     @FXML
@@ -93,6 +90,10 @@ public class menu {
         
         double amount = 0, toSave = 0;
         String description = "", dateToday = "";
+        if(record_amount.getText().length() == 0){
+            trans_info.setText("Please fill in all the section of the form.");
+            return;
+        }
         amount = Double.parseDouble(record_amount.getText());
         
         String type = "";
@@ -134,7 +135,9 @@ public class menu {
         description = record_descp.getText();
         if (description.length() > 100){
             trans_info.setText("Error: Description exceeds 100 characters, please retry.");
-        } else {
+        } else if(description.length() == 0){
+            trans_info.setText("Please fill in all the section of the form.");
+        }else{
             List<String[]> transaction = file.get_transactions_csv(user_id);
             transaction.add(new String[]{"", String.valueOf(user_id), type, String.valueOf(amount), description, dateToday});
             file.set_transactions_csv(transaction);
@@ -202,6 +205,25 @@ public class menu {
         file.set_savings_csv(savings);
         
         update_account_info();
+    }
+    
+    
+    
+    @FXML ChoiceBox loan_choice = new ChoiceBox();
+    
+    public void creditLoan(int user_id) {
+        
+        // Automatically get date
+        LocalDate date = LocalDate.now();
+        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String dateToday = date.format(pattern);
+
+        String strChoice = loan_choice.getValue().toString();
+        switch(strChoice){
+            case "Apply Loan" -> credit_loan.applyLoan(user_id, dateToday);
+            case "Repay Loan" -> credit_loan.repayLoan(user_id, dateToday, date);
+            default -> System.out.println("Invalid input, please retry.");
+        }   
     }
     
     
@@ -645,35 +667,6 @@ public class menu {
 //    
 //    
 //    
-//    private static void creditLoan(int user_id) {
-//        
-//        // Automatically get date
-//        LocalDate date = LocalDate.now();
-//        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-//        String dateToday = date.format(pattern);
-//
-//        while (true) {
-//            System.out.println("\n---- Credit Loan System ----");
-//            System.out.println("1. Apply Loan");
-//            System.out.println("2. Repay Loan");
-//            System.out.println("3. Exit");
-//            System.out.print("Enter your choice: ");
-//            int choices = sc.nextInt();
-//            
-//            
-//            if (choices == 1) {
-//                credit_loan.applyLoan(user_id, dateToday); 
-//            } else if (choices == 2) {
-//                credit_loan.repayLoan(user_id, dateToday, date);   
-//            } else if (choices == 3) {
-//                System.out.println("Exiting the system. Thank you!");
-//                break;
-//            } else {
-//                System.out.println("Invalid input, please retry.");
-//            }
-//        }
-//        
-//    }
 //    
 //    
 //    private static int logOut() {

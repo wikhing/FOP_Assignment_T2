@@ -106,7 +106,7 @@
     <Separator GridPane.rowIndex="3" GridPane.columnIndex="2" orientation="HORIZONTAL"/>
     
     <children>
-        <StackPane GridPane.rowIndex="4" GridPane.columnIndex="2">
+        <StackPane GridPane.rowIndex="4" GridPane.columnIndex="2" minHeight="170" prefHeight="180" maxHeight="190">
             <GridPane hgap="10" vgap="10">
                 <Label text="Deposit Interest Predictor" GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
                 

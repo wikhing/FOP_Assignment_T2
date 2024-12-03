@@ -20,6 +20,8 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import topic_2_ledger_system.credit_loan;
+import topic_2_ledger_system.file;
 
 /**
  *
@@ -284,20 +286,21 @@ public class menu {
             
         // Calculate interest earned for valid input
         double interestEarned = 0.0;
+        interest.setWrapText(true);
         switch (period){
             case 1:
                 interestEarned = (deposit*(selectedBankIntRate/100))/365;
-                interest.setText("Daily Interest earned \nRM " + df.format(interestEarned));
+                interest.setText("Daily Interest \nearned RM " + df.format(interestEarned));
                 interest_info.setText("");
                 break;
             case 2:
                 interestEarned = (deposit*(selectedBankIntRate/100))/12;
-                interest.setText("Monthly Interest earned \nRM" + df.format(interestEarned));
+                interest.setText("Monthly Interest \nearned RM" + df.format(interestEarned));
                 interest_info.setText("");
                 break;
             case 3: 
                 interestEarned = deposit*(selectedBankIntRate/100);
-                interest.setText("Annually Interest earned \nRM" + df.format(interestEarned));
+                interest.setText("Annually Interest \nearned RM" + df.format(interestEarned));
                 interest_info.setText("");
                 break;
         }

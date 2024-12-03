@@ -36,7 +36,7 @@ public class main_system extends Application{
     @Override
     public void start(Stage stage) throws IOException {
         primStage = stage;
-        mainScene = new Scene(loadFXML("menu"), 1170, 420);
+        mainScene = new Scene(loadFXML("menu"), 1170, 440);
         scene = new Scene(loadFXML("login_register"), 640, 480);
         stage.setScene(mainScene);
         stage.show();
@@ -57,7 +57,7 @@ public class main_system extends Application{
     }
     
     private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(main_system.class.getResource(fxml + ".fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(main_system.class.getResource("resources/" + fxml + ".fxml"));
         return fxmlLoader.load();
     }
     

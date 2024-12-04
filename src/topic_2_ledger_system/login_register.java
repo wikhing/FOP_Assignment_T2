@@ -5,6 +5,8 @@
 package topic_2_ledger_system;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 /**
@@ -16,6 +18,7 @@ public class login_register {
     private static Scanner input = new Scanner(System.in);
     
     public static int initialize() throws IOException{
+
         int typeOfUser = promptUser();
         
         while(typeOfUser != 1 && typeOfUser != 2){
@@ -42,6 +45,11 @@ public class login_register {
     }
     
     private static int loginORregister(int typeOfUser) throws IOException{
+        
+        LocalDate date = LocalDate.now();
+        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String dateToday = date.format(pattern);
+        
         if(typeOfUser == 2){
             System.out.println("\n== Please fill in the form ==");
 
@@ -90,7 +98,7 @@ public class login_register {
 
                 List<String[]> allUser = file.get_user_csv();
                 String hashedPassword = bcrypt.hashpw(password, bcrypt.gensalt());
-                allUser.add(new String[]{"", user_name, e_mail, hashedPassword});
+                allUser.add(new String[]{"", user_name, e_mail, hashedPassword, dateToday});
                 file.set_user_csv(allUser);
                 file.new_user_acc_setup(allUser.size() - 1);
                 System.out.println("\nRegister successful!");

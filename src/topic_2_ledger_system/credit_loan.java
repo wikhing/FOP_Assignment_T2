@@ -136,6 +136,7 @@ public class credit_loan {
     }
     
     public static int repayLoan(int user_id, String dateToday, LocalDate date) {
+        List<String[]> loanHis = file.get_loanHistory_csv(user_id);
         
         boolean activeLoan = getActiveLoan(user_id);
         int period = getPeriod(user_id);
@@ -160,6 +161,16 @@ public class credit_loan {
         }
 
         balance -= paymentAmount;
+        if (balance <= 0) {
+            balance = 0;
+            activeLoan = false;// Mark loan as fully repaid
+        }
+        
+        if(!loanHis.isEmpty()){
+            loanHis.add(new String[]{"", String.valueOf(user_id), String.valueOf(paymentAmount), String.valueOf(Double.parseDouble(loanHis.get(loanHis.size()-1)[3]) + paymentAmount), String.valueOf(balance), dateToday});
+        }else{
+            loanHis.add(new String[]{"", String.valueOf(user_id), String.valueOf(paymentAmount), String.valueOf(paymentAmount), String.valueOf(balance), dateToday});
+        }
         System.out.println("Payment successful! ----" + dateToday);
         
         if (balance > 0) {
@@ -167,15 +178,16 @@ public class credit_loan {
         } else if (balance < 0) {
             System.out.println("Remaining balance is 0");
             System.out.printf("Your change : RM%.2f\n", -balance);
+            loanHis.get(loanHis.size()-1)[2] = String.valueOf(Double.parseDouble(loanHis.get(loanHis.size()-1)[2]) + balance);
+            loanHis.get(loanHis.size()-1)[3] = String.valueOf(Double.parseDouble(loanHis.get(loanHis.size()-1)[3]) + balance);
         }
         
-        if (balance <= 0) {
+        if (balance == 0) {
             System.out.println("Loan fully repaid. Thank you!");
-            activeLoan = false; // Mark loan as fully repaid
-            balance = 0;
         }
         
         updateLoan(user_id, balance, period, activeLoan);
+        file.set_loanHistory_csv(loanHis);
         
         return 0;
     }

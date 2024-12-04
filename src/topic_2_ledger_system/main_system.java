@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -53,21 +54,100 @@ public class main_system {
         System.out.println("8. Logout\n");
         System.out.print("> ");
     }
+    
+    
+    
+    private static void update_by_end_month(int user_id){
+        ArrayList<String[]> user_csv = file.get_user_csv();
+        String datePrevious = user_csv.get(user_id)[4];
+        
+ 
+        String[] datePreviousSplittedStr = datePrevious.split("/"); 
+        int[] datePreviousSplitted = new int[datePreviousSplittedStr.length];
+        for (int i = 0; i < datePreviousSplittedStr.length; i++){
+            datePreviousSplitted[i] = Integer.parseInt(datePreviousSplittedStr[i]);
+        }
+        
+        //int dayDatePrevious = datePreviousSplitted[0];
+        int monthDatePrevious = datePreviousSplitted[1];
+        int yearDatePrevious= datePreviousSplitted[2];
+        
+        LocalDate date = LocalDate.now();
+        //int dayDate = date.getDayOfMonth();
+        int monthDate = date.getMonthValue();
+        int yearDate = date.getYear();
+        
+        // testrun
+        //yearDate = 2025;
+        //monthDate = 1;
+        
+        boolean isUpdate = true;
+        
+        if(yearDate > yearDatePrevious){
+            isUpdate = false;
+        }
+        else if (yearDate == yearDatePrevious){
+            if(monthDate > monthDatePrevious){
+                isUpdate= false;
+            }
+        }
+        
+        String[] savings = file.get_savings_csv(user_id);
+        double balance = file.get_accbalance_csv(user_id);
+        double monthlySavings = Double.parseDouble(savings[4]);
+
+        if(!isUpdate){
+            System.out.println("The savings amount has been successfully added to your balance from the previous login month.");
+               
+            balance -= monthlySavings;
+            if (balance < 0.0){
+                balance = 0.0;
+            }
+            System.out.printf("Final balance of the last login month : %.2f\n", balance);
+                
+            balance = 0.0;
+            file.set_accbalance_csv(user_id, balance);        
+                
+            monthlySavings -= balance;
+            if (monthlySavings < 0.0){
+                monthlySavings = 0.0;
+            }
+                
+            savings[4] = String.valueOf(monthlySavings);
+            file.set_savings_csv(savings);
+                
+            System.out.printf("Remaining balance to be carried forward to this month. : %.2f\n", monthlySavings);
+            System.out.println("The balance amount has been reset to zero for this month.");
+        }
+            
+    }
 
     private static void debit() {
         double balance = file.get_accbalance_csv(user_id);
         String[] savings = file.get_savings_csv(user_id);
+        List<String[]> savHis = file.get_savHistory_csv(user_id);
         
         double amount = 0, toSave = 0;
         String description = "", dateToday = "";
         while (true) {
+            // Automatically get date
+            LocalDate date = LocalDate.now();
+            DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            dateToday = date.format(pattern);
+            
             System.out.println("== Debit ==");
             System.out.print("Enter amount: ");
-
+         
             amount = sc.nextDouble();
-
+            sc.nextLine();
+            
             if(savings[2].equals("active")){
-                toSave = amount * Integer.parseInt(savings[3]) / 100.0;
+                toSave = amount * Double.parseDouble(savings[3]) / 100.0;
+                if(!savHis.isEmpty()){
+                    savHis.add(new String[]{"", String.valueOf(user_id), String.valueOf(toSave), String.valueOf(Double.parseDouble(savHis.get(savHis.size()-1)[3]) + toSave), dateToday});
+                }else{
+                    savHis.add(new String[]{"", String.valueOf(user_id), String.valueOf(toSave), String.valueOf(toSave), dateToday});
+                }
             }
             
             if (amount > 0 && amount < (Math.pow(10, 9))) {
@@ -76,14 +156,11 @@ public class main_system {
                 System.out.println("Invalid input, please retry");
                 continue;
             }
-
-            // Automatically get date
-            LocalDate date = LocalDate.now();
-            DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            dateToday = date.format(pattern);
+           
+            
 
             System.out.print("Enter description: ");
-            description = sc.next();
+            description = sc.nextLine();
             if (description.length() > 100){
                 System.out.println("Error: Description exceeds 100 characters, please retry. ");
             } else {
@@ -100,6 +177,8 @@ public class main_system {
         
         savings[4] = String.valueOf(Double.parseDouble(savings[4]) + toSave);
         file.set_savings_csv(savings);
+        
+        file.set_savHistory_csv(savHis);
     }
     
     private static void credit() {
@@ -515,7 +594,7 @@ public class main_system {
         
         char choice;
         boolean isActive = false;
-        int percentage = 0;
+        double percentage = 0.0;
         while(true){
             System.out.print("Are you sure you want to activare it? (Y/N) : ");
             choice = sc.next().charAt(0);
@@ -524,7 +603,7 @@ public class main_system {
                 isActive = true;
                 while(true){
                     System.out.print("Please enter the percentage you wish to deduct from the next debit: ");
-                    percentage = sc.nextInt();
+                    percentage = sc.nextDouble();
 
                     if (percentage >= 0 && percentage <= 100){
                         System.out.println("\n\nSavings Setting added successfully!!!\n");
@@ -549,14 +628,7 @@ public class main_system {
             savings[3] = String.valueOf(percentage);
         }else if(!isActive){
             savings[2] = "inactive";
-            savings[3] = "0";
-            if(savings[4] != "0"){
-                double balance = file.get_accbalance_csv(user_id);
-                balance += Double.parseDouble(savings[4]);
-                
-                file.set_accbalance_csv(user_id, balance);
-            }
-            savings[4] = "0";
+            savings[3] = "0.0";
         }
         file.set_savings_csv(savings);
         
@@ -567,7 +639,7 @@ public class main_system {
         
         // Automatically get date
         LocalDate date = LocalDate.now();
-        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String dateToday = date.format(pattern);
 
         while (true) {
@@ -661,6 +733,10 @@ public class main_system {
     
     
     public static void loginPage(int user_id) {
+        
+        update_by_end_month(user_id);
+        file.update_login_date(user_id);
+        
         ArrayList<String[]> user_csv = file.get_user_csv();
         String username = user_csv.get(user_id)[1];
         String email = user_csv.get(user_id)[2];
@@ -695,7 +771,7 @@ public class main_system {
             try {
                 option = Integer.parseInt(rawOption);
                 
-                if (!(option >= 1 && option <= 7)) {
+                if (!(option >= 1 && option <= 8)) {
                     System.out.println("Invalid option, please retry.");
                     continue;
                 }

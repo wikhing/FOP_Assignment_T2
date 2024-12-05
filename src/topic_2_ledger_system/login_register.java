@@ -180,6 +180,9 @@ public class login_register {
         List<String[]> users = file.get_user_csv();
 
         for(int i = 1; i < users.size(); i++){
+            if (users.get(i).length < 4){
+                continue;
+            }
             if(users.get(i)[2].equals(loginInfo[0]) && bcrypt.checkpw(loginInfo[1], users.get(i)[3])){
                 return Integer.parseInt(users.get(i)[0]);
             }

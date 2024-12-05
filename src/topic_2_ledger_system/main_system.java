@@ -91,12 +91,11 @@ public class main_system {
                 isUpdate= false;
             }
         }
-        double balance = 0.0;
-        double monthlySavings = 0.0;
-        
+       
+       
         String[] savings = file.get_savings_csv(user_id);
-        balance = file.get_accbalance_csv(user_id);
-        monthlySavings = Double.parseDouble(savings[4]);
+        double balance = file.get_accbalance_csv(user_id);
+        double monthlySavings = Double.parseDouble(savings[4]);
 
         if(!isUpdate){
             System.out.println("The savings amount has been successfully added to your balance from the previous login month.");

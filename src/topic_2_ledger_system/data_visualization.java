@@ -154,6 +154,8 @@ public class data_visualization extends ApplicationFrame {
         chartPanel.setPreferredSize(new java.awt.Dimension(1200, 1000));
         setContentPane(chartPanel);
     }
+    
+    //Saving 
    public static double getSavingsByMonthYear(int user_id, String monthYear) {
         List<String[]> allSavingsHis = file.get_savHistory_csv(user_id);
         double SavingsMonthYear = 0.0;
@@ -256,19 +258,25 @@ public class data_visualization extends ApplicationFrame {
      public static double getRepaymentsByMonthYear(int user_id, String monthYear) {
         List<String[]> allLoanHis = file.get_loanHistory_csv(user_id);
         double repaymentsMonthYear = 0.0;
+        boolean isRepayments = false;
         
         for (String[] loanHis: allLoanHis) {
-
+            
             if (loanHis.length < 6){
                 continue;
             }
             
             double repayment = Double.parseDouble(loanHis[3]);
             if (loanHis[5].endsWith(monthYear)){
+                isRepayments = true;
                 if (repayment > repaymentsMonthYear){
                     repaymentsMonthYear = repayment;
                 }
             }
+        }
+        
+        if(!isRepayments){
+            repaymentsMonthYear = -1;
         }
         return repaymentsMonthYear;
     }
@@ -280,7 +288,6 @@ public class data_visualization extends ApplicationFrame {
         for (int i = 0; i < 12; i++) { 
             String monthYear = String.format("%02d/%04d", month, year);
             repaymentsTrend.add(getRepaymentsByMonthYear(user_id, monthYear));
-            System.out.println(getRepaymentsByMonthYear(user_id, monthYear));
             month++;
             
             if(month > 12 ){
@@ -346,6 +353,7 @@ public class data_visualization extends ApplicationFrame {
    public static double getLoanByMonthYear(int user_id, String monthYear) {
         List<String[]> allLoanHis = file.get_loanHistory_csv(user_id);
         double loanMonthYear = Double.MAX_VALUE;
+        boolean isLoan = false;
         
         for (String[] loanHis: allLoanHis) {
 
@@ -355,10 +363,14 @@ public class data_visualization extends ApplicationFrame {
             
             double loan = Double.parseDouble(loanHis[4]);
             if (loanHis[5].endsWith(monthYear)){
+                isLoan = true;
                 if (loan < loanMonthYear){
                     loanMonthYear = loan;
                 }
             }
+        }
+        if(!isLoan){
+            loanMonthYear = -1;
         }
         return loanMonthYear;
     }
@@ -370,7 +382,6 @@ public class data_visualization extends ApplicationFrame {
         for (int i = 0; i < 12; i++) { 
             String monthYear = String.format("%02d/%04d", month, year);
             loanTrend.add(getLoanByMonthYear(user_id, monthYear));
-            System.out.println(getLoanByMonthYear(user_id, monthYear));
             month++;
             
             if(month > 12 ){

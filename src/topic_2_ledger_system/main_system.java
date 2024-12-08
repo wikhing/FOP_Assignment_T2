@@ -36,13 +36,13 @@ public class main_system extends Application{
     @Override
     public void start(Stage stage) throws IOException {
         primStage = stage;
-        mainScene = new Scene(loadFXML("menu"), 1170, 440);
+        mainScene = new Scene(loadFXML("menu"), 1170, 560);         // To be commented
         scene = new Scene(loadFXML("login_register"), 640, 480);
-        stage.setScene(mainScene);
+        stage.setScene(mainScene);                                  // To be changed to scene
         stage.show();
     }
 
-    static void setScene(String fxml) throws IOException {
+    protected static void setScene(String fxml) throws IOException {
         Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
         
         if(fxml.equals("menu")){
@@ -56,7 +56,7 @@ public class main_system extends Application{
         }
     }
     
-    private static Parent loadFXML(String fxml) throws IOException {
+    protected static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(main_system.class.getResource("resources/" + fxml + ".fxml"));
         return fxmlLoader.load();
     }

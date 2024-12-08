@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -24,7 +25,7 @@ import javafx.scene.layout.VBox;
  * @author Teo Yik Kiat, Wong Ing Khing, Sim Pei Jun
  *
  */
-public class login_register {
+public class login_register extends main_system{
     
     @FXML Button back_btn = new Button();
     @FXML VBox main_btn = new VBox();
@@ -72,11 +73,11 @@ public class login_register {
                 int user_id = login(email, password);
                 
                 if(user_id != -1){
-                    System.out.println("Login Succesful" + user_id);
-                    
+                    System.out.println("Login Succesful " + user_id);
+
                     menu.set_user(user_id);
+                    main_system.mainScene = new Scene(main_system.loadFXML("menu"), 1170, 440);
                     main_system.setScene("menu");
-//                    menu.update_account_info();
                 }
                 
             } catch (IOException ex) {
@@ -113,6 +114,7 @@ public class login_register {
                 }
                 
                 menu.set_user(user_id);
+                main_system.mainScene = new Scene(main_system.loadFXML("menu"), 1170, 440);
                 main_system.setScene("menu");
                 
             } catch (IOException ex) {

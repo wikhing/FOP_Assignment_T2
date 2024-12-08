@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Scanner;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
@@ -20,7 +22,8 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import topic_2_ledger_system.credit_loan;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import topic_2_ledger_system.file;
 
 /**
@@ -31,7 +34,7 @@ public class menu {
     
     private static final DecimalFormat df = new DecimalFormat("0.00");
     
-    private static int user_id = 1;
+    private static int user_id = 2;
     public static void set_user(int user_id){
         menu.user_id = user_id;
     }
@@ -216,18 +219,265 @@ public class menu {
     public void creditLoan(int user_id) {
         
         // Automatically get date
-        LocalDate date = LocalDate.now();
+        LocalDate dateNow = LocalDate.now();
         DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String dateToday = date.format(pattern);
+        String dateToday = dateNow.format(pattern);
 
         String strChoice = loan_choice.getValue().toString();
         switch(strChoice){
-            case "Apply Loan" -> credit_loan.applyLoan(user_id, dateToday);
-            case "Repay Loan" -> credit_loan.repayLoan(user_id, dateToday, date);
+            case "Apply Loan" -> loanApplySet(user_id, dateToday);
+            case "Repay Loan" -> loanRepaySet(user_id, dateToday, dateNow);
             default -> System.out.println("Invalid input, please retry.");
         }   
     }
     
+    private static final Scanner sc = new Scanner(System.in);
+    
+    public static boolean getActiveLoan(int user_id) {
+        
+        boolean isActive = false;
+        
+        try {
+            String[] loan_csv = file.get_loans_csv(user_id);
+            isActive = loan_csv[6].equals("active");
+        } catch (Exception e) {
+            return false;
+        }
+                
+        return isActive;
+    }
+    
+    public static double getBalance(int user_id) {
+        try {
+            String[] loan_csv = file.get_loans_csv(user_id);
+            return Double.parseDouble(loan_csv[5]);
+        } catch (Exception e) {
+            return 0;
+        }
+        
+    }
+    
+    public static void updateLoan(int user_id, double totalAmount, double monthlyPayment, int period, boolean activeLoan, String dateToday, double interestRate) {
+        
+        String[] loan = {"", 
+                        String.valueOf(user_id), 
+                        String.valueOf(totalAmount), 
+                        String.valueOf(interestRate), 
+                        String.valueOf(period), 
+                        String.valueOf(totalAmount), 
+                        (activeLoan ? "active" : "inactive"), 
+                        dateToday};
+        
+        
+        file.set_loans_csv(loan);
+    }
+    
+    public static void updateLoan(int user_id, double balance, int period, boolean activeLoan) {
+        
+        String[] loan_csv = file.get_loans_csv(user_id);
+        
+        String[] loan = {"", 
+                        String.valueOf(user_id), 
+                        loan_csv[2], 
+                        loan_csv[3], 
+                        String.valueOf(period), 
+                        String.valueOf(balance), 
+                        (activeLoan ? "active" : "inactive"), 
+                        loan_csv[7]};
+        
+        
+        file.set_loans_csv(loan);
+        
+    }
+    
+    public static int getPeriod(int user_id) {
+        String[] loan_csv = file.get_loans_csv(user_id);
+        return Integer.parseInt(loan_csv[4]);
+    }
+    
+    @FXML StackPane loan_form;
+    
+    TextField loanPrincipal = new TextField();
+    TextField loanInterest = new TextField();
+    TextField loanPeriod = new TextField();
+    Button applyBtn = new Button("Apply Loan");
+    
+    TextField payAmount = new TextField();
+    Button payBtn = new Button("Pay Loan");
+    
+    VBox vertBox = new VBox();
+    
+    @FXML
+    public void formMaker(int typeForm){
+        vertBox.setSpacing(10);
+        vertBox.setAlignment(Pos.CENTER);
+        if(loan_form.getChildren().contains(vertBox)){
+            loan_form.getChildren().remove(vertBox);
+        }
+        
+        if(typeForm == 1){
+            loanPrincipal.setPromptText("Loan Amount(RM)");
+            loanPrincipal.setMaxWidth(120);
+            loanInterest.setPromptText("Interest Rate(%)");
+            loanInterest.setMaxWidth(120);
+            loanPeriod.setPromptText("Period(months)");
+            loanPeriod.setMaxWidth(120);
+            
+            applyBtn.setOnAction(e -> applyLoan());
+            applyBtn.prefWidth(90);
+            
+            vertBox.getChildren().setAll(loanPrincipal, loanInterest, loanPeriod, applyBtn);
+            loan_form.getChildren().add(vertBox);
+        }else if(typeForm == 2){
+            payAmount.setPromptText("Payment Amount(RM)");
+            payAmount.setMaxWidth(130);
+            
+            payBtn.setOnAction(e -> repayLoan());
+            payBtn.prefWidth(90);
+            
+            vertBox.getChildren().setAll(payAmount, payBtn);
+            loan_form.getChildren().add(vertBox);
+        }
+    }
+    
+    @FXML VBox loan_infos;
+    Label lT1 = new Label("");
+    Label lT2 = new Label("");
+    Label lT3 = new Label("");
+    Label lT4 = new Label("");
+    
+    String date;
+    
+    @FXML
+    public void loanApplySet(int user_id, String dateToday) {
+        formMaker(1);
+        date = dateToday;
+        
+        loan_infos.getChildren().removeAll(lT1, lT2, lT3, lT4);
+                
+        boolean activeLoan = getActiveLoan(user_id);
+        
+        if (activeLoan) {
+            lT1.setWrapText(true);
+            lT1.setText("You already have an active loan.\nPlease repay it before applying for another.");
+            loan_infos.getChildren().add(lT1);
+        }
+    }
+    
+    @FXML
+    public void applyLoan(){
+        boolean activeLoan = getActiveLoan(user_id);
+        
+        loan_infos.getChildren().removeAll(lT1, lT2, lT3, lT4);
+        
+        if(loanPrincipal.getText().isEmpty() || loanInterest.getText().isEmpty() || loanPeriod.getText().isEmpty()){
+            lT1.setText("Please fill in all section!");
+            loan_infos.getChildren().add(lT1);
+            return;
+        }
+        
+        if(loanPrincipal.getText().matches("[a-z]") || loanInterest.getText().matches("[a-z]") || loanPeriod.getText().matches("[a-z]")) {
+            lT1.setText("Invalid input, please retry.");
+            loan_infos.getChildren().add(lT1);
+            return;
+        }
+        
+        double rate = Double.parseDouble(loanInterest.getText());
+        int period = Integer.parseInt(loanPeriod.getText());
+        
+        double principal = Double.parseDouble(loanPrincipal.getText());
+
+        if (!(principal > 0 && rate > 0 && period > 0)) {
+            lT1.setText("Invalid input, please retry.");
+            loan_infos.getChildren().add(lT1);
+            return;
+        }
+
+        double totalAmount = principal + (principal * (rate / 100) * (period / 12.0));
+        double monthlyPayment = totalAmount / period;
+
+        activeLoan = true;
+        
+        lT1.setText("Loan approved!");
+        lT2.setText("Total repayment amount: " + df.format(totalAmount));
+        lT3.setText("Monthly repayment amount: " + df.format(monthlyPayment));
+//        System.out.println("Repayment period: " + period + " months");
+        lT4.setText("Loan start date: " + date);
+        loan_infos.getChildren().addAll(lT1, lT2, lT3, lT4);
+
+        updateLoan(user_id, Double.parseDouble(df.format(totalAmount)), Double.parseDouble(df.format(monthlyPayment)), period, activeLoan, date, rate);
+    }
+    
+    @FXML
+    public void loanRepaySet(int user_id, String dateToday, LocalDate dateNow) {
+        formMaker(2);
+        date = dateToday;
+        
+        loan_infos.getChildren().removeAll(lT1, lT2, lT3, lT4);
+        
+        boolean activeLoan = getActiveLoan(user_id);
+        int period = getPeriod(user_id);
+                
+        if (!activeLoan) {
+            lT1.setText("No active loan to repay.");
+            return;
+        }   
+
+        if (dateNow.isAfter(dateNow.plusMonths(period))) {
+            lT1.setText("Loan repayment period has ended. Further debits and credits are not allowed.");
+        }
+    }
+    
+    @FXML
+    public void repayLoan(){
+        List<String[]> loanHis = file.get_loanHistory_csv(user_id);
+        boolean activeLoan = getActiveLoan(user_id);
+        double balance = getBalance(user_id);
+        int period = getPeriod(user_id);
+        
+        if(payAmount.getText().isEmpty()){
+            lT1.setText("Please fill in all section!");
+            return;
+        }
+        
+        if(payAmount.getText().matches("[a-z]")) {
+            lT1.setText("Invalid input, please retry.");
+            return;
+        }
+        
+        double paymentAmount = Double.parseDouble(payAmount.getText());
+
+        if (paymentAmount <= 0) {
+            lT1.setText("Invalid input, please retry.");
+            return;
+        }
+
+        balance -= paymentAmount;
+        if(!loanHis.isEmpty()){
+            loanHis.add(new String[]{"", String.valueOf(user_id), String.valueOf(paymentAmount), String.valueOf(Double.parseDouble(loanHis.get(loanHis.size()-1)[3]) + paymentAmount), date});
+        }else{
+            loanHis.add(new String[]{"", String.valueOf(user_id), String.valueOf(paymentAmount), String.valueOf(paymentAmount), date});
+        }
+        lT1.setText("Payment successful! ----" + date);
+        
+        if (balance > 0) {
+            lT2.setText("Remaining balance: " + balance);
+        } else if (balance < 0) {
+            lT2.setText("Remaining balance is 0");
+            lT3.setText("Your change: RM" + df.format(-balance));
+            loanHis.get(loanHis.size()-1)[2] = String.valueOf(Double.parseDouble(loanHis.get(loanHis.size()-1)[2]) + balance);
+            loanHis.get(loanHis.size()-1)[3] = String.valueOf(Double.parseDouble(loanHis.get(loanHis.size()-1)[3]) + balance);
+        }
+        
+        if (balance <= 0) {
+            lT4.setText("Loan fully repaid. Thank you!");
+            activeLoan = false; // Mark loan as fully repaid
+            balance = 0;
+        }
+        
+        updateLoan(user_id, balance, period, activeLoan);
+        file.set_loanHistory_csv(loanHis);
+    }
     
     
     @FXML ChoiceBox bank_list = new ChoiceBox();

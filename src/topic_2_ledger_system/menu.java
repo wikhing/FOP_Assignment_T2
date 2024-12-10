@@ -8,8 +8,6 @@ import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import javafx.fxml.FXML;
@@ -19,12 +17,12 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import topic_2_ledger_system.file;
 
 /**
  *
@@ -46,6 +44,14 @@ public class menu {
         sav_percentage.valueProperty().addListener((obs, oldVal, newVal) -> saving_setting());
         loan_choice.valueProperty().addListener((obs, oldVal, newVal) -> creditLoan(user_id));
     }
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     @FXML Label username = new Label();
@@ -76,6 +82,15 @@ public class menu {
         String ln = loans_data[5];
         loanfx.setText("RM " + df.format(Double.parseDouble(ln)));
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     @FXML TextField record_amount = new TextField();
     @FXML ChoiceBox record_choice = new ChoiceBox();
@@ -164,6 +179,13 @@ public class menu {
     
     
     
+    
+    
+    
+    
+    
+    
+    
     @FXML CheckBox user_choice = new CheckBox();
     @FXML Spinner sav_percentage = new Spinner();
     @FXML Label sav_info = new Label();
@@ -214,6 +236,13 @@ public class menu {
     
     
     
+    
+    
+    
+    
+    
+    
+    
     @FXML ChoiceBox loan_choice = new ChoiceBox();
     
     public void creditLoan(int user_id) {
@@ -225,8 +254,8 @@ public class menu {
 
         String strChoice = loan_choice.getValue().toString();
         switch(strChoice){
-            case "Apply Loan" -> loanApplySet(user_id, dateToday);
-            case "Repay Loan" -> loanRepaySet(user_id, dateToday, dateNow);
+            case "Apply Loan" -> loanApplySet(dateToday);
+            case "Repay Loan" -> loanRepaySet(dateToday, dateNow);
             default -> System.out.println("Invalid input, please retry.");
         }   
     }
@@ -349,7 +378,7 @@ public class menu {
     String date;
     
     @FXML
-    public void loanApplySet(int user_id, String dateToday) {
+    public void loanApplySet(String dateToday) {
         formMaker(1);
         date = dateToday;
         
@@ -369,6 +398,12 @@ public class menu {
         boolean activeLoan = getActiveLoan(user_id);
         
         loan_infos.getChildren().removeAll(lT1, lT2, lT3, lT4);
+        
+        if (activeLoan) {
+            lT1.setWrapText(true);
+            lT1.setText("You already have an active loan.\nPlease repay it before applying for another.");
+            loan_infos.getChildren().add(lT1);
+        }
         
         if(loanPrincipal.getText().isEmpty() || loanInterest.getText().isEmpty() || loanPeriod.getText().isEmpty()){
             lT1.setText("Please fill in all section!");
@@ -406,49 +441,65 @@ public class menu {
         loan_infos.getChildren().addAll(lT1, lT2, lT3, lT4);
 
         updateLoan(user_id, Double.parseDouble(df.format(totalAmount)), Double.parseDouble(df.format(monthlyPayment)), period, activeLoan, date, rate);
+        
+        update_account_info();
     }
     
     @FXML
-    public void loanRepaySet(int user_id, String dateToday, LocalDate dateNow) {
+    public void loanRepaySet(String dateToday, LocalDate dateNow) {
         formMaker(2);
         date = dateToday;
         
         loan_infos.getChildren().removeAll(lT1, lT2, lT3, lT4);
         
         boolean activeLoan = getActiveLoan(user_id);
+        
         int period = getPeriod(user_id);
                 
         if (!activeLoan) {
             lT1.setText("No active loan to repay.");
+            loan_infos.getChildren().add(lT1);
             return;
         }   
 
         if (dateNow.isAfter(dateNow.plusMonths(period))) {
             lT1.setText("Loan repayment period has ended. Further debits and credits are not allowed.");
+            loan_infos.getChildren().add(lT1);
         }
     }
     
     @FXML
     public void repayLoan(){
+        loan_infos.getChildren().removeAll(lT1, lT2, lT3, lT4);
+        
         List<String[]> loanHis = file.get_loanHistory_csv(user_id);
         boolean activeLoan = getActiveLoan(user_id);
         double balance = getBalance(user_id);
         int period = getPeriod(user_id);
         
-        if(payAmount.getText().isEmpty()){
+        if (!activeLoan) {
+            lT1.setText("No active loan to repay.");
+            loan_infos.getChildren().add(lT1);
+            return;
+        }   
+        
+        String pay_amount_str = payAmount.getText();
+        if(pay_amount_str.isEmpty()){
             lT1.setText("Please fill in all section!");
+            loan_infos.getChildren().add(lT1);
             return;
         }
-        
-        if(payAmount.getText().matches("[a-z]")) {
+        if(pay_amount_str.matches("[a-z]")) {
             lT1.setText("Invalid input, please retry.");
+            loan_infos.getChildren().add(lT1);
             return;
         }
         
-        double paymentAmount = Double.parseDouble(payAmount.getText());
+        double paymentAmount = Double.parseDouble(pay_amount_str);
 
         if (paymentAmount <= 0) {
             lT1.setText("Invalid input, please retry.");
+            loan_infos.getChildren().add(lT1);
             return;
         }
 
@@ -474,10 +525,21 @@ public class menu {
             activeLoan = false; // Mark loan as fully repaid
             balance = 0;
         }
+        loan_infos.getChildren().addAll(lT1, lT2, lT3, lT4);
         
         updateLoan(user_id, balance, period, activeLoan);
         file.set_loanHistory_csv(loanHis);
+        
+        update_account_info();
     }
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     @FXML ChoiceBox bank_list = new ChoiceBox();
@@ -556,183 +618,261 @@ public class menu {
         }
     }
     
-//    private static void history() {
-//        System.out.print("Enter the month and year (eg. MM/YYYY): ");
-//        sc.nextLine();
-//        String monthYear = sc.nextLine();
-//        
-//        // In case of invalid month/year input
-//        if (!monthYear.matches("\\d{2}/\\d{4}")) {
-//            System.out.println("Invalid format. Please use MM/YYYY.");
-//            return;
-//        }
-//        view_export_csv.viewAndExportTransactions(user_id, monthYear);
-//    }
-//    
-//    private static void filterhistory(List<String[]> transactions){
-//        
-//        System.out.println();
-//        
-//        // Filter options: Amount Range, Date Range, Transaction Type
-//        int filterOption = 0; // Initialize variable to store user's choice
-//        while (true) {
-//            System.out.println();
-//            System.out.println("Filter Options:");
-//            System.out.println("1. Filter by Amount Range");
-//            System.out.println("2. Filter by Date Range");
-//            System.out.println("3. Filter by Transaction Type (debit/credit)");
-//            System.out.print("Enter filter option (1-3): ");
-//
-//            if (sc.hasNextInt()) { // Check if the input is an integer
-//                filterOption = sc.nextInt();
-//                sc.nextLine(); // Consume newline
-//
-//                if (filterOption >= 1 && filterOption <= 3) {
-//                    // Valid option, exit the loop
-//                    break;
-//                } else {
-//                    System.out.println("Invalid option. Please enter a number between 1 and 3.");
-//                }
-//            } else {
-//                // Clear invalid input
-//                System.out.println("Invalid input. Please enter a valid number.");
-//                sc.nextLine(); // Consume the invalid input
-//            }
-//        }
-//        
-//        // Initialize filter variables
-//        Double minAmount = null;
-//        Double maxAmount = null;
-//        LocalDate startDate = null;
-//        LocalDate endDate = null;
-//        String transactionType = "";
-//
-//        // Amount Range Filter
-//        if (filterOption == 1 ) {
-//            System.out.print("Enter minimum amount: ");
-//            minAmount = sc.nextDouble();
-//            System.out.print("Enter maximum amount: ");
-//            maxAmount = sc.nextDouble();
-//            sc.nextLine(); // Consume newline
-//        }
-//
-//        // Date Range Filter
-//        if (filterOption == 2 ) {
-//            System.out.print("Enter start date (dd/MM/yyyy): ");
-//            String startDateInput = sc.nextLine();
-//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-//
-//            while (startDate == null) {
-//                try {
-//                    // Try to parse the date
-//                    startDate = LocalDate.parse(startDateInput,formatter);
-//                } catch (Exception e) {
-//                    // If the date format is invalid, inform the user and ask again
-//                    System.out.println("Invalid start date. Please use the correct format (dd/MM/yyyy).");
-//                    System.out.print("Enter start date (dd/MM/yyyy): ");
-//                    startDateInput = sc.nextLine();  // Prompt the user again for the date
-//                }
-//            }
-//
-//            System.out.print("Enter end date (dd/MM/yyyy): ");
-//            String endDateInput = sc.nextLine();
-//
-//            while (endDate == null) {
-//                try {
-//                    // Try to parse the date
-//                    endDate = LocalDate.parse(endDateInput, formatter);
-//                } catch (Exception e) {
-//                    // If the date format is invalid, inform the user and ask again
-//                    System.out.println("Invalid end date. Please use the correct format (dd/MM/yyyy).");
-//                    System.out.print("Enter end date (dd/MM/yyyy): ");
-//                    endDateInput = sc.nextLine();  // Prompt the user again for the date
-//                }
-//            }
-//        }
-//
-//        // Transaction Type Filter
-//        if (filterOption == 3 ) {
-//            String transactionTypeInput = "";
-//            while (true) {
-//                System.out.print("Enter transaction type (debit/credit): ");
-//                transactionTypeInput = sc.nextLine().toLowerCase(); // Accept lowercase
-//                if (transactionTypeInput.equals("debit") || transactionTypeInput.equals("credit")) {
-//                    transactionType = transactionTypeInput;
-//                    break;
-//                } else {
-//                    System.out.println("Invalid input. Please enter 'debit' or 'credit'.");
-//                }
-//            }
-//        }
-//
-//        // Filtering transactions
-//        List<String[]> filteredTransactions = new ArrayList<>();
-//        for (String[] transaction : transactions) {
-//            try {
-//                // Ensure the transaction has at least 6 elements (e.g., date, amount, type)
-//                if (transaction.length < 6) {
-//                    System.out.println("Skipping malformed transaction: " + String.join(", ", transaction));
-//                    continue;
-//                }
-//
-//                // Parsing date and amount for comparison
-//                LocalDate transactionDate = LocalDate.parse(transaction[5], DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-//                double amount = Double.parseDouble(transaction[3]);  // Converts string to double
-//                String type = transaction[2].toLowerCase();
-//
-//                // Filter by date range (if provided)
-//                if (startDate != null && transactionDate.isBefore(startDate)) {
-//                    continue;  // Skip transaction if before the start date
-//                }
-//                if (endDate != null && transactionDate.isAfter(endDate)) {
-//                    continue;  // Skip transaction if after the end date
-//                }
-//
-//                // Filter by amount range (if provided)
-//                if (minAmount != null && amount < minAmount) {
-//                    continue;  // Skip transaction if less than minAmount
-//                }
-//                if (maxAmount != null && amount > maxAmount) {
-//                    continue;  // Skip transaction if greater than maxAmount
-//                }
-//
-//                // Filter by transaction type (if provided)
-//                if (!transactionType.isEmpty() && !type.equals(transactionType)) {
-//                    continue;  // Skip transaction if type doesn't match
-//                }
-//
-//                // If the transaction passes all filters, add it to the list
-//                filteredTransactions.add(transaction);
-//            } catch (Exception e) {
-//                System.out.println("Error processing transaction: " + String.join(", ", transaction));
-//            }
-//        }
-//
-//        // Display filtered transactions
-//        if (filteredTransactions.isEmpty()) {
-//            System.out.println("No transactions found matching the criteria.");
-//        } else {
-//            System.out.println("\nFiltered Transaction History");
-//            System.out.println("===========================================================================");
-//            System.out.printf("%-20s %-15s %-10s %-10s %-20s %-15s\n", 
-//                "Transaction ID", "User ID", "Type", "Amount", "Description", "Date");
-//
-//            for (String[] transaction : filteredTransactions) {
-//                if (transaction.length >= 6) {
-//                    System.out.printf("%-20s %-15s %-10s %-10s %-20s %-15s\n",
-//                        transaction[0], // Transaction ID
-//                        transaction[1], // User ID
-//                        transaction[2], // Type
-//                        transaction[3], // Amount
-//                        transaction[4], // Description
-//                        transaction[5]); // Date
-//                } else {
-//                    System.out.println("Skipping malformed transaction: " + String.join(", ", transaction));
-//                }
-//            }
-//        }
-//
-//    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    @FXML TableView<Transaction> histories;
+    @FXML TextField monthFilter;
+    @FXML TextField yearFilter;
+    
+    public void history() {
+        String monthYear = monthFilter.getText() + "/" + yearFilter.getText();                      //StringBuilder?
+        
+        if(monthYear.equals("/")){
+            viewFullTransactionHistory();
+            return;
+        }
+        
+        // In case of invalid month/year input
+        if (!monthYear.matches("\\d{2}/\\d{4}")) {
+            System.out.println("Invalid format. Please use MM/YYYY and fill in all section");
+            return;
+        }
+        
+        viewAndExportTransactions(user_id, monthYear);
+    }
+    
+    public void viewAndExportTransactions(int user_id, String monthYear) {
+        List<String[]> transactions = view_export_csv.getTransactionsByMonth(user_id, monthYear);
+
+        // In case no transaction history for specific user at that certain session
+        if (transactions.isEmpty()) {
+            System.out.println("No transactions found for the given month and year.");
+            return;
+        }
+        // Get transaction history
+        System.out.println("Transaction History");
+        System.out.println("===================");
+        System.out.printf("%-20s %-15s %-10s %-10s %-20s %-15s\n", "Transaction ID", "User ID", "Type", "Amount", "Description", "Date");
+        for (String[] row : transactions) {
+            if (row.length>=6){
+                System.out.printf("%-20s %-15s %-10s %-10s %-20s %-20s\n",
+                row[0], // Transaction ID
+                row[1], // User ID
+                row[2], // Type
+                row[3], // Amount
+                row[4], // Description
+                row[5]); // Date
+            }
+        }
+
+        // Enhanced part:Let user to determine whether want to export scv file
+        System.out.print("Export to CSV? (yes/no): ");
+        Scanner sc = new Scanner(System.in);
+        if (sc.nextLine().equalsIgnoreCase("yes")) {
+            view_export_csv.exportTransactionsToCSV(transactions, "TransactionHistory_" + monthYear.replace("-", "_"));
+            System.out.println("Transactions exported successfully!");
+        }
+    }
+    
+    // View overall transaction history
+    public static void viewFullTransactionHistory() {
+        // Fetch all transactions
+        List<String[]> allTransactions = file.get_transactions_csv(-1); // Pass -1 for all users
+
+        if (allTransactions.isEmpty()) {
+            System.out.println("No transactions found.");
+            return;
+        }
+
+        // Display header
+        System.out.println("Transaction History:");
+        System.out.printf("%-20s %-15s %-10s %-10s %-20s %-15s\n", "Transaction ID", "User ID", "Type", "Amount", "Description", "Date");
+
+        // Display each transaction
+        for (String[] transaction : allTransactions) {
+            if (transaction.length>=6){
+                System.out.printf("%-20s %-15s %-10s %-10s %-20s %-20s\n",
+                transaction[0], // Transaction ID
+                transaction[1], // User ID
+                transaction[2], // Type
+                transaction[3], // Amount
+                transaction[4], // Description
+                transaction[5]); // Date
+            }
+        }  
+    }
+    
+    private static void filterhistory(List<String[]> transactions){
+        
+        System.out.println();
+        
+        // Filter options: Amount Range, Date Range, Transaction Type
+        int filterOption = 0; // Initialize variable to store user's choice
+        while (true) {
+            System.out.println();
+            System.out.println("Filter Options:");
+            System.out.println("1. Filter by Amount Range");
+            System.out.println("2. Filter by Date Range");
+            System.out.println("3. Filter by Transaction Type (debit/credit)");
+            System.out.print("Enter filter option (1-3): ");
+
+            if (sc.hasNextInt()) { // Check if the input is an integer
+                filterOption = sc.nextInt();
+                sc.nextLine(); // Consume newline
+
+                if (filterOption >= 1 && filterOption <= 3) {
+                    // Valid option, exit the loop
+                    break;
+                } else {
+                    System.out.println("Invalid option. Please enter a number between 1 and 3.");
+                }
+            } else {
+                // Clear invalid input
+                System.out.println("Invalid input. Please enter a valid number.");
+                sc.nextLine(); // Consume the invalid input
+            }
+        }
+        
+        // Initialize filter variables
+        Double minAmount = null;
+        Double maxAmount = null;
+        LocalDate startDate = null;
+        LocalDate endDate = null;
+        String transactionType = "";
+
+        // Amount Range Filter
+        if (filterOption == 1 ) {
+            System.out.print("Enter minimum amount: ");
+            minAmount = sc.nextDouble();
+            System.out.print("Enter maximum amount: ");
+            maxAmount = sc.nextDouble();
+            sc.nextLine(); // Consume newline
+        }
+
+        // Date Range Filter
+        if (filterOption == 2 ) {
+            System.out.print("Enter start date (dd/MM/yyyy): ");
+            String startDateInput = sc.nextLine();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+            while (startDate == null) {
+                try {
+                    // Try to parse the date
+                    startDate = LocalDate.parse(startDateInput,formatter);
+                } catch (Exception e) {
+                    // If the date format is invalid, inform the user and ask again
+                    System.out.println("Invalid start date. Please use the correct format (dd/MM/yyyy).");
+                    System.out.print("Enter start date (dd/MM/yyyy): ");
+                    startDateInput = sc.nextLine();  // Prompt the user again for the date
+                }
+            }
+
+            System.out.print("Enter end date (dd/MM/yyyy): ");
+            String endDateInput = sc.nextLine();
+
+            while (endDate == null) {
+                try {
+                    // Try to parse the date
+                    endDate = LocalDate.parse(endDateInput, formatter);
+                } catch (Exception e) {
+                    // If the date format is invalid, inform the user and ask again
+                    System.out.println("Invalid end date. Please use the correct format (dd/MM/yyyy).");
+                    System.out.print("Enter end date (dd/MM/yyyy): ");
+                    endDateInput = sc.nextLine();  // Prompt the user again for the date
+                }
+            }
+        }
+
+        // Transaction Type Filter
+        if (filterOption == 3 ) {
+            String transactionTypeInput = "";
+            while (true) {
+                System.out.print("Enter transaction type (debit/credit): ");
+                transactionTypeInput = sc.nextLine().toLowerCase(); // Accept lowercase
+                if (transactionTypeInput.equals("debit") || transactionTypeInput.equals("credit")) {
+                    transactionType = transactionTypeInput;
+                    break;
+                } else {
+                    System.out.println("Invalid input. Please enter 'debit' or 'credit'.");
+                }
+            }
+        }
+
+        // Filtering transactions
+        List<String[]> filteredTransactions = new ArrayList<>();
+        for (String[] transaction : transactions) {
+            try {
+                // Ensure the transaction has at least 6 elements (e.g., date, amount, type)
+                if (transaction.length < 6) {
+                    System.out.println("Skipping malformed transaction: " + String.join(", ", transaction));
+                    continue;
+                }
+
+                // Parsing date and amount for comparison
+                LocalDate transactionDate = LocalDate.parse(transaction[5], DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                double amount = Double.parseDouble(transaction[3]);  // Converts string to double
+                String type = transaction[2].toLowerCase();
+
+                // Filter by date range (if provided)
+                if (startDate != null && transactionDate.isBefore(startDate)) {
+                    continue;  // Skip transaction if before the start date
+                }
+                if (endDate != null && transactionDate.isAfter(endDate)) {
+                    continue;  // Skip transaction if after the end date
+                }
+
+                // Filter by amount range (if provided)
+                if (minAmount != null && amount < minAmount) {
+                    continue;  // Skip transaction if less than minAmount
+                }
+                if (maxAmount != null && amount > maxAmount) {
+                    continue;  // Skip transaction if greater than maxAmount
+                }
+
+                // Filter by transaction type (if provided)
+                if (!transactionType.isEmpty() && !type.equals(transactionType)) {
+                    continue;  // Skip transaction if type doesn't match
+                }
+
+                // If the transaction passes all filters, add it to the list
+                filteredTransactions.add(transaction);
+            } catch (Exception e) {
+                System.out.println("Error processing transaction: " + String.join(", ", transaction));
+            }
+        }
+
+        // Display filtered transactions
+        if (filteredTransactions.isEmpty()) {
+            System.out.println("No transactions found matching the criteria.");
+        } else {
+            System.out.println("\nFiltered Transaction History");
+            System.out.println("===========================================================================");
+            System.out.printf("%-20s %-15s %-10s %-10s %-20s %-15s\n", 
+                "Transaction ID", "User ID", "Type", "Amount", "Description", "Date");
+
+            for (String[] transaction : filteredTransactions) {
+                if (transaction.length >= 6) {
+                    System.out.printf("%-20s %-15s %-10s %-10s %-20s %-15s\n",
+                        transaction[0], // Transaction ID
+                        transaction[1], // User ID
+                        transaction[2], // Type
+                        transaction[3], // Amount
+                        transaction[4], // Description
+                        transaction[5]); // Date
+                } else {
+                    System.out.println("Skipping malformed transaction: " + String.join(", ", transaction));
+                }
+            }
+        }
+
+    }
 //    
 //    private static void sortinghistory(){
 //        

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.String?>
-<?import fxmltableview.*?> 
-<?import javafx.collections.FXCollections?>
+<?import javafx.collections.*?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.cell.*?> 
@@ -160,14 +160,37 @@
         <StackPane GridPane.rowIndex="0" GridPane.columnIndex="4">
             <GridPane hgap="10" vgap="10">
                 <Label text="History" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                <TableView GridPane.rowIndex="1" GridPane.columnIndex="0">
+                <HBox spacing="10" GridPane.rowIndex="1" GridPane.columnIndex="0">
+                    <TextField fx:id="monthFilter" promptText="Month"/>
+                    <TextField fx:id="yearFilter" promptText="Year"/>
+                    <Button text="Filter Date" onAction="#history"/>
+                </HBox>
+                <TableView fx:id="histories" GridPane.rowIndex="2" GridPane.columnIndex="0">
                     <columns>
-                        <TableColumn text="Date"></TableColumn>
-                        <TableColumn text="Description"></TableColumn>
-                        <TableColumn text="Debit"></TableColumn>
-                        <TableColumn text="Credit"></TableColumn>
-                        <TableColumn text="Balance"></TableColumn>
+                        <TableColumn fx:id="balanceColumn" text="Balance">
+                            <cellValueFactory><PropertyValueFactory property="balance"/></cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="typeColumn" text="Type">
+                            <cellValueFactory><PropertyValueFactory property="type"/></cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="descriptionColumn" text="Description">
+                            <cellValueFactory><PropertyValueFactory property="description"/></cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="dateColumn" text="Date">
+                            <cellValueFactory><PropertyValueFactory property="date"/></cellValueFactory>
+                        </TableColumn>
                     </columns>
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            
+                        </FXCollections>
+                    </items>
+                    <sortOrder>
+                        <fx:reference source="balanceColumn"/>
+                        <fx:reference source="typeColumn"/>
+                        <fx:reference source="descriptionColumn"/>
+                        <fx:reference source="dateColumn"/>
+                    </sortOrder>
                 </TableView>
             </GridPane>
         </StackPane>

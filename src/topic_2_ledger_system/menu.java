@@ -114,6 +114,10 @@ public class menu {
             trans_info.setText("Please fill in all the section of the form.");
             return;
         }
+        if(record_amount.getText().matches(".[a-z]+")){
+            trans_info.setText("Invalid Input. Please enter again.");
+            return;
+        }
         amount = Double.parseDouble(record_amount.getText());
         
         String type = "";
@@ -411,7 +415,7 @@ public class menu {
             return;
         }
         
-        if(loanPrincipal.getText().matches("[a-z]") || loanInterest.getText().matches("[a-z]") || loanPeriod.getText().matches("[a-z]")) {
+        if(loanPrincipal.getText().matches(".[a-z]+") || loanInterest.getText().matches(".[a-z]+") || loanPeriod.getText().matches(".[a-z]+")) {
             lT1.setText("Invalid input, please retry.");
             loan_infos.getChildren().add(lT1);
             return;

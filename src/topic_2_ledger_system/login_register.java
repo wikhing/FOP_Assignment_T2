@@ -76,7 +76,6 @@ public class login_register extends main_system{
                     System.out.println("Login Succesful " + user_id);
 
                     menu.set_user(user_id);
-                    main_system.mainScene = new Scene(main_system.loadFXML("menu"), 1170, 440);
                     main_system.setScene("menu");
                 }
                 

@@ -1,215 +1,146 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package topic_2_ledger_system;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import javafx.application.Application;
-import static javafx.application.Application.launch;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Parent;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.stage.Screen;
-import javafx.stage.Stage;
-import javafx.stage.Window;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 /**
- * Write your name here
- * @author Teo Yik Kiat, Wong Ing Khing, Sim Pei Jun
  *
+ * @author I Khing
  */
-public class main_system extends Application{
-
-    private static Scene loginScene;
-    public static Scene mainScene;
-
-    private static Stage primStage;
-    @Override
-    public void start(Stage stage) throws IOException {
-        primStage = stage;
-        mainScene = new Scene(loadFXML("menu"), 220, 440);         // To be commented
-        loginScene = new Scene(loadFXML("login_register"), 640, 480);
-        stage.setScene(mainScene);                                  // To be changed to scene
-        stage.show();
+public class historyFX {
+    
+    private static final DecimalFormat df = new DecimalFormat("0.00");
+    
+    private static int user_id = 2;
+    public static void set_user(int user_id){
+        historyFX.user_id = user_id;
     }
-
-    protected static void setScene(String fxml) throws IOException {
-        Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
+    
+    @FXML
+    public void initialize(){
         
-        switch(fxml){
-            case "login_register" -> {
-                primStage.setScene(loginScene);
-                primStage.setX((bounds.getMaxX() - loginScene.getWidth()) / 2);
-                primStage.setY((bounds.getMaxY() - loginScene.getHeight()) / 2);
-            }
-            case "menu" -> {
-                mainScene = new Scene(loadFXML("menu"), 220, 440);
-                primStage.setScene(mainScene);
-                primStage.setX((bounds.getMaxX() - mainScene.getWidth()) / 2);
-                primStage.setY((bounds.getMaxY() - mainScene.getHeight()) / 2);
-            }
-            case "transaction" -> {
-                mainScene = new Scene(loadFXML("transaction"), 370, 270);
-                primStage.setScene(mainScene);
-                primStage.setX((bounds.getMaxX() - mainScene.getWidth()) / 2);
-                primStage.setY((bounds.getMaxY() - mainScene.getHeight()) / 2);
-            }
-            case "saving" -> {
-                mainScene = new Scene(loadFXML("saving"), 350, 240);
-                primStage.setScene(mainScene);
-                primStage.setX((bounds.getMaxX() - mainScene.getWidth()) / 2);
-                primStage.setY((bounds.getMaxY() - mainScene.getHeight()) / 2);
-            }
-            case "creditloan" -> {
-                mainScene = new Scene(loadFXML("creditloan"), 310, 440);
-                primStage.setScene(mainScene);
-                primStage.setX((bounds.getMaxX() - mainScene.getWidth()) / 2);
-                primStage.setY((bounds.getMaxY() - mainScene.getHeight()) / 2);
-            }
-            case "depositinterest" -> {
-                mainScene = new Scene(loadFXML("depositinterest"), 300, 270);
-                primStage.setScene(mainScene);
-                primStage.setX((bounds.getMaxX() - mainScene.getWidth()) / 2);
-                primStage.setY((bounds.getMaxY() - mainScene.getHeight()) / 2);
-            }
-            case "history" -> {
-                mainScene = new Scene(loadFXML("history"), 430, 580);
-                primStage.setScene(mainScene);
-                primStage.setX((bounds.getMaxX() - mainScene.getWidth()) / 2);
-                primStage.setY((bounds.getMaxY() - mainScene.getHeight()) / 2);
-            }
+        history();
+    }
+    
+    @FXML
+    public void back() throws IOException{
+        main_system.setScene("menu");
+        
+        menu m = new menu();
+        m.update_account_info();
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    @FXML TableView<Transaction> histories = new TableView<>();
+    @FXML TextField monthFilter;
+    @FXML TextField yearFilter;
+    
+    @FXML Label his_info = new Label();
+    
+    public void toHistory() throws IOException{
+        main_system.setScene("history");
+    }
+    
+    @FXML
+    public void history() {
+        ObservableList<Transaction> data = histories.getItems();
+        data.clear();
+        his_info.setText("");
+        
+        String monthYear = monthFilter.getText() + "/" + yearFilter.getText();                      //StringBuilder?
+        
+        if(monthYear.equals("/")){
+            viewFullTransactionHistory();
+            return;
         }
+        
+        // In case of invalid month/year input
+        if (!monthYear.matches("\\d{2}+/\\d{4}+")) {
+            his_info.setText("Invalid format. Please use MM/YYYY and fill in all section");
+            return;
+        }
+        
+        viewAndExportTransactions(user_id, monthYear);
     }
     
-    protected static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(main_system.class.getResource("resources/" + fxml + ".fxml"));
-        return fxmlLoader.load();
-    }
-    
+    @FXML
+    public void viewAndExportTransactions(int user_id, String monthYear) {
+        List<String[]> transactions = view_export_csv.getTransactionsByMonth(user_id, monthYear);
 
-//    private static void debit() {
-//        double balance = file.get_accbalance_csv(user_id);
-//        String[] savings = file.get_savings_csv(user_id);
-//        List<String[]> savHis = file.get_savHistory_csv(user_id);
-//        
-//        double amount = 0, toSave = 0;
-//        String description = "", dateToday = "";
-//        while (true) {
-//            // Automatically get date
-//            LocalDate date = LocalDate.now();
-//            DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-//            dateToday = date.format(pattern);
-//            
-//            System.out.println("== Debit ==");
-//            System.out.print("Enter amount: ");
-//
-//            amount = sc.nextDouble();
-//
-//            if(savings[2].equals("active")){
-//                toSave = amount * Integer.parseInt(savings[3]) / 100.0;
-//                if(!savHis.isEmpty()){
-//                    savHis.add(new String[]{"", String.valueOf(user_id), String.valueOf(toSave), String.valueOf(Double.parseDouble(savHis.get(savHis.size()-1)[3]) + toSave), dateToday});
-//                }else{
-//                    savHis.add(new String[]{"", String.valueOf(user_id), String.valueOf(toSave), String.valueOf(toSave), dateToday});
-//                }
-//            }
-//            
-//            if (amount > 0 && amount < (Math.pow(10, 9))) {
-//                balance += amount - toSave;
-//            } else {
-//                System.out.println("Invalid input, please retry");
-//                continue;
-//            }
-//
-//            System.out.print("Enter description: ");
-//            description = sc.nextLine();
-//            if (description.length() > 100){
-//                System.out.println("Error: Description exceeds 100 characters, please retry. ");
-//            } else {
-//                System.out.print("\nDebit Successfully Recorded!!!");
-//                break;
-//            }
+        // In case no transaction history for specific user at that certain session
+        if (transactions.isEmpty()) {
+            System.out.println("No transactions found for the given month and year.");
+            return;
+        }
+        
+        ObservableList<Transaction> data = histories.getItems();
+        
+        for (String[] row : transactions) {
+            if(row.length == 1) continue;
+            data.add(new Transaction(row[3], row[2], row[4], row[5]));
+        }
+
+//        // Enhanced part:Let user to determine whether want to export scv file
+//        System.out.print("Export to CSV? (yes/no): ");
+//        Scanner sc = new Scanner(System.in);
+//        if (sc.nextLine().equalsIgnoreCase("yes")) {
+//            view_export_csv.exportTransactionsToCSV(transactions, "TransactionHistory_" + monthYear.replace("-", "_"));
+//            System.out.println("Transactions exported successfully!");
 //        }
-//        
-//        List<String[]> transaction = file.get_transactions_csv(user_id);
-//        transaction.add(new String[]{"", String.valueOf(user_id), "debit", String.valueOf(amount), description, dateToday});
-//        file.set_transactions_csv(transaction);
-//        
-//        file.set_accbalance_csv(user_id, balance);
-//        
-//        savings[4] = String.valueOf(Double.parseDouble(savings[4]) + toSave);
-//        file.set_savings_csv(savings);
-//        
-//        file.set_savHistory_csv(savHis);
-//    }
-//    
-//    private static void credit() {
-//        double balance = file.get_accbalance_csv(user_id);
-//        
-//        System.out.println("== Credit ==");
-//        
-//        double credit_amount = 0;
-//        while(true){
-//            System.out.print("Enter amount: ");
-//            credit_amount = sc.nextDouble();
-//
-//            if(credit_amount > 0 && credit_amount < balance){
-//                balance = balance - credit_amount;
-//                break;
-//            }
-//            
-//            System.out.println();
-//            System.out.println("Please enter amount greater than 0 and less than your balance.");
-//        }
-//        
-//        sc.nextLine();
-//        String credit_description = "";
-//        while(true){
-//            System.out.print("Enter description: ");
-//            credit_description = sc.nextLine();
-//            
-//            if(credit_description.length() <= 100){
-//                System.out.println("\n\nCredit Successfully Recorded!!!\n");
-//                break;
-//            }
-//            
-//            System.out.println("\nError: Description exceeds 100 characters. ");
-//        }
-//        
-//        // Automatically get date
-//        LocalDate date = LocalDate.now();
-//        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-//        String dateToday = date.format(pattern);
-//        
-//        List<String[]> transaction = file.get_transactions_csv(user_id);
-//        transaction.add(new String[]{"", String.valueOf(user_id), "credit", String.valueOf(credit_amount), credit_description, dateToday});
-//        file.set_transactions_csv(transaction);
-//        
-//        file.set_accbalance_csv(user_id, balance);
-//    }
-//    
-//    private static void history() {
-//        System.out.print("Enter the month and year (eg. MM/YYYY): ");
-//        sc.nextLine();
-//        String monthYear = sc.nextLine();
-//        
-//        // In case of invalid month/year input
-//        if (!monthYear.matches("\\d{2}/\\d{4}")) {
-//            System.out.println("Invalid format. Please use MM/YYYY.");
-//            return;
-//        }
-//        view_export_csv.viewAndExportTransactions(user_id, monthYear);
-//    }
-//    
+    }
+    
+    @FXML
+    // View overall transaction history
+    public void viewFullTransactionHistory() {
+        // Fetch all transactions
+        List<String[]> allTransactions = file.get_transactions_csv(-1); // Pass -1 for all users
+
+        if (allTransactions.isEmpty()) {
+            his_info.setText("No transactions found.");
+            return;
+        }
+        
+        ObservableList<Transaction> data = histories.getItems();
+        
+        // Display each transaction
+        for (String[] transaction : allTransactions) {
+            if(transaction.length == 1) continue;
+            data.add(new Transaction(transaction[3], transaction[2], transaction[4], transaction[5]));
+        }  
+    }
+    
 //    private static void filterhistory(List<String[]> transactions){
 //        
 //        System.out.println();
@@ -560,93 +491,11 @@ public class main_system extends Application{
 //        
 //    
 //    
-//    private static void saving() {
-//        System.out.println("\n== Savings ==");
-//        
-//        char choice;
-//        boolean isActive = false;
-//        int percentage = 0;
-//        while(true){
-//            System.out.print("Are you sure you want to activare it? (Y/N) : ");
-//            choice = sc.next().charAt(0);
-//            
-//            if(choice == 'Y' || choice == 'y'){
-//                isActive = true;
-//                while(true){
-//                    System.out.print("Please enter the percentage you wish to deduct from the next debit: ");
-//                    percentage = sc.nextInt();
-//
-//                    if (percentage >= 0 && percentage <= 100){
-//                        System.out.println("\n\nSavings Setting added successfully!!!\n");
-//                        break;
-//                    }
-//                    
-//                    System.out.println("Please enter valid percentage!");
-//                }
-//                break;
-//            }else if(choice == 'N'|| choice == 'n'){
-//                isActive = false;
-//                System.out.println("\n\nSavings Setting is not added!!!");
-//                break;
-//            }
-//            
-//            System.out.println("Invalid! Please enter Y or N");
-//        }
-//        
-//        String[] savings = file.get_savings_csv(user_id);
-//        if(isActive){
-//            savings[2] = "active";
-//            savings[3] = String.valueOf(percentage);
-//        }else if(!isActive){
-//            savings[2] = "inactive";
-//            savings[3] = "0";
-//            if(savings[4] != "0"){
-//                double balance = file.get_accbalance_csv(user_id);
-//                balance += Double.parseDouble(savings[4]);
-//                
-//                file.set_accbalance_csv(user_id, balance);
-//            }
-//            savings[4] = "0";
-//        }
-//        file.set_savings_csv(savings);
-//        
-//        
-//    }
 //    
-//    private static void creditLoan(int user_id) {
-//        
-//        // Automatically get date
-//        LocalDate date = LocalDate.now();
-//        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-//        String dateToday = date.format(pattern);
-//
-//        while (true) {
-//            System.out.println("\n---- Credit Loan System ----");
-//            System.out.println("1. Apply Loan");
-//            System.out.println("2. Repay Loan");
-//            System.out.println("3. Exit");
-//            System.out.print("Enter your choice: ");
-//            int choices = sc.nextInt();
-//            
-//            
-//            if (choices == 1) {
-//                credit_loan.applyLoan(user_id, dateToday); 
-//            } else if (choices == 2) {
-//                credit_loan.repayLoan(user_id, dateToday, date);   
-//            } else if (choices == 3) {
-//                System.out.println("Exiting the system. Thank you!");
-//                break;
-//            } else {
-//                System.out.println("Invalid input, please retry.");
-//            }
-//        }
-//        
+//    
+//    
+//    private static int logOut() {
+//        System.out.println("\nUser successfully logged out.");
+//        return -1;
 //    }
-
-    
-    
-    public static void main(String[] args) throws IOException{
-//        login_register.initialize();
-        launch(args);
-    }
 }

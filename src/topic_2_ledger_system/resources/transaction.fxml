@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.cell.*?> 
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.geometry.Insets?>
+
+<GridPane GridPane.halignment="CENTER" hgap="15" vgap="15" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="topic_2_ledger_system.menu">
+    
+    <Label text="Transaction Record Form" GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="3"/>
+    <TextField fx:id="record_amount" promptText="Amount(RM)" GridPane.rowIndex="1" GridPane.columnIndex="0" prefWidth="100"/>
+    <ChoiceBox fx:id="record_choice" value="Debit" GridPane.rowIndex="2" GridPane.columnIndex="0" prefWidth="100">
+        <items>
+            <FXCollections fx:factory="observableArrayList">
+                <String fx:value="Debit" />
+                <String fx:value="Credit" />
+            </FXCollections>
+        </items>
+    </ChoiceBox>
+    <TextArea fx:id="record_descp" promptText="Write your transaction description less than 100 characters" wrapText="true" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.rowSpan="4" GridPane.columnSpan="2" minWidth="190" prefWidth="210" maxWidth="220" minHeight="100" prefHeight="120" maxHeight="130"/>
+    <Button text="Submit" GridPane.rowIndex="4" GridPane.columnIndex="0" prefWidth="100" onAction="#transaction_record"/>
+    <Label fx:id="trans_info" GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.columnSpan="3"/>
+    <Button text="&#60;Back" GridPane.rowIndex="6" GridPane.columnIndex="0" onAction="#back"/>
+        
+        
+    <padding>
+        <Insets top="20" bottom="20" left="20" right="20"/>
+    </padding>
+</GridPane>

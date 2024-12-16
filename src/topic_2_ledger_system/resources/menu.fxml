@@ -22,12 +22,10 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.geometry.Insets?>
 
-<GridPane hgap="15" vgap="15" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="topic_2_ledger_system.menu">
+<GridPane GridPane.halignment="CENTER" hgap="15" vgap="15" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="topic_2_ledger_system.menu">
     
-    <VBox spacing="15" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="300" prefWidth="320" maxWidth="340">
-        <children>
-            <StackPane>
-                <GridPane hgap="10" vgap="10">
+<!--    <VBox spacing="15" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="300" prefWidth="320" maxWidth="340">
+        <children>-->
                     <Label text="Welcome to The Ledger System" GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
                     <Label fx:id="username" text="USERNAME" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
 
@@ -40,10 +38,16 @@
                     <Label text="Loan:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
                     <Label fx:id="loanfx" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
 
-                    <Button text="Logout" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
-                </GridPane>
-            </StackPane>
-        </children>
+                    <VBox spacing="15" GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="CENTER">
+                        <Button text="Transaction" prefWidth="180" onAction="#toTransaction"/>
+                        <Button text="Saving" prefWidth="180" onAction="#toSaving"/>
+                        <Button text="Credit Loan" prefWidth="180" onAction="#toCreditLoan"/>
+                        <Button text="Deposit Interest Predictor" prefWidth="180" onAction="#toDepositInterest"/>
+                        <Button text="History" prefWidth="180" onAction="#toHistory"/>
+                        <Button text="Logout" prefWidth="180"/>
+                    </VBox>
+                    
+<!--        </children>
 
         <Separator orientation="HORIZONTAL"/>
 
@@ -110,7 +114,7 @@
                     <VBox fx:id="loan_infos" spacing="15" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
                     
                 </GridPane>
-                    <!--<Button text="Credit Loan" />-->
+                    <Button text="Credit Loan" />
             </StackPane>
         </children>
 
@@ -194,7 +198,7 @@
                 </TableView>
             </GridPane>
         </StackPane>
-    </children>
+    </children>-->
     
     <padding>
         <Insets top="20" bottom="20" left="20" right="20"/>

@@ -4,14 +4,17 @@
  */
 package topic_2_ledger_system;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
@@ -41,11 +44,22 @@ public class menu {
     public void initialize(){
         update_account_info();
         
+        String[] savings = file.get_savings_csv(user_id);
+        if(savings[2].equals("active")) user_choice.setSelected(true);
+        
         sav_percentage.valueProperty().addListener((obs, oldVal, newVal) -> saving_setting());
-        loan_choice.valueProperty().addListener((obs, oldVal, newVal) -> creditLoan(user_id));
+        
+        sav_status.setText("Current Status - " + savings[2]);
+        sav_perc.setText("Current Percentage - " + savings[3]);
+        
+        loanSet();
     }
     
-    
+    @FXML
+    public void back() throws IOException{
+        main_system.setScene("menu");
+        update_account_info();
+    }
     
     
     
@@ -99,12 +113,12 @@ public class menu {
     
     @FXML Button record_submit = new Button();
     
-    public void toTransaction(){
-        transaction_record();
+    public void toTransaction() throws IOException{
+        main_system.setScene("transaction");
     }
     
     @FXML
-    private void transaction_record() {
+    public void transaction_record() {
         double balance = file.get_accbalance_csv(user_id);
         String[] savings = file.get_savings_csv(user_id);
         
@@ -114,7 +128,7 @@ public class menu {
             trans_info.setText("Please fill in all the section of the form.");
             return;
         }
-        if(record_amount.getText().matches(".[a-z]+")){
+        if(record_amount.getText().matches("[a-z]+")){
             trans_info.setText("Invalid Input. Please enter again.");
             return;
         }
@@ -170,8 +184,6 @@ public class menu {
 
             savings[4] = String.valueOf(Double.parseDouble(savings[4]) + toSave);
             file.set_savings_csv(savings);
-
-            update_account_info();
             
             if(type.equals("debit")){
                 trans_info.setText("Debit Successfully Recorded!!!");
@@ -190,10 +202,16 @@ public class menu {
     
     
     
+    @FXML Label sav_status = new Label();
+    @FXML Label sav_perc = new Label();
     @FXML CheckBox user_choice = new CheckBox();
     @FXML Spinner sav_percentage = new Spinner();
     @FXML Label sav_info = new Label();
             
+    public void toSaving() throws IOException{
+        main_system.setScene("saving");
+    }
+    
     @FXML
     public void saving_setting() {
         char choice;
@@ -201,7 +219,7 @@ public class menu {
         int percentage = 0;
         
         choice = user_choice.isSelected() ? 'y' : 'n';
-            
+        
         if(choice == 'y'){
             isActive = true;
             
@@ -222,20 +240,22 @@ public class menu {
         if(isActive){
             savings[2] = "active";
             savings[3] = String.valueOf(percentage);
+            sav_status.setText("Current Status - " + savings[2]);
+            sav_perc.setText("Current Percentage - " + savings[3]);
         }else if(!isActive){
             savings[2] = "inactive";
             savings[3] = "0";
-            if(savings[4] != "0.0"){
+            if(!"0.0".equals(savings[4])){
                 double balance = file.get_accbalance_csv(user_id);
                 balance += Double.parseDouble(savings[4]);
                 
                 file.set_accbalance_csv(user_id, balance);
             }
             savings[4] = "0.0";
+            sav_status.setText("Current Status - " + savings[2]);
+            sav_perc.setText("Current Percentage - " + savings[3]);
         }
         file.set_savings_csv(savings);
-        
-        update_account_info();
     }
     
     
@@ -247,21 +267,38 @@ public class menu {
     
     
     
-    @FXML ChoiceBox loan_choice = new ChoiceBox();
+    public void toCreditLoan() throws IOException{
+        main_system.setScene("creditloan");
+    }
     
-    public void creditLoan(int user_id) {
-        
-        // Automatically get date
+    @FXML
+    public void loanSet() {
         LocalDate dateNow = LocalDate.now();
         DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String dateToday = dateNow.format(pattern);
+        
+        date = dateToday;
+        
+        loan_infos.getChildren().removeAll(lT1, lT2, lT3, lT4);
+        
+        boolean activeLoan = getActiveLoan(user_id);
+        
+        int period = getPeriod(user_id);
+        
+        if (!activeLoan) {
+            lT1.setText("No active loan to repay.");
+            loan_infos.getChildren().add(lT1);
+            return;
+        }else{
+            lT1.setWrapText(true);
+            lT1.setText("You already have an active loan.\nPlease repay it before applying for another.");
+            loan_infos.getChildren().add(lT1);
+        }
 
-        String strChoice = loan_choice.getValue().toString();
-        switch(strChoice){
-            case "Apply Loan" -> loanApplySet(dateToday);
-            case "Repay Loan" -> loanRepaySet(dateToday, dateNow);
-            default -> System.out.println("Invalid input, please retry.");
-        }   
+        if (dateNow.isAfter(dateNow.plusMonths(period))) {
+            lT1.setText("Loan repayment period has ended. Further debits and credits are not allowed.");
+            loan_infos.getChildren().add(lT1);
+        }
     }
     
     private static final Scanner sc = new Scanner(System.in);
@@ -328,74 +365,19 @@ public class menu {
         return Integer.parseInt(loan_csv[4]);
     }
     
-    @FXML StackPane loan_form;
+    @FXML TextField loanPrincipal = new TextField();
+    @FXML TextField loanInterest = new TextField();
+    @FXML TextField loanPeriod = new TextField();
     
-    TextField loanPrincipal = new TextField();
-    TextField loanInterest = new TextField();
-    TextField loanPeriod = new TextField();
-    Button applyBtn = new Button("Apply Loan");
+    @FXML TextField payAmount = new TextField();
     
-    TextField payAmount = new TextField();
-    Button payBtn = new Button("Pay Loan");
-    
-    VBox vertBox = new VBox();
-    
-    @FXML
-    public void formMaker(int typeForm){
-        vertBox.setSpacing(10);
-        vertBox.setAlignment(Pos.CENTER);
-        if(loan_form.getChildren().contains(vertBox)){
-            loan_form.getChildren().remove(vertBox);
-        }
-        
-        if(typeForm == 1){
-            loanPrincipal.setPromptText("Loan Amount(RM)");
-            loanPrincipal.setMaxWidth(120);
-            loanInterest.setPromptText("Interest Rate(%)");
-            loanInterest.setMaxWidth(120);
-            loanPeriod.setPromptText("Period(months)");
-            loanPeriod.setMaxWidth(120);
-            
-            applyBtn.setOnAction(e -> applyLoan());
-            applyBtn.prefWidth(90);
-            
-            vertBox.getChildren().setAll(loanPrincipal, loanInterest, loanPeriod, applyBtn);
-            loan_form.getChildren().add(vertBox);
-        }else if(typeForm == 2){
-            payAmount.setPromptText("Payment Amount(RM)");
-            payAmount.setMaxWidth(130);
-            
-            payBtn.setOnAction(e -> repayLoan());
-            payBtn.prefWidth(90);
-            
-            vertBox.getChildren().setAll(payAmount, payBtn);
-            loan_form.getChildren().add(vertBox);
-        }
-    }
-    
-    @FXML VBox loan_infos;
-    Label lT1 = new Label("");
-    Label lT2 = new Label("");
-    Label lT3 = new Label("");
-    Label lT4 = new Label("");
+    @FXML VBox loan_infos = new VBox();
+    Label lT1 = new Label();
+    Label lT2 = new Label();
+    Label lT3 = new Label();
+    Label lT4 = new Label();
     
     String date;
-    
-    @FXML
-    public void loanApplySet(String dateToday) {
-        formMaker(1);
-        date = dateToday;
-        
-        loan_infos.getChildren().removeAll(lT1, lT2, lT3, lT4);
-                
-        boolean activeLoan = getActiveLoan(user_id);
-        
-        if (activeLoan) {
-            lT1.setWrapText(true);
-            lT1.setText("You already have an active loan.\nPlease repay it before applying for another.");
-            loan_infos.getChildren().add(lT1);
-        }
-    }
     
     @FXML
     public void applyLoan(){
@@ -403,19 +385,13 @@ public class menu {
         
         loan_infos.getChildren().removeAll(lT1, lT2, lT3, lT4);
         
-        if (activeLoan) {
-            lT1.setWrapText(true);
-            lT1.setText("You already have an active loan.\nPlease repay it before applying for another.");
-            loan_infos.getChildren().add(lT1);
-        }
-        
         if(loanPrincipal.getText().isEmpty() || loanInterest.getText().isEmpty() || loanPeriod.getText().isEmpty()){
             lT1.setText("Please fill in all section!");
             loan_infos.getChildren().add(lT1);
             return;
         }
         
-        if(loanPrincipal.getText().matches(".[a-z]+") || loanInterest.getText().matches(".[a-z]+") || loanPeriod.getText().matches(".[a-z]+")) {
+        if(loanPrincipal.getText().matches("[a-z]+") || loanInterest.getText().matches("[a-z]+") || loanPeriod.getText().matches("[a-z]+")) {
             lT1.setText("Invalid input, please retry.");
             loan_infos.getChildren().add(lT1);
             return;
@@ -445,31 +421,6 @@ public class menu {
         loan_infos.getChildren().addAll(lT1, lT2, lT3, lT4);
 
         updateLoan(user_id, Double.parseDouble(df.format(totalAmount)), Double.parseDouble(df.format(monthlyPayment)), period, activeLoan, date, rate);
-        
-        update_account_info();
-    }
-    
-    @FXML
-    public void loanRepaySet(String dateToday, LocalDate dateNow) {
-        formMaker(2);
-        date = dateToday;
-        
-        loan_infos.getChildren().removeAll(lT1, lT2, lT3, lT4);
-        
-        boolean activeLoan = getActiveLoan(user_id);
-        
-        int period = getPeriod(user_id);
-                
-        if (!activeLoan) {
-            lT1.setText("No active loan to repay.");
-            loan_infos.getChildren().add(lT1);
-            return;
-        }   
-
-        if (dateNow.isAfter(dateNow.plusMonths(period))) {
-            lT1.setText("Loan repayment period has ended. Further debits and credits are not allowed.");
-            loan_infos.getChildren().add(lT1);
-        }
     }
     
     @FXML
@@ -533,8 +484,6 @@ public class menu {
         
         updateLoan(user_id, balance, period, activeLoan);
         file.set_loanHistory_csv(loanHis);
-        
-        update_account_info();
     }
     
     
@@ -550,6 +499,10 @@ public class menu {
     @FXML ChoiceBox period_list = new ChoiceBox();
     @FXML Label interest = new Label();
     @FXML Label interest_info = new Label();
+    
+    public void toDepositInterest() throws IOException{
+        main_system.setScene("depositinterest");
+    }
     
     public void depositInterestPredictor() {
         // Retrieve all bank data from CSV
@@ -631,11 +584,23 @@ public class menu {
     
     
     
-    @FXML TableView<Transaction> histories;
+    @FXML TableView<Transaction> histories = new TableView<>();
     @FXML TextField monthFilter;
     @FXML TextField yearFilter;
     
+    @FXML Label his_info = new Label();
+    
+    public void toHistory() throws IOException{
+        main_system.setScene("history");
+        historyFX.set_user(user_id);
+    }
+    
+    @FXML
     public void history() {
+        ObservableList<Transaction> data = histories.getItems();
+        data.clear();
+        his_info.setText("");
+        
         String monthYear = monthFilter.getText() + "/" + yearFilter.getText();                      //StringBuilder?
         
         if(monthYear.equals("/")){
@@ -644,14 +609,15 @@ public class menu {
         }
         
         // In case of invalid month/year input
-        if (!monthYear.matches("\\d{2}/\\d{4}")) {
-            System.out.println("Invalid format. Please use MM/YYYY and fill in all section");
+        if (!monthYear.matches("\\d{2}+/\\d{4}+")) {
+            his_info.setText("Invalid format. Please use MM/YYYY and fill in all section");
             return;
         }
         
         viewAndExportTransactions(user_id, monthYear);
     }
     
+    @FXML
     public void viewAndExportTransactions(int user_id, String monthYear) {
         List<String[]> transactions = view_export_csv.getTransactionsByMonth(user_id, monthYear);
 
@@ -660,56 +626,40 @@ public class menu {
             System.out.println("No transactions found for the given month and year.");
             return;
         }
-        // Get transaction history
-        System.out.println("Transaction History");
-        System.out.println("===================");
-        System.out.printf("%-20s %-15s %-10s %-10s %-20s %-15s\n", "Transaction ID", "User ID", "Type", "Amount", "Description", "Date");
+        
+        ObservableList<Transaction> data = histories.getItems();
+        
         for (String[] row : transactions) {
-            if (row.length>=6){
-                System.out.printf("%-20s %-15s %-10s %-10s %-20s %-20s\n",
-                row[0], // Transaction ID
-                row[1], // User ID
-                row[2], // Type
-                row[3], // Amount
-                row[4], // Description
-                row[5]); // Date
-            }
+            if(row.length == 1) continue;
+            data.add(new Transaction(row[3], row[2], row[4], row[5]));
         }
 
-        // Enhanced part:Let user to determine whether want to export scv file
-        System.out.print("Export to CSV? (yes/no): ");
-        Scanner sc = new Scanner(System.in);
-        if (sc.nextLine().equalsIgnoreCase("yes")) {
-            view_export_csv.exportTransactionsToCSV(transactions, "TransactionHistory_" + monthYear.replace("-", "_"));
-            System.out.println("Transactions exported successfully!");
-        }
+//        // Enhanced part:Let user to determine whether want to export scv file
+//        System.out.print("Export to CSV? (yes/no): ");
+//        Scanner sc = new Scanner(System.in);
+//        if (sc.nextLine().equalsIgnoreCase("yes")) {
+//            view_export_csv.exportTransactionsToCSV(transactions, "TransactionHistory_" + monthYear.replace("-", "_"));
+//            System.out.println("Transactions exported successfully!");
+//        }
     }
     
+    @FXML
     // View overall transaction history
-    public static void viewFullTransactionHistory() {
+    public void viewFullTransactionHistory() {
         // Fetch all transactions
         List<String[]> allTransactions = file.get_transactions_csv(-1); // Pass -1 for all users
 
         if (allTransactions.isEmpty()) {
-            System.out.println("No transactions found.");
+            his_info.setText("No transactions found.");
             return;
         }
-
-        // Display header
-        System.out.println("Transaction History:");
-        System.out.printf("%-20s %-15s %-10s %-10s %-20s %-15s\n", "Transaction ID", "User ID", "Type", "Amount", "Description", "Date");
-
+        
+        ObservableList<Transaction> data = histories.getItems();
+        
         // Display each transaction
         for (String[] transaction : allTransactions) {
-            if (transaction.length>=6){
-                System.out.printf("%-20s %-15s %-10s %-10s %-20s %-20s\n",
-                transaction[0], // Transaction ID
-                transaction[1], // User ID
-                transaction[2], // Type
-                transaction[3], // Amount
-                transaction[4], // Description
-                transaction[5]); // Date
-            }
+            if(transaction.length == 1) continue;
+            data.add(new Transaction(transaction[3], transaction[2], transaction[4], transaction[5]));
         }  
     }
     

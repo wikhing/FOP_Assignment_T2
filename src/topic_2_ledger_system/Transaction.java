@@ -13,7 +13,7 @@ import javafx.beans.property.SimpleStringProperty;
 public class Transaction {
     
     private final SimpleStringProperty type = new SimpleStringProperty("");
-    private final SimpleStringProperty amount = new SimpleStringProperty("");
+    private final SimpleStringProperty balance = new SimpleStringProperty("");
     private final SimpleStringProperty description = new SimpleStringProperty("");
     private final SimpleStringProperty date = new SimpleStringProperty("");
     
@@ -21,9 +21,9 @@ public class Transaction {
         this("", "", "", "");
     }
     
-    public Transaction(String type, String amount, String description, String date){
+    public Transaction(String balance, String type, String description, String date){
         setType(type);
-        setAmount(amount);
+        setBalance(balance);
         setDescription(description);
         setDate(date);
     }
@@ -35,11 +35,11 @@ public class Transaction {
         type.set(typ);
     }
     
-    public String getAmount(){
-        return amount.get();
+    public String getBalance(){
+        return balance.get();
     }
-    public void setAmount(String amo){
-        amount.set(amo);
+    public void setBalance(String bal){
+        balance.set(bal);
     }
     
     public String getDescription(){

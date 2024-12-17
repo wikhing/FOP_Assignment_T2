@@ -31,18 +31,17 @@ import javafx.scene.layout.VBox;
  *
  * @author I Khing
  */
-public class historyFX {
+public class FXhistory {
     
     private static final DecimalFormat df = new DecimalFormat("0.00");
     
     private static int user_id = 2;
     public static void set_user(int user_id){
-        historyFX.user_id = user_id;
+        FXhistory.user_id = user_id;
     }
     
     @FXML
     public void initialize(){
-        
         history();
     }
     
@@ -68,10 +67,6 @@ public class historyFX {
     @FXML TextField yearFilter;
     
     @FXML Label his_info = new Label();
-    
-    public void toHistory() throws IOException{
-        main_system.setScene("history");
-    }
     
     @FXML
     public void history() {
@@ -487,15 +482,5 @@ public class historyFX {
 //            System.out.println("No transactions found matching the criteria.");
 //        }
 //
-//    }
-//        
-//    
-//    
-//    
-//    
-//    
-//    private static int logOut() {
-//        System.out.println("\nUser successfully logged out.");
-//        return -1;
 //    }
 }

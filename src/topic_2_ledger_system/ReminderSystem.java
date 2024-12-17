@@ -14,7 +14,7 @@ import java.time.temporal.ChronoUnit;
 public class ReminderSystem {
     private static void ReminderSystem(int user_id){
    
-        boolean activeLoan = menu.getActiveLoan(user_id);
+        boolean activeLoan = FXcreditLoan.getActiveLoan(user_id);
         if (!activeLoan) {
             System.out.println("There are no active loans.");
             return;
@@ -89,7 +89,7 @@ public class ReminderSystem {
         
         //Compare the balances, then determine is user 
         //overdue//has upcoming loan repayment(<=5days)//has no upcoming loan repayment(<=5days)
-        double currentBalance = menu.getBalance(user_id);
+        double currentBalance = FXcreditLoan.getBalance(user_id);
         //System.out.println("lastduedate: "+lastDueDate);
         //System.out.println("lastexpectedbalance: "+lastExpectedBalance);
         //System.out.println("nextdueddate: "+nextDueDate);

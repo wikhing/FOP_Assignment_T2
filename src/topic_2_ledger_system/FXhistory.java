@@ -9,8 +9,15 @@ import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -20,6 +27,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -42,6 +50,35 @@ public class FXhistory {
     
     @FXML
     public void initialize(){
+        balanceColumn.setComparator(new Comparator<String>() {
+            @Override
+            public int compare(String a, String b) {
+                return Double.compare(Double.parseDouble(a), Double.parseDouble(b));
+            }
+        });
+        dateColumn.setComparator(new Comparator<String>() {
+            @Override
+            public int compare(String a, String b) {
+
+                //compare year
+                if(!a.substring(6).equals(b.substring(6))){
+                    return Integer.compare(Integer.parseInt(a.substring(6)), Integer.parseInt(b.substring(6)));
+                }
+                
+                //compare month
+                if(!a.substring(3, 5).equals(b.substring(3, 5))){
+                    return Integer.compare(Integer.parseInt(a.substring(3, 5)), Integer.parseInt(b.substring(3, 5)));
+                }
+                
+                //compare date
+                if(!a.substring(0, 2).equals(b.substring(0, 2))){
+                    return Integer.compare(Integer.parseInt(a.substring(0, 2)), Integer.parseInt(b.substring(0, 2)));
+                }
+                
+                return 0; //all equal
+            }
+        });
+        
         history();
     }
     
@@ -60,9 +97,12 @@ public class FXhistory {
     
     
     
+    @FXML TableColumn balanceColumn = new TableColumn();
+    @FXML TableColumn typeColumn = new TableColumn();
+    @FXML TableColumn descriptionColumn = new TableColumn();
+    @FXML TableColumn dateColumn = new TableColumn();
     
-    
-    @FXML TableView<Transaction> histories = new TableView<>();
+    @FXML TableView<Transaction> histories = new TableView<Transaction>();
     @FXML TextField monthFilter;
     @FXML TextField yearFilter;
     
@@ -102,10 +142,12 @@ public class FXhistory {
         
         ObservableList<Transaction> data = histories.getItems();
         
+        
         for (String[] row : transactions) {
             if(row.length == 1) continue;
             data.add(new Transaction(row[3], row[2], row[4], row[5]));
         }
+        
 
 //        // Enhanced part:Let user to determine whether want to export scv file
 //        System.out.print("Export to CSV? (yes/no): ");
@@ -120,7 +162,7 @@ public class FXhistory {
     // View overall transaction history
     public void viewFullTransactionHistory() {
         // Fetch all transactions
-        List<String[]> allTransactions = file.get_transactions_csv(-1); // Pass -1 for all users
+        List<String[]> allTransactions = view_export_csv.getTransactions(user_id);
 
         if (allTransactions.isEmpty()) {
             his_info.setText("No transactions found.");
@@ -129,10 +171,11 @@ public class FXhistory {
         
         ObservableList<Transaction> data = histories.getItems();
         
+        
         // Display each transaction
         for (String[] transaction : allTransactions) {
-            if(transaction.length == 1) continue;
-            data.add(new Transaction(transaction[3], transaction[2], transaction[4], transaction[5]));
+            if(transaction.length != 6) continue;
+            data.add(new Transaction(df.format(Double.parseDouble(transaction[3])), transaction[2], transaction[4], transaction[5]));
         }  
     }
     
@@ -301,44 +344,24 @@ public class FXhistory {
 //
 //    }
 //    
-//    private static void sortinghistory(){
-//        
-//        System.out.println();
-//        
-//        //sorting options
-//        int sortOption = 0;
-//        while (true) {
-//            System.out.println("Select sorting option: ");
-//            System.out.println("1. Sort by Date (Newest First)");
-//            System.out.println("2. Sort by Date (Oldest First)");
-//            System.out.println("3. Sort by Amount (Highest First)");
-//            System.out.println("4. Sort by Amount (Lowest First)");
-//            System.out.print("Enter your choice (1-4): ");
-//
-//            if (sc.hasNextInt()) { // Check if the input is an integer
-//                sortOption = sc.nextInt();
-//                sc.nextLine(); // Consume newline
-//
-//                if (sortOption >= 1 && sortOption <= 4) {
-//                    // Valid option, exit the loop
-//                    break;
-//                } else {
-//                    System.out.println("Invalid option. Please enter a number between 1 and 4.");
-//                }
-//            } else {
-//                // Clear invalid input
-//                System.out.println("Invalid input. Please enter a valid number.");
-//                sc.nextLine(); // Consume the invalid input
-//            }
-//        }
-//        
-//        // Initialize sorting variables
-//        Double minAmount = null;
-//        Double maxAmount = null;
-//        LocalDate startDate = null;
-//        LocalDate endDate = null;
-//        String transactionType = "";
-//
+    private void sortingHistory(String column,String sortType){
+        //sorting options
+        int sortOption = 0;
+        switch(column + sortType){
+            case "date" + "DESCENDING" -> sortOption = 1;
+            case "date" + "ASCENDING" -> sortOption = 2;
+            case "balance" + "DESCENDING" -> sortOption = 3;
+            case "balance" + "ASCENDING" -> sortOption = 4;
+        }
+        
+        
+        // Initialize sorting variables
+        Double minAmount = null;
+        Double maxAmount = null;
+        LocalDate startDate = null;
+        LocalDate endDate = null;
+        String transactionType = "";
+
 //        // Date Range Filter
 //        if (sortOption == 1 || sortOption == 2) {
 //            System.out.print("Enter start date (dd/MM/yyyy): ");
@@ -372,7 +395,7 @@ public class FXhistory {
 //                }
 //            }
 //        }
-//        
+        
 //        // Amount Range Filter
 //        if (sortOption == 3 || sortOption == 4) {
 //            System.out.print("Enter minimum amount: ");
@@ -381,11 +404,11 @@ public class FXhistory {
 //            maxAmount = sc.nextDouble();
 //            sc.nextLine(); // Consume newline
 //        }
-//
-//        //Fetch transaction 
-//        List<String[]> transactions =file.get_transactions_csv(user_id);  
-//        List<String[]> filteredTransactions = new ArrayList<>();
-//
+
+        //Fetch transaction 
+        List<String[]> transactions =file.get_transactions_csv(user_id);  
+        List<String[]> filteredTransactions = new ArrayList<>();
+
 //        for (String[] transaction : transactions) {      //loop thru transactions
 //            try {
 //                if (transaction.length < 6) continue;   
@@ -410,77 +433,68 @@ public class FXhistory {
 //                System.out.println("Skipping malformed transaction: " + Arrays.toString(transaction));
 //            }
 //        }
-//            
-//        // sorting option
-//        switch (sortOption){
-//            case 1:          //Sort by Date (Newest First)
-//                filteredTransactions.sort((a, b) -> {
-//                    // Compare by Date (Newest First)
-//                    int dateComparison = LocalDate.parse(b[5], DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-//                                                 .compareTo(LocalDate.parse(a[5], DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-//
-//                    // If dates are the same, compare by Transaction ID (Newest First)
-//                    if (dateComparison == 0) {
-//                        return b[0].compareTo(a[0]);  // Transaction ID in descending order
-//                    }
-//
-//                    return dateComparison;  // Otherwise, order by date
-//                });
-//                break; 
-//                
-//            case 2:          // Sort by Date (Oldest First)
-//                filteredTransactions.sort((a, b) -> {
-//                    // Compare by Date (Oldest First)
-//                    int dateComparison = LocalDate.parse(a[5], DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-//                                                 .compareTo(LocalDate.parse(b[5], DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-//
-//                    // If dates are the same, compare by Transaction ID (Oldest First)
-//                    if (dateComparison == 0) {
-//                        return a[0].compareTo(b[0]);  // Transaction ID in ascending order
-//                    }
-//
-//                    return dateComparison;  // Otherwise, order by date
-//                });
-//                break;
-//                
-//            case 3:           //Sort by Amount(Highest to Lowest)
-//                filteredTransactions.sort((a, b) -> Double.compare(Double.parseDouble(b[3]), Double.parseDouble(a[3])));
-//                break;
-//                
-//            case 4:           //Sort by Amount (Lowest to Highest)
-//                filteredTransactions.sort((a, b) -> Double.compare(Double.parseDouble(a[3]), Double.parseDouble(b[3])));
-//                break;
-//                
-//            default:
-//                System.out.println("Invalid sort option.");
-//                return;
+            
+
+        ObservableList<Transaction> data = histories.getItems();
+        
+        // sorting option
+        switch (sortOption){
+            case 1:          //Sort by Date (Newest First)
+                transactions.sort((a, b) -> {
+                    // Compare by Date (Newest First)
+                    int dateComparison = LocalDate.parse(b[5], DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                                                 .compareTo(LocalDate.parse(a[5], DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+
+                    // If dates are the same, compare by Transaction ID (Newest First)
+                    if (dateComparison == 0) {
+                        return b[0].compareTo(a[0]);  // Transaction ID in descending order
+                    }
+
+                    return dateComparison;  // Otherwise, order by date
+                });
+                break; 
+                
+            case 2:          // Sort by Date (Oldest First)
+                transactions.sort((a, b) -> {
+                    // Compare by Date (Oldest First)
+                    int dateComparison = LocalDate.parse(a[5], DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                                                 .compareTo(LocalDate.parse(b[5], DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+
+                    // If dates are the same, compare by Transaction ID (Oldest First)
+                    if (dateComparison == 0) {
+                        return a[0].compareTo(b[0]);  // Transaction ID in ascending order
+                    }
+
+                    return dateComparison;  // Otherwise, order by date
+                });
+                break;
+                
+            case 3:           //Sort by Amount(Highest to Lowest)
+//                data.sort((b, a) -> Double.compare(Double.parseDouble(a.getBalance()), Double.parseDouble(b.getBalance())));
+                break;
+                
+            case 4:           //Sort by Amount (Lowest to Highest)
+                data.sort((a, b) -> Double.compare(Double.parseDouble(a.getBalance()), Double.parseDouble(b.getBalance())));
+                break;
+                
+            default:
+                System.out.println("Invalid sort option.");
+                return;
+        }
+        
+        // Check if no transactions were found
+        if (transactions.isEmpty()) {
+            his_info.setText("No transactions found matching the criteria.");
+            return;
+        }
+        
+        data.sort((a, b) -> Double.compare(Double.parseDouble(a.getBalance()), Double.parseDouble(b.getBalance())));
+        
+        
+        // Display each transaction
+//        for (String[] transaction : transactions) {
+//            if(transaction.length != 6) continue;
+//            data.add(new Transaction(df.format(Double.parseDouble(transaction[3])), transaction[2], transaction[4], transaction[5]));
 //        }
-//        
-//        // Display filtered and sorted transactions
-//        System.out.println("\nSorted Transaction History");
-//        System.out.println("===========================================================================");
-//        System.out.printf("%-20s %-15s %-10s %-10s %-20s %-15s\n", 
-//            "Transaction ID", "User ID", "Type", "Amount", "Description", "Date");
-//
-//        // Display each transaction
-//        for (String[] transaction : filteredTransactions) {
-//            if (transaction.length >= 6) {
-//                System.out.printf("%-20s %-15s %-10s %-10s %-20s %-15s\n",
-//                    transaction[0], // Transaction ID
-//                    transaction[1], // User ID
-//                    transaction[2], // Type
-//                    transaction[3], // Amount
-//                    transaction[4], // Description
-//                    transaction[5]); // Date
-//            } else {
-//                System.out.println("Skipping malformed transaction: " + String.join(", ", transaction));
-//            }
-//        }
-//
-//        // Check if no transactions were found
-//        if (filteredTransactions.isEmpty()) {
-//            System.out.println("No transactions found matching the criteria.");
-//        }
-//
-//    }
+    }
 }

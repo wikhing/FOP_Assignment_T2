@@ -4,14 +4,14 @@
  */
 package topic_2_ledger_system;
 
+import java.util.Comparator;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
  *
  * @author I Khing
  */
-public class Transaction {
-    
+public class Transaction{
     private final SimpleStringProperty type = new SimpleStringProperty("");
     private final SimpleStringProperty balance = new SimpleStringProperty("");
     private final SimpleStringProperty description = new SimpleStringProperty("");

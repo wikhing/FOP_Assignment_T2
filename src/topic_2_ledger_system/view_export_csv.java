@@ -32,6 +32,13 @@ public class view_export_csv {
 
         return filteredTransactions;
     }
+    
+    public static List<String[]> getTransactions(int user_id) {
+        //Retrieve all transactions from the CSV
+        List<String[]> allTransactions = file.get_transactions_csv(user_id);
+
+        return allTransactions;
+    }
 
     public static void exportTransactionsToCSV(List<String[]> transactions, String fileName) {
         // Define the file path 

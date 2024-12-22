@@ -38,7 +38,7 @@ public class main_system extends Application{
         primStage = stage;
         mainScene = new Scene(loadFXML("menu"), 220, 440);         // To be commented
         loginScene = new Scene(loadFXML("login_register"), 640, 480);
-        stage.setScene(mainScene);                                  // To be changed to scene
+        stage.setScene(mainScene);                                  // To be changed to loginscene
         stage.show();
     }
 
@@ -52,37 +52,61 @@ public class main_system extends Application{
                 primStage.setY((bounds.getMaxY() - loginScene.getHeight()) / 2);
             }
             case "menu" -> {
-                mainScene = new Scene(loadFXML("menu"), 220, 440);
+                mainScene = new Scene(loadFXML("menu"), 230, 480);
+                primStage.setMinWidth(230);
+                primStage.setMaxWidth(230);
+                primStage.setMinHeight(480);
+                primStage.setMaxHeight(480);
                 primStage.setScene(mainScene);
                 primStage.setX((bounds.getMaxX() - mainScene.getWidth()) / 2);
                 primStage.setY((bounds.getMaxY() - mainScene.getHeight()) / 2);
             }
             case "transaction" -> {
-                mainScene = new Scene(loadFXML("transaction"), 370, 270);
+                mainScene = new Scene(loadFXML("transaction"), 470, 310);
+                primStage.setMinWidth(470);
+                primStage.setMaxWidth(470);
+                primStage.setMinHeight(310);
+                primStage.setMaxHeight(310);
                 primStage.setScene(mainScene);
                 primStage.setX((bounds.getMaxX() - mainScene.getWidth()) / 2);
                 primStage.setY((bounds.getMaxY() - mainScene.getHeight()) / 2);
             }
             case "saving" -> {
-                mainScene = new Scene(loadFXML("saving"), 350, 240);
+                mainScene = new Scene(loadFXML("saving"), 320, 250);
+                primStage.setMinWidth(320);
+                primStage.setMaxWidth(320);
+                primStage.setMinHeight(250);
+                primStage.setMaxHeight(250);
                 primStage.setScene(mainScene);
                 primStage.setX((bounds.getMaxX() - mainScene.getWidth()) / 2);
                 primStage.setY((bounds.getMaxY() - mainScene.getHeight()) / 2);
             }
             case "creditloan" -> {
-                mainScene = new Scene(loadFXML("creditloan"), 310, 440);
+                mainScene = new Scene(loadFXML("creditloan"), 340, 380);
+                primStage.setMinWidth(340);
+                primStage.setMaxWidth(340);
+                primStage.setMinHeight(380);
+                primStage.setMaxHeight(380);
                 primStage.setScene(mainScene);
                 primStage.setX((bounds.getMaxX() - mainScene.getWidth()) / 2);
                 primStage.setY((bounds.getMaxY() - mainScene.getHeight()) / 2);
             }
             case "depositinterest" -> {
                 mainScene = new Scene(loadFXML("depositinterest"), 300, 270);
+                primStage.setMinWidth(310);
+                primStage.setMaxWidth(310);
+                primStage.setMinHeight(300);
+                primStage.setMaxHeight(300);
                 primStage.setScene(mainScene);
                 primStage.setX((bounds.getMaxX() - mainScene.getWidth()) / 2);
                 primStage.setY((bounds.getMaxY() - mainScene.getHeight()) / 2);
             }
             case "history" -> {
                 mainScene = new Scene(loadFXML("history"), 430, 580);
+                primStage.setMinWidth(370);
+                primStage.setMaxWidth(370);
+                primStage.setMinHeight(630);
+                primStage.setMaxHeight(630);
                 primStage.setScene(mainScene);
                 primStage.setX((bounds.getMaxX() - mainScene.getWidth()) / 2);
                 primStage.setY((bounds.getMaxY() - mainScene.getHeight()) / 2);

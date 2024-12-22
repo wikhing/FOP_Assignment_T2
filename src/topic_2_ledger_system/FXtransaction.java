@@ -119,7 +119,7 @@ public class FXtransaction {
 
         description = record_descp.getText();
         if (description.length() > 100){
-            trans_info.setText("Error: Description exceeds 100 characters, please retry.");
+            trans_info.setText("Description exceeds 100 characters, please retry.");
         } else if(description.length() == 0){
             trans_info.setText("Please fill in all the section of the form.");
         }else{

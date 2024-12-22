@@ -14,11 +14,11 @@
     <top>
         <StackPane>
             <BorderPane>
-                <center>
+                <top>
                     <Label fx:id="app_title" BorderPane.alignment="BOTTOM_CENTER" text="Welcome to The One Ledger System!" textAlignment="JUSTIFY"/>
-                </center>
+                </top>
                 <left>
-                    <Button fx:id="back_btn" BorderPane.alignment="CENTER_LEFT" text="&#60;" textAlignment="CENTER" onAction="#back" visible="false"/>
+                    <Button fx:id="back_btn" BorderPane.alignment="CENTER_LEFT" text="&#60;Back" textAlignment="CENTER" onAction="#back" visible="false"/>
                 </left>
                 <padding>
                     <Insets bottom="10" left="15" right="15" top="10" />

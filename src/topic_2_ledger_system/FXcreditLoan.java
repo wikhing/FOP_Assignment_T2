@@ -77,7 +77,7 @@ public class FXcreditLoan {
         int period = getPeriod(user_id);
         
         if (!activeLoan) {
-            lT1.setText("No active loan to repay.");
+            lT1.setText("No active loan to repay. You may apply for new loan.");
             loan_infos.getChildren().add(lT1);
             return;
         }else{

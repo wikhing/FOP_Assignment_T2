@@ -102,8 +102,6 @@ public class FXsaving {
         if(isActive){
             savings[2] = "active";
             savings[3] = String.valueOf(percentage);
-            sav_status.setText("Current Status - " + savings[2]);
-            sav_perc.setText("Current Percentage - " + savings[3]);
         }else if(!isActive){
             savings[2] = "inactive";
             savings[3] = "0";
@@ -114,8 +112,6 @@ public class FXsaving {
                 file.set_accbalance_csv(user_id, balance);
             }
             savings[4] = "0.0";
-            sav_status.setText("Current Status - " + savings[2]);
-            sav_perc.setText("Current Percentage - " + savings[3]);
         }
         file.set_savings_csv(savings);
     }

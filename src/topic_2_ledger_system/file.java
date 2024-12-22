@@ -163,11 +163,6 @@ public class file {
             return transactions_csv;
         }
         
-        //return full transaction list if user_id is -1, but not recommended to use this
-        if(user_id == -1){
-            return transactions_csv;
-        }
-        
         //look for transaction according to user_id and remove the transaction from transactions_csv
         List<String[]> specificTransaction = new ArrayList<>();
         Iterator<String[]> it = transactions_csv.iterator();

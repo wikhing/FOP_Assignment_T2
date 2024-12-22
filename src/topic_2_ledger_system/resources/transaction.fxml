@@ -24,9 +24,13 @@
 
 <GridPane GridPane.halignment="CENTER" hgap="15" vgap="15" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="topic_2_ledger_system.FXtransaction">
     
-    <Label text="Transaction Record Form" GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="3"/>
-    <TextField fx:id="record_amount" promptText="Amount(RM)" GridPane.rowIndex="1" GridPane.columnIndex="0" prefWidth="100"/>
-    <ChoiceBox fx:id="record_choice" value="Debit" GridPane.rowIndex="2" GridPane.columnIndex="0" prefWidth="100">
+    <Label text="Transaction Record Form" GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="4"/>
+    
+    <Label text="Amount(RM):" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+    <TextField fx:id="record_amount" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="100"/>
+    
+    <Label text="Transaction type:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+    <ChoiceBox fx:id="record_choice" value="Debit" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="100">
         <items>
             <FXCollections fx:factory="observableArrayList">
                 <String fx:value="Debit" />
@@ -34,9 +38,13 @@
             </FXCollections>
         </items>
     </ChoiceBox>
-    <TextArea fx:id="record_descp" promptText="Write your transaction description less than 100 characters" wrapText="true" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.rowSpan="4" GridPane.columnSpan="2" minWidth="190" prefWidth="210" maxWidth="220" minHeight="100" prefHeight="120" maxHeight="130"/>
-    <Button text="Submit" GridPane.rowIndex="4" GridPane.columnIndex="0" prefWidth="100" onAction="#transaction_record"/>
-    <Label fx:id="trans_info" GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.columnSpan="3"/>
+    
+    <Label text="Description:" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+    <TextArea fx:id="record_descp" promptText="Write your transaction description less than 100 characters" wrapText="true" GridPane.rowIndex="2" GridPane.columnIndex="2" GridPane.rowSpan="3" GridPane.columnSpan="2" minWidth="190" prefWidth="210" maxWidth="220" minHeight="100" prefHeight="120" maxHeight="130"/>
+    
+    <Button text="Submit" GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="CENTER" prefWidth="180" onAction="#transaction_record"/>
+    <Label fx:id="trans_info" GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.columnSpan="4"/>
+    
     <Button text="&#60;Back" GridPane.rowIndex="6" GridPane.columnIndex="0" onAction="#back"/>
         
         

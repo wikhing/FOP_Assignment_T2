@@ -40,41 +40,6 @@ public class view_export_csv {
         return allTransactions;
     }
 
-    public static void exportTransactionsToCSV(List<String[]> transactions, String fileName) {
-        // Define the file path 
-        String filePath = "src/topic_2_ledger_system/exported/" + fileName + ".csv";
-        File file = new File(filePath);
-        // Ensure the directory exists
-        File parentDir = file.getParentFile();
-        if (!parentDir.exists()) {
-            parentDir.mkdirs();  // Create the directory if it doesn't exist
-        }
-
-        // Write to the CSV file
-        try (PrintWriter writer = new PrintWriter(file)) {
-            // Write header
-            writer.println("Transaction ID\", \"User ID\", \"Type\", \"Amount\", \"Description\", \"Date\"");
-
-            // Write each transaction row
-            for (String[] transaction : transactions) {
-                if (transaction.length>=6){
-                writer.printf("%s, %s, %s, %s, %s, %s%n",
-                            transaction[0], // Transaction ID
-                            transaction[1], // User ID
-                            transaction[2], // Type
-                            transaction[3], // Amount
-                            transaction[4], // Description
-                            transaction[5]  // Date
-                    ); 
-                }
-            }
-
-            System.out.println("File saved at: " + file.getAbsolutePath());
-        } catch (IOException e) {
-            System.err.println("Error while exporting transactions: " + e.getMessage());
-        }
-    }
-
     
     
     /*public static void main(String[] args) {

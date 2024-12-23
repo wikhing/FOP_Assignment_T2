@@ -22,23 +22,36 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.geometry.Insets?>
 
-<GridPane GridPane.halignment="CENTER" hgap="15" vgap="15" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="topic_2_ledger_system.FXhistory">
+<GridPane alignment="CENTER" hgap="15" vgap="15" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="topic_2_ledger_system.FXhistory">
     
     <Label text="History" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-    <HBox spacing="10" GridPane.rowIndex="1" GridPane.columnIndex="0" alignment="CENTER">
-        <VBox>
-            <Label text="Month"/>
-            <TextField fx:id="monthFilter" maxWidth="80"/>
-        </VBox>
-        <VBox>
-            <Label text="Year"/>
-            <TextField fx:id="yearFilter" maxWidth="80"/>
-        </VBox>
-        
-        <Button text="Filter Date" onAction="#history"/>
-    </HBox>
+    <VBox fx:id="filterHistory" spacing="10" alignment="CENTER" GridPane.rowIndex="1" GridPane.columnIndex="0">
+        <HBox spacing="10"  alignment="CENTER">
+            <VBox>
+                <Label text="Month"/>
+                <TextField fx:id="monthFilter" maxWidth="80"/>
+            </VBox>
+            <VBox>
+                <Label text="Year"/>
+                <TextField fx:id="yearFilter" maxWidth="80"/>
+            </VBox>
+
+            <Button text="Filter Date" onAction="#history"/>
+        </HBox>
+        <ChoiceBox fx:id="filterChoice" value="Choose Filter Type" prefWidth="150">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Filter Date Range" />
+                    <String fx:value="Filter Transaction Type" />
+                    <String fx:value="Filter Amount Range" />
+                </FXCollections>
+            </items>
+        </ChoiceBox>
+        <HBox fx:id="filterBox" spacing="10"  alignment="CENTER"/>
+    </VBox>
+    
     <Label fx:id="his_info" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-    <TableView fx:id="histories" GridPane.rowIndex="3" GridPane.columnIndex="0">
+    <TableView fx:id="histories" GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.halignment="CENTER" minWidth="280" maxWidth="280">
         <columns>
             <TableColumn fx:id="balanceColumn" text="Balance">
                 <cellValueFactory><PropertyValueFactory property="balance"/></cellValueFactory>
@@ -54,12 +67,12 @@
             </TableColumn>
         </columns>
         <items>
-            <FXCollections fx:factory="observableArrayList">
-
-            </FXCollections>
+            <FXCollections fx:factory="observableArrayList"/>
         </items>
     </TableView>
-    <Button text="&#60;Back" GridPane.rowIndex="4" GridPane.columnIndex="0" onAction="#back"/>
+    <Button text="Export to CSV" GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.halignment="CENTER" onAction="#export"/>
+    <Label fx:id="exportLabel" GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.halignment="CENTER"/>
+    <Button text="&#60;Back" GridPane.rowIndex="6" GridPane.columnIndex="0" onAction="#back"/>
     
     <padding>
         <Insets top="20" bottom="20" left="20" right="20"/>

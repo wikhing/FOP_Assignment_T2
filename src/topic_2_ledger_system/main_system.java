@@ -102,9 +102,9 @@ public class main_system extends Application{
                 primStage.setY((bounds.getMaxY() - mainScene.getHeight()) / 2);
             }
             case "history" -> {
-                mainScene = new Scene(loadFXML("history"), 430, 580);
-                primStage.setMinWidth(370);
-                primStage.setMaxWidth(370);
+                mainScene = new Scene(loadFXML("history"), 430, 630);
+                primStage.setMinWidth(430);
+                primStage.setMaxWidth(430);
                 primStage.setMinHeight(630);
                 primStage.setMaxHeight(630);
                 primStage.setScene(mainScene);

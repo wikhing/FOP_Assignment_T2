@@ -124,17 +124,6 @@ public class menu {
         FXdepositInterest.set_user(user_id);
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     public void toHistory() throws IOException{
         main_system.setScene("history");
         FXhistory.set_user(user_id);

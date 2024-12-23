@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -150,6 +152,35 @@ public class file {
         write(user_csv, "user");
     }
     
+    public static void update_login_date (int user_id){
+        LocalDate date = LocalDate.now();
+        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String dateToday = date.format(pattern);
+        
+        List<String[]> user_csv = get_user_csv();
+        String[] specificUser = new String[5];
+        Iterator<String[]> it = user_csv.iterator();
+        while(it.hasNext()){
+            String[] data = it.next();
+            
+            if(data.length == 1 || data.length == 0)continue;
+            if(Integer.parseInt(data[0]) == user_id){
+                specificUser = data;
+                it.remove();
+                break;
+            }
+        }
+        
+        specificUser[4] = dateToday;
+        user_csv.add(specificUser);
+        
+        for(int i = 1; i < user_csv.size(); i++){
+            user_csv.get(i)[0] = String.valueOf(i);
+        }
+        
+        write(user_csv, "user");
+       
+    }
     
     // Need get first then set
     // Array format: {"", user_id, transaction_type, amount, description, date}
@@ -239,6 +270,7 @@ public class file {
     }
     
     // Need get first then set
+    // Array format: {"", user_id, savedBalance, date}
     // Array format: {"", user_id, savedBalance, cumulativeSaved, date}
     private static List<String[]> tempSavHistory = new ArrayList<>();
     public static List<String[]> get_savHistory_csv(int user_id){

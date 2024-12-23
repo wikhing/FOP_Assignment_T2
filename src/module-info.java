@@ -9,6 +9,7 @@ module topic_2_ledger_system {
     requires javafx.web;
     requires java.desktop;
     requires java.logging;
+    requires jfreechart;
 
     opens topic_2_ledger_system to javafx.fxml;
     exports topic_2_ledger_system;

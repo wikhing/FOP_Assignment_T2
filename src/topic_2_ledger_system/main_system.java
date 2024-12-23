@@ -6,6 +6,7 @@ package topic_2_ledger_system;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -40,6 +41,74 @@ public class main_system extends Application{
         loginScene = new Scene(loadFXML("login_register"), 640, 480);
         stage.setScene(mainScene);                                  // To be changed to loginscene
         stage.show();
+    }
+    
+    
+    
+    private static void update_by_end_month(int user_id){
+        ArrayList<String[]> user_csv = file.get_user_csv();
+        String datePrevious = user_csv.get(user_id)[4];
+        
+ 
+        String[] datePreviousSplittedStr = datePrevious.split("/"); 
+        int[] datePreviousSplitted = new int[datePreviousSplittedStr.length];
+        for (int i = 0; i < datePreviousSplittedStr.length; i++){
+            datePreviousSplitted[i] = Integer.parseInt(datePreviousSplittedStr[i]);
+        }
+        
+        //int dayDatePrevious = datePreviousSplitted[0];
+        int monthDatePrevious = datePreviousSplitted[1];
+        int yearDatePrevious= datePreviousSplitted[2];
+        
+        LocalDate date = LocalDate.now();
+        //int dayDate = date.getDayOfMonth();
+        int monthDate = date.getMonthValue();
+        int yearDate = date.getYear();
+        
+        // testrun
+        //yearDate = 2025;
+        //monthDate = 1;
+        
+        boolean isUpdate = true;
+        
+        if(yearDate > yearDatePrevious){
+            isUpdate = false;
+        }
+        else if (yearDate == yearDatePrevious){
+            if(monthDate > monthDatePrevious){
+                isUpdate= false;
+            }
+        }
+       
+       
+        String[] savings = file.get_savings_csv(user_id);
+        double balance = file.get_accbalance_csv(user_id);
+        double monthlySavings = Double.parseDouble(savings[4]);
+
+        if(!isUpdate){
+            System.out.println("The savings amount has been successfully added to your balance from the previous login month.");
+               
+            balance -= monthlySavings;
+            if (balance < 0.0){
+                balance = 0.0;
+            }
+            System.out.printf("Final balance of the last login month : %.2f\n", balance);
+                
+            balance = 0.0;
+            file.set_accbalance_csv(user_id, balance);        
+                
+            monthlySavings -= balance;
+            if (monthlySavings < 0.0){
+                monthlySavings = 0.0;
+            }
+                
+            savings[4] = String.valueOf(monthlySavings);
+            file.set_savings_csv(savings);
+                
+            System.out.printf("Remaining balance to be carried forward to this month. : %.2f\n", monthlySavings);
+            System.out.println("The balance amount has been reset to zero for this month.");
+        }
+            
     }
 
     protected static void setScene(String fxml) throws IOException {

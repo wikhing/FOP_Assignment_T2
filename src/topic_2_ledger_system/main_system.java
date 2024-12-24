@@ -37,78 +37,11 @@ public class main_system extends Application{
     @Override
     public void start(Stage stage) throws IOException {
         primStage = stage;
-        mainScene = new Scene(loadFXML("menu"), 220, 440);         // To be commented
+//        mainScene = new Scene(loadFXML("menu"), 230, 540);         // To be commented
         loginScene = new Scene(loadFXML("login_register"), 640, 480);
-        stage.setScene(mainScene);                                  // To be changed to loginscene
+        stage.centerOnScreen();
+        stage.setScene(loginScene);                                  // To be changed to loginscene
         stage.show();
-    }
-    
-    
-    
-    private static void update_by_end_month(int user_id){
-        ArrayList<String[]> user_csv = file.get_user_csv();
-        String datePrevious = user_csv.get(user_id)[4];
-        
- 
-        String[] datePreviousSplittedStr = datePrevious.split("/"); 
-        int[] datePreviousSplitted = new int[datePreviousSplittedStr.length];
-        for (int i = 0; i < datePreviousSplittedStr.length; i++){
-            datePreviousSplitted[i] = Integer.parseInt(datePreviousSplittedStr[i]);
-        }
-        
-        //int dayDatePrevious = datePreviousSplitted[0];
-        int monthDatePrevious = datePreviousSplitted[1];
-        int yearDatePrevious= datePreviousSplitted[2];
-        
-        LocalDate date = LocalDate.now();
-        //int dayDate = date.getDayOfMonth();
-        int monthDate = date.getMonthValue();
-        int yearDate = date.getYear();
-        
-        // testrun
-        //yearDate = 2025;
-        //monthDate = 1;
-        
-        boolean isUpdate = true;
-        
-        if(yearDate > yearDatePrevious){
-            isUpdate = false;
-        }
-        else if (yearDate == yearDatePrevious){
-            if(monthDate > monthDatePrevious){
-                isUpdate= false;
-            }
-        }
-       
-       
-        String[] savings = file.get_savings_csv(user_id);
-        double balance = file.get_accbalance_csv(user_id);
-        double monthlySavings = Double.parseDouble(savings[4]);
-
-        if(!isUpdate){
-            System.out.println("The savings amount has been successfully added to your balance from the previous login month.");
-               
-            balance -= monthlySavings;
-            if (balance < 0.0){
-                balance = 0.0;
-            }
-            System.out.printf("Final balance of the last login month : %.2f\n", balance);
-                
-            balance = 0.0;
-            file.set_accbalance_csv(user_id, balance);        
-                
-            monthlySavings -= balance;
-            if (monthlySavings < 0.0){
-                monthlySavings = 0.0;
-            }
-                
-            savings[4] = String.valueOf(monthlySavings);
-            file.set_savings_csv(savings);
-                
-            System.out.printf("Remaining balance to be carried forward to this month. : %.2f\n", monthlySavings);
-            System.out.println("The balance amount has been reset to zero for this month.");
-        }
-            
     }
 
     protected static void setScene(String fxml) throws IOException {
@@ -116,16 +49,21 @@ public class main_system extends Application{
         
         switch(fxml){
             case "login_register" -> {
+                loginScene = new Scene(loadFXML("login_register"), 640, 480);
+                primStage.setMinWidth(640);
+                primStage.setMaxWidth(640);
+                primStage.setMinHeight(480);
+                primStage.setMaxHeight(480);
                 primStage.setScene(loginScene);
                 primStage.setX((bounds.getMaxX() - loginScene.getWidth()) / 2);
                 primStage.setY((bounds.getMaxY() - loginScene.getHeight()) / 2);
             }
             case "menu" -> {
-                mainScene = new Scene(loadFXML("menu"), 230, 480);
+                mainScene = new Scene(loadFXML("menu"), 230, 540);
                 primStage.setMinWidth(230);
                 primStage.setMaxWidth(230);
-                primStage.setMinHeight(480);
-                primStage.setMaxHeight(480);
+                primStage.setMinHeight(540);
+                primStage.setMaxHeight(540);
                 primStage.setScene(mainScene);
                 primStage.setX((bounds.getMaxX() - mainScene.getWidth()) / 2);
                 primStage.setY((bounds.getMaxY() - mainScene.getHeight()) / 2);
@@ -151,11 +89,11 @@ public class main_system extends Application{
                 primStage.setY((bounds.getMaxY() - mainScene.getHeight()) / 2);
             }
             case "creditloan" -> {
-                mainScene = new Scene(loadFXML("creditloan"), 340, 380);
+                mainScene = new Scene(loadFXML("creditloan"), 340, 480);
                 primStage.setMinWidth(340);
                 primStage.setMaxWidth(340);
-                primStage.setMinHeight(380);
-                primStage.setMaxHeight(380);
+                primStage.setMinHeight(480);
+                primStage.setMaxHeight(480);
                 primStage.setScene(mainScene);
                 primStage.setX((bounds.getMaxX() - mainScene.getWidth()) / 2);
                 primStage.setY((bounds.getMaxY() - mainScene.getHeight()) / 2);

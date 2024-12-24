@@ -135,7 +135,7 @@ public class file {
      */
     
     // Need get first then set
-    // Array format: {"", name, email, password}
+    // Array format: {"", name, email, password, last_login_date}
     public static ArrayList<String[]> get_user_csv(){
         List<String[]> user_csv = new ArrayList<>();
         user_csv = file.read("user");
@@ -158,27 +158,35 @@ public class file {
         String dateToday = date.format(pattern);
         
         List<String[]> user_csv = get_user_csv();
-        String[] specificUser = new String[5];
-        Iterator<String[]> it = user_csv.iterator();
-        while(it.hasNext()){
-            String[] data = it.next();
-            
-            if(data.length == 1 || data.length == 0)continue;
-            if(Integer.parseInt(data[0]) == user_id){
-                specificUser = data;
-                it.remove();
-                break;
+        for(int i = 1; i < user_csv.size(); i++){
+            if(Integer.parseInt(user_csv.get(i)[0]) == user_id){
+                user_csv.get(i)[4] = dateToday;
             }
         }
         
-        specificUser[4] = dateToday;
-        user_csv.add(specificUser);
+        set_user_csv(user_csv);
         
-        for(int i = 1; i < user_csv.size(); i++){
-            user_csv.get(i)[0] = String.valueOf(i);
-        }
-        
-        write(user_csv, "user");
+//        String[] specificUser = new String[5];
+//        Iterator<String[]> it = user_csv.iterator();
+//        while(it.hasNext()){
+//            String[] data = it.next();
+//            
+//            if(data.length == 1 || data.length == 0)continue;
+//            if(Integer.parseInt(data[0]) == user_id){
+//                specificUser = data;
+//                it.remove();
+//                break;
+//            }
+//        }
+//        
+//        specificUser[4] = dateToday;
+//        user_csv.add(specificUser);
+//        
+//        for(int i = 1; i < user_csv.size(); i++){
+//            user_csv.get(i)[0] = String.valueOf(i);
+//        }
+//        
+//        write(user_csv, "user");
        
     }
     

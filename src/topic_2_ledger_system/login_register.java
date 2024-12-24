@@ -75,10 +75,13 @@ public class login_register extends main_system{
                 int user_id = login(email, password);
                 
                 if(user_id != -1){
-                    System.out.println("Login Succesful " + user_id);
+//                    System.out.println("Login Succesful " + user_id);
 
                     menu.set_user(user_id);
                     main_system.setScene("menu");
+                    
+                    menu m = new menu();
+                    m.ReminderSystem(user_id);
                 }
                 
             } catch (IOException ex) {
@@ -111,12 +114,11 @@ public class login_register extends main_system{
                 int user_id = register(name, email, password, conf_pass);
                 
                 if(user_id != -1){
-                    System.out.println("Register and login successful" + user_id);
+//                    System.out.println("Register and login successful" + user_id);
+
+                    menu.set_user(user_id);
+                    main_system.setScene("menu");
                 }
-                
-                menu.set_user(user_id);
-                main_system.mainScene = new Scene(main_system.loadFXML("menu"), 1170, 440);
-                main_system.setScene("menu");
                 
             } catch (IOException ex) {
                 error("register");
@@ -134,8 +136,10 @@ public class login_register extends main_system{
         GridPane.setColumnSpan(error, 2);
         
         if(login_register.equals("login")){
-            login.add(error, 0, 9);
+            login.getChildren().remove(error);
+            login.add(error, 0, 6);
         }else if(login_register.equals("register")){
+            register.getChildren().remove(error);
             register.add(error, 0, 9);
         }
     }
@@ -187,7 +191,10 @@ public class login_register extends main_system{
             GridPane.setHalignment(input_invalid, HPos.CENTER);
             GridPane.setColumnSpan(input_invalid, 2);
 
+            register.getChildren().remove(input_invalid);
             register.add(input_invalid, 0, 7);
+            
+            return -1;
         }
 
         boolean passwordMatch = confirmPassword(password, confirmationPassword);
@@ -208,7 +215,7 @@ public class login_register extends main_system{
         if(passwordMatch && validEmailFormat && passwordIsValid){
             List<String[]> allUser = file.get_user_csv();
             String hashedPassword = bcrypt.hashpw(password, bcrypt.gensalt());
-            allUser.add(new String[]{"", name, e_mail, hashedPassword});
+            allUser.add(new String[]{"", name, e_mail, hashedPassword, "00/00/0000"});
             file.set_user_csv(allUser);
             file.new_user_acc_setup(allUser.size() - 1);
             
@@ -223,14 +230,13 @@ public class login_register extends main_system{
         user_id = compareUser(new String[]{e_mail, password});
 
         if(user_id == -1){
-            Label input_invalid = new Label();
-
             String text = "Incorrect E-mail or Password";
             input_invalid.setText(text);
 
             GridPane.setHalignment(input_invalid, HPos.CENTER);
             GridPane.setColumnSpan(input_invalid, 2);
 
+            login.getChildren().remove(input_invalid);
             login.add(input_invalid, 0, 4);
         }
         
@@ -375,7 +381,7 @@ public class login_register extends main_system{
         List<String[]> users = file.get_user_csv();
 
         for(int i = 1; i < users.size(); i++){
-            if (users.get(i).length < 4){
+            if (users.get(i).length < 5){
                 continue;
             }
             if(users.get(i)[2].equals(loginInfo[0]) && bcrypt.checkpw(loginInfo[1], users.get(i)[3])){

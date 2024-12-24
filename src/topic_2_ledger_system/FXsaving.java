@@ -35,7 +35,7 @@ public class FXsaving {
     
     private static final DecimalFormat df = new DecimalFormat("0.00");
     
-    private static int user_id = 2;
+    private static int user_id;
     public static void set_user(int user_id){
         FXsaving.user_id = user_id;
     }
@@ -54,9 +54,6 @@ public class FXsaving {
     @FXML
     public void back() throws IOException{
         main_system.setScene("menu");
-        
-        menu m = new menu();
-        m.update_account_info();
     }
     
     

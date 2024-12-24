@@ -48,9 +48,6 @@ public class FXcreditLoan {
     @FXML
     public void back() throws IOException{
         main_system.setScene("menu");
-        
-        menu m = new menu();
-        m.update_account_info();
     }
     
     
@@ -125,7 +122,7 @@ public class FXcreditLoan {
                         String.valueOf(totalAmount), 
                         String.valueOf(interestRate), 
                         String.valueOf(period), 
-                        String.valueOf(totalAmount), 
+                        df.format(totalAmount), 
                         (activeLoan ? "active" : "inactive"), 
                         dateToday};
         
@@ -142,7 +139,7 @@ public class FXcreditLoan {
                         loan_csv[2], 
                         loan_csv[3], 
                         String.valueOf(period), 
-                        String.valueOf(balance), 
+                        df.format(balance), 
                         (activeLoan ? "active" : "inactive"), 
                         loan_csv[7]};
         
@@ -262,8 +259,8 @@ public class FXcreditLoan {
         } else if (balance < 0) {
             lT2.setText("Remaining balance is 0");
             lT3.setText("Your change: RM" + df.format(-balance));
-            loanHis.get(loanHis.size()-1)[2] = String.valueOf(Double.parseDouble(loanHis.get(loanHis.size()-1)[2]) + balance);
-            loanHis.get(loanHis.size()-1)[3] = String.valueOf(Double.parseDouble(loanHis.get(loanHis.size()-1)[3]) + balance);
+            loanHis.get(loanHis.size()-1)[2] = df.format(Double.parseDouble(loanHis.get(loanHis.size()-1)[2]) + balance);
+            loanHis.get(loanHis.size()-1)[3] = df.format(Double.parseDouble(loanHis.get(loanHis.size()-1)[3]) + balance);
         }
         
         if (balance <= 0) {
@@ -273,7 +270,7 @@ public class FXcreditLoan {
         }
         loan_infos.getChildren().addAll(lT1, lT2, lT3, lT4);
         
-        updateLoan(user_id, balance, period, activeLoan);
+        updateLoan(user_id, Double.parseDouble(df.format(balance)), period, activeLoan);
         file.set_loanHistory_csv(loanHis);
     }
 }

@@ -43,9 +43,6 @@ public class FXdepositInterest {
     @FXML
     public void back() throws IOException{
         main_system.setScene("menu");
-        
-        menu m = new menu();
-        m.update_account_info();
     }
     
     

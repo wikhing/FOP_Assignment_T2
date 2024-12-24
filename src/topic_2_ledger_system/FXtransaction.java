@@ -43,9 +43,6 @@ public class FXtransaction {
     @FXML
     public void back() throws IOException{
         main_system.setScene("menu");
-        
-        menu m = new menu();
-        m.update_account_info();
     }
     
     
@@ -68,6 +65,7 @@ public class FXtransaction {
     public void transaction_record() {
         double balance = file.get_accbalance_csv(user_id);
         String[] savings = file.get_savings_csv(user_id);
+        List<String[]> savHis = file.get_savHistory_csv(user_id);
         
         double amount = 0, toSave = 0;
         String description = "", dateToday = "";
@@ -87,6 +85,11 @@ public class FXtransaction {
                 type = "debit";
                 if(savings[2].equals("active")){
                     toSave = amount * Integer.parseInt(savings[3]) / 100.0;
+                    if(!savHis.isEmpty()){
+                        savHis.add(new String[]{"", String.valueOf(user_id), String.valueOf(toSave), String.valueOf(Double.parseDouble(savHis.get(savHis.size()-1)[3]) + toSave), dateToday});
+                    }else{
+                        savHis.add(new String[]{"", String.valueOf(user_id), String.valueOf(toSave), String.valueOf(toSave), dateToday});
+                    }
                 }
                 
                 if (amount > 0 && amount < (Math.pow(10, 9))) {
@@ -131,6 +134,8 @@ public class FXtransaction {
 
             savings[4] = String.valueOf(Double.parseDouble(savings[4]) + toSave);
             file.set_savings_csv(savings);
+            
+            file.set_savHistory_csv(savHis);
             
             if(type.equals("debit")){
                 trans_info.setText("Debit Successfully Recorded!!!");

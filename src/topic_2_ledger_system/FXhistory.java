@@ -97,9 +97,6 @@ public class FXhistory {
     @FXML
     public void back() throws IOException{
         main_system.setScene("menu");
-        
-        menu m = new menu();
-        m.update_account_info();
     }
     
     

@@ -24,181 +24,29 @@
 
 <GridPane GridPane.halignment="CENTER" hgap="15" vgap="15" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="topic_2_ledger_system.menu">
     
-<!--    <VBox spacing="15" GridPane.rowIndex="0" GridPane.columnIndex="0" minWidth="300" prefWidth="320" maxWidth="340">
-        <children>-->
-                    <Label text="Welcome to The Ledger System" GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
-                    <Label fx:id="username" text="USERNAME" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+    <Label text="Welcome to The Ledger System" GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+    <Label fx:id="username" text="USERNAME" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
 
-                    <Label text="Balance:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                    <Label fx:id="balancefx" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+    <Label text="Balance:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+    <Label fx:id="balancefx" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
-                    <Label text="Saving:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-                    <Label fx:id="savingfx" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+    <Label text="Saving:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+    <Label fx:id="savingfx" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
 
-                    <Label text="Loan:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-                    <Label fx:id="loanfx" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+    <Label text="Loan:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+    <Label fx:id="loanfx" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
 
-                    <VBox spacing="15" GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="CENTER">
-                        <Button text="Transaction" prefWidth="180" onAction="#toTransaction"/>
-                        <Button text="Saving" prefWidth="180" onAction="#toSaving"/>
-                        <Button text="Credit Loan" prefWidth="180" onAction="#toCreditLoan"/>
-                        <Button text="Deposit Interest Predictor" prefWidth="180" onAction="#toDepositInterest"/>
-                        <Button text="History" prefWidth="180" onAction="#toHistory"/>
-                        <Button text="Logout" prefWidth="180"/>
-                    </VBox>
-                    
-<!--        </children>
+    <VBox fx:id="addi_info" GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
 
-        <Separator orientation="HORIZONTAL"/>
-
-        <children>
-            <StackPane>
-                <GridPane hgap="10" vgap="10">
-                    <Label text="Transaction Record Form" GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="3"/>
-                    <TextField fx:id="record_amount" promptText="Amount(RM)" GridPane.rowIndex="1" GridPane.columnIndex="0" prefWidth="100"/>
-                    <ChoiceBox fx:id="record_choice" value="Debit" GridPane.rowIndex="2" GridPane.columnIndex="0" prefWidth="100">
-                        <items>
-                            <FXCollections fx:factory="observableArrayList">
-                                <String fx:value="Debit" />
-                                <String fx:value="Credit" />
-                            </FXCollections>
-                        </items>
-                    </ChoiceBox>
-                    <TextArea fx:id="record_descp" promptText="Write your transaction description less than 100 characters" wrapText="true" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.rowSpan="4" GridPane.columnSpan="2" minWidth="190" prefWidth="210" maxWidth="220" minHeight="100" prefHeight="120" maxHeight="130"/>
-                    <Button text="Submit" GridPane.rowIndex="4" GridPane.columnIndex="0" prefWidth="100" onAction="#toTransaction"/>
-                    <Label fx:id="trans_info" GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.columnSpan="3"/>
-                </GridPane>
-            </StackPane>
-        </children>
-        
-        <Separator orientation="HORIZONTAL"/>
-
-        <children>
-            <StackPane>
-                <GridPane hgap="10" vgap="10">
-                    <Label text="Saving" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                    <CheckBox fx:id="user_choice" text="Enable Saving Setting" GridPane.rowIndex="1" GridPane.columnIndex="0" onAction="#saving_setting"/>
-                    <Label text="Percentage to be Deducted(%):" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                    <Spinner fx:id="sav_percentage" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="70">
-                        <valueFactory>
-                            <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="100"/>
-                        </valueFactory>
-                    </Spinner>
-                    <Label fx:id="sav_info" GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
-                </GridPane>
-            </StackPane>
-        </children>
+    <VBox spacing="15" GridPane.rowIndex="6" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="CENTER">
+        <Button text="Transaction" prefWidth="180" onAction="#toTransaction"/>
+        <Button text="Saving" prefWidth="180" onAction="#toSaving"/>
+        <Button text="Credit Loan" prefWidth="180" onAction="#toCreditLoan"/>
+        <Button text="Deposit Interest Predictor" prefWidth="180" onAction="#toDepositInterest"/>
+        <Button text="History" prefWidth="180" onAction="#toHistory"/>
+        <Button text="Data Visualize" prefWidth="180" onAction="#todataVisualization"/>
+        <Button text="Logout" prefWidth="180" onAction="#logOut"/>
     </VBox>
-    
-    <Separator GridPane.rowIndex="0" GridPane.columnIndex="1" orientation="VERTICAL"/>
-    
-    <VBox spacing="15" GridPane.rowIndex="0" GridPane.columnIndex="2">
-        <children>
-            <StackPane GridPane.rowIndex="2" GridPane.columnIndex="2" GridPane.halignment="CENTER">
-                <GridPane hgap="10" vgap="10">
-                    <Label text="Credit Loan" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                    
-                    <VBox spacing="15" alignment="CENTER" GridPane.rowIndex="1" GridPane.columnIndex="0">
-                        <ChoiceBox fx:id="loan_choice" value="Choose loan option" prefWidth="130">
-                            <items>
-                                <FXCollections fx:factory="observableArrayList">
-                                    <String fx:value="Apply Loan"/>
-                                    <String fx:value="Repay Loan"/>
-                                </FXCollections>
-                            </items>
-                        </ChoiceBox>
-                        
-                        <StackPane fx:id="loan_form"/>
-                    </VBox>
-                    
-                    <VBox fx:id="loan_infos" spacing="15" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                    
-                </GridPane>
-                    <Button text="Credit Loan" />
-            </StackPane>
-        </children>
-
-        <Separator orientation="HORIZONTAL"/>
-
-        <children>
-            <StackPane GridPane.rowIndex="4" GridPane.columnIndex="2" minHeight="170" prefHeight="180" maxHeight="190">
-                <GridPane hgap="10" vgap="10">
-                    <Label text="Deposit Interest Predictor" GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
-
-                    <Label text="Type of Bank:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                    <ChoiceBox fx:id="bank_list" value="Choose a Bank" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="170" onAction="#depositInterestPredictor">
-                        <items>
-                            <FXCollections fx:factory="observableArrayList">
-                                <String fx:value="RHB                          - 2.6%"/>
-                                <String fx:value="Maybank                  - 2.5%"/>
-                                <String fx:value="Hong Leong             - 2.3%"/>
-                                <String fx:value="Alliance                    - 2.85%"/>
-                                <String fx:value="AmBank                   - 2.55%"/>
-                                <String fx:value="Standard Chartered - 2.65%"/>
-                            </FXCollections>
-                        </items>
-                    </ChoiceBox>
-
-                    <Label text="Period:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                    <ChoiceBox fx:id="period_list" value="Choose a Period" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="170" onAction="#depositInterestPredictor">
-                        <items>
-                            <FXCollections fx:factory="observableArrayList">
-                                <String fx:value="Daily"/>
-                                <String fx:value="Monthly"/>
-                                <String fx:value="Annually"/>
-                            </FXCollections>
-                        </items>
-                    </ChoiceBox>
-
-                    <Label text="Interest:" wrapText="true" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-                    <Label fx:id="interest" GridPane.rowIndex="3" GridPane.columnIndex="1" wrapText="true"/>
-                    <Label fx:id="interest_info" GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
-                </GridPane>
-            </StackPane>
-        </children>
-    </VBox>
-    
-    <Separator GridPane.rowIndex="0" GridPane.columnIndex="3" orientation="VERTICAL"/>
-    
-    <children>
-        <StackPane GridPane.rowIndex="0" GridPane.columnIndex="4">
-            <GridPane hgap="10" vgap="10">
-                <Label text="History" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                <HBox spacing="10" GridPane.rowIndex="1" GridPane.columnIndex="0">
-                    <TextField fx:id="monthFilter" promptText="Month"/>
-                    <TextField fx:id="yearFilter" promptText="Year"/>
-                    <Button text="Filter Date" onAction="#history"/>
-                </HBox>
-                <TableView fx:id="histories" GridPane.rowIndex="2" GridPane.columnIndex="0">
-                    <columns>
-                        <TableColumn fx:id="balanceColumn" text="Balance">
-                            <cellValueFactory><PropertyValueFactory property="balance"/></cellValueFactory>
-                        </TableColumn>
-                        <TableColumn fx:id="typeColumn" text="Type">
-                            <cellValueFactory><PropertyValueFactory property="type"/></cellValueFactory>
-                        </TableColumn>
-                        <TableColumn fx:id="descriptionColumn" text="Description">
-                            <cellValueFactory><PropertyValueFactory property="description"/></cellValueFactory>
-                        </TableColumn>
-                        <TableColumn fx:id="dateColumn" text="Date">
-                            <cellValueFactory><PropertyValueFactory property="date"/></cellValueFactory>
-                        </TableColumn>
-                    </columns>
-                    <items>
-                        <FXCollections fx:factory="observableArrayList">
-                            
-                        </FXCollections>
-                    </items>
-                    <sortOrder>
-                        <fx:reference source="balanceColumn"/>
-                        <fx:reference source="typeColumn"/>
-                        <fx:reference source="descriptionColumn"/>
-                        <fx:reference source="dateColumn"/>
-                    </sortOrder>
-                </TableView>
-            </GridPane>
-        </StackPane>
-    </children>-->
     
     <padding>
         <Insets top="20" bottom="20" left="20" right="20"/>

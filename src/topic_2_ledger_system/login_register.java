@@ -180,12 +180,28 @@ public class login_register extends main_system{
     private int register(String name, String e_mail, String password, String confirmationPassword) throws IOException{
         boolean validEmailFormat = validateEmail(e_mail);
         boolean passwordIsValid = isPasswordComplex(password);
+        boolean hasRegistered = compareUser(e_mail);
         
         if(!validEmailFormat || !passwordIsValid){
             passesNotSame.setVisible(false);
             input_invalid.setVisible(true);
             
             String text = "Incorrect E-mail Format or Password Format";
+            input_invalid.setText(text);
+
+            GridPane.setHalignment(input_invalid, HPos.CENTER);
+            GridPane.setColumnSpan(input_invalid, 2);
+
+            register.getChildren().remove(input_invalid);
+            register.add(input_invalid, 0, 7);
+            
+            return -1;
+        }
+        if(hasRegistered){
+            passesNotSame.setVisible(false);
+            input_invalid.setVisible(true);
+            
+            String text = "E-mail has been registered.";
             input_invalid.setText(text);
 
             GridPane.setHalignment(input_invalid, HPos.CENTER);
@@ -390,5 +406,20 @@ public class login_register extends main_system{
         }
         
         return -1;
+    }
+    
+    private static boolean compareUser(String e_mail) throws IOException{
+        List<String[]> users = file.get_user_csv();
+
+        for(int i = 1; i < users.size(); i++){
+            if (users.get(i).length < 5){
+                continue;
+            }
+            if(users.get(i)[2].equals(e_mail)){
+                return true;
+            }
+        }
+        
+        return false;
     }
 }

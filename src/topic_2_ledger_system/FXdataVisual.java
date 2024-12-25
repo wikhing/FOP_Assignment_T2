@@ -112,11 +112,11 @@ public class FXdataVisual extends JFrame{
         Double debitMonthYear = 0.0;
         
         for (String[] transaction : allTransactions) {
-            if (transaction.length < 6){
+            if (transaction.length < 7){
                 continue;
             }
             
-            if (transaction[5].endsWith(monthYear) && transaction[2].equalsIgnoreCase("debit")) {
+            if (transaction[6].endsWith(monthYear) && transaction[2].equalsIgnoreCase("debit")) {
                 debitMonthYear += Double.parseDouble(transaction[3]);
             }
         }

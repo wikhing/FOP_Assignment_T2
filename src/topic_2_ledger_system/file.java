@@ -191,7 +191,7 @@ public class file {
     }
     
     // Need get first then set
-    // Array format: {"", user_id, transaction_type, amount, description, date}
+    // Array format: {"", user_id, transaction_type, amount, desc_type, description, date}
     private static List<String[]> tempTransactions = new ArrayList<>();
     public static List<String[]> get_transactions_csv(int user_id){//put in user_id to directly get transaction data of the user
         List<String[]> transactions_csv = new ArrayList<>();

@@ -56,6 +56,7 @@ public class FXtransaction {
     
     @FXML TextField record_amount = new TextField();
     @FXML ChoiceBox record_choice = new ChoiceBox();
+    @FXML ChoiceBox desc_choice = new ChoiceBox();
     @FXML TextArea record_descp = new TextArea();
     @FXML Label trans_info = new Label();
     
@@ -68,14 +69,14 @@ public class FXtransaction {
         List<String[]> savHis = file.get_savHistory_csv(user_id);
         
         double amount = 0, toSave = 0;
-        String description = "", dateToday = "";
+        String desc_type ="", description = "", dateToday = "";
         
         // Automatically get date
         LocalDate date = LocalDate.now();
         DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         dateToday = date.format(pattern);
         
-        if(record_amount.getText().length() == 0){
+        if(record_amount.getText().length() == 0 || desc_choice.getValue().toString().equals("Choose Description Type")){
             trans_info.setText("Please fill in all the section of the form.");
             return;
         }
@@ -119,7 +120,7 @@ public class FXtransaction {
             default -> trans_info.setText("Error!");
         }
 
-
+        desc_type = desc_choice.getValue().toString();
         description = record_descp.getText();
         if (description.length() > 100){
             trans_info.setText("Description exceeds 100 characters, please retry.");
@@ -127,7 +128,7 @@ public class FXtransaction {
             trans_info.setText("Please fill in all the section of the form.");
         }else{
             List<String[]> transaction = file.get_transactions_csv(user_id);
-            transaction.add(new String[]{"", String.valueOf(user_id), type, String.valueOf(amount), description, dateToday});
+            transaction.add(new String[]{"", String.valueOf(user_id), type, String.valueOf(amount), desc_type, description, dateToday});
             file.set_transactions_csv(transaction);
 
             file.set_accbalance_csv(user_id, balance);

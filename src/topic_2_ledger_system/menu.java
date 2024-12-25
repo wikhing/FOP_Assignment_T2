@@ -383,8 +383,10 @@ public class menu {
         main_system.setScene("history");
     }
     
-    public void todataVisualization(){
-        data_visualization.dataVisualization(user_id);
+    public void todataVisualization() throws IOException{
+        FXdataVisual.set_user(user_id);
+        main_system.setScene("dataVisual");
+//        FXdataVisual.dataVisualization(user_id);
     }
     
     public void logOut() throws IOException {

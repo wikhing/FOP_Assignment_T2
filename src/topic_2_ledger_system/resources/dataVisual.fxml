@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.cell.*?> 
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.geometry.Insets?>
+
+<GridPane GridPane.halignment="CENTER" hgap="15" vgap="15" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="topic_2_ledger_system.FXdataVisual">
+    
+    <Label text="Data Visualization" GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+    
+    <Label text="Data for the next 12 months will be displayed" GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+    <Label text="Enter Starting Month and Year(MM/YYYY):" GridPane.rowIndex="2" GridPane.columnIndex="0" wrapText="true" prefWidth="120"/>
+    <TextField fx:id="tfmonthYear" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="100"/>
+    
+    <Label text="Type of Trend:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+    <ChoiceBox fx:id="trend_choice" value="Choose Trend" GridPane.rowIndex="3" GridPane.columnIndex="1" prefWidth="130">
+        <items>
+            <FXCollections fx:factory="observableArrayList">
+                <String fx:value="Spending" />
+                <String fx:value="Savings" />
+                <String fx:value="Loan Repayments" />
+                <String fx:value="Loan" />
+            </FXCollections>
+        </items>
+    </ChoiceBox>
+
+    <Button text="Submit" GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="CENTER" prefWidth="90" onAction="#dataVisualization"/>
+    <Label fx:id="dataV_info" GridPane.rowIndex="6" GridPane.columnIndex="0" GridPane.columnSpan="4"/>
+    
+    <Button text="&#60;Back" GridPane.rowIndex="7" GridPane.columnIndex="0" onAction="#back"/>
+        
+        
+    <padding>
+        <Insets top="20" bottom="20" left="20" right="20"/>
+    </padding>
+</GridPane>

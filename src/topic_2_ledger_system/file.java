@@ -278,7 +278,6 @@ public class file {
     }
     
     // Need get first then set
-    // Array format: {"", user_id, savedBalance, date}
     // Array format: {"", user_id, savedBalance, cumulativeSaved, date}
     private static List<String[]> tempSavHistory = new ArrayList<>();
     public static List<String[]> get_savHistory_csv(int user_id){
@@ -367,7 +366,7 @@ public class file {
     }
     
     // Need get first then set
-    // Array format: {"", user_id, loanPaid, cumulativeLoanPaid, date}
+    // Array format: {"", user_id, loanPaid, cumulativeLoanPaid, remainingBalance, date}
     private static List<String[]> tempLoanHistory = new ArrayList<>();
     public static List<String[]> get_loanHistory_csv(int user_id){
         List<String[]> loans_csv = new ArrayList<>();

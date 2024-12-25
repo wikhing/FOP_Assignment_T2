@@ -170,6 +170,7 @@ public class FXcreditLoan {
     @FXML
     public void applyLoan(){
         boolean activeLoan = getActiveLoan(user_id);
+        List<String[]> loanHis = file.get_loanHistory_csv(user_id);
         
         loan_infos.getChildren().removeAll(lT1, lT2, lT3, lT4);
         
@@ -209,6 +210,8 @@ public class FXcreditLoan {
         loan_infos.getChildren().addAll(lT1, lT2, lT3, lT4);
 
         updateLoan(user_id, Double.parseDouble(df.format(totalAmount)), Double.parseDouble(df.format(monthlyPayment)), period, activeLoan, date, rate);
+        loanHis.add(new String[]{"", String.valueOf(user_id), "0", "0", String.valueOf(totalAmount), date});
+        file.set_loanHistory_csv(loanHis);
     }
     
     @FXML
@@ -248,9 +251,9 @@ public class FXcreditLoan {
 
         balance -= paymentAmount;
         if(!loanHis.isEmpty()){
-            loanHis.add(new String[]{"", String.valueOf(user_id), String.valueOf(paymentAmount), String.valueOf(Double.parseDouble(loanHis.get(loanHis.size()-1)[3]) + paymentAmount), date});
+            loanHis.add(new String[]{"", String.valueOf(user_id), String.valueOf(paymentAmount), String.valueOf(Double.parseDouble(loanHis.get(loanHis.size()-1)[3]) + paymentAmount), String.valueOf(balance), date});
         }else{
-            loanHis.add(new String[]{"", String.valueOf(user_id), String.valueOf(paymentAmount), String.valueOf(paymentAmount), date});
+            loanHis.add(new String[]{"", String.valueOf(user_id), String.valueOf(paymentAmount), String.valueOf(paymentAmount), String.valueOf(balance), date});
         }
         lT1.setText("Payment successful! ----" + date);
         

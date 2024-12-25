@@ -4,91 +4,105 @@
  */
 package topic_2_ledger_system;
 
+import java.awt.geom.Ellipse2D;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javax.swing.JFrame;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.chart.ui.ApplicationFrame;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
+import org.jfree.chart.ui.ApplicationFrame;
+import org.jfree.data.category.DefaultCategoryDataset;
 
-
-import java.awt.geom.Ellipse2D;
-
-import java.util.List;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import java.util.Scanner;
-
-public class data_visualization extends ApplicationFrame {
-
-    public data_visualization(String title) {
-        super(title);
+/**
+ *
+ * @author I Khing
+ */
+public class FXdataVisual extends JFrame{
+    
+    private static final DecimalFormat df = new DecimalFormat("0.00");
+    
+    private static int user_id;
+    public static void set_user(int user_id){
+        FXdataVisual.user_id = user_id;
     }
-   // x-axis 
+    
+    @FXML
+    public void back() throws IOException{
+        main_system.setScene("menu");
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+//    public FXdataVisual(String title) {
+//        super(title);
+//    }
+    // x-axis 
     public static String getStrMonth (int month) {
         String monthStr = "";
         switch (month) {
-            case 1 -> {
-                monthStr = "Jan";
-            }
-            case 2 -> {
-                monthStr = "Feb";
-            }
-            case 3 -> {
-                monthStr = "Mar";
-            }
-            case 4 -> {
-                monthStr = "Apr";
-            }
-            case 5 -> {
-                monthStr = "May";
-            }
-            case 6 -> {
-                monthStr = "Jun";
-            }
-            case 7 -> {
-                monthStr = "Jul";
-            }
-            case 8 -> {
-                monthStr = "Aug";
-            }
-            case 9 -> {
-                monthStr = "Sep";
-            }
-            case 10 -> {
-                monthStr = "Oct";
-            }
-            case 11 -> {
-                monthStr = "Nov";
-            }
-            case 12 -> {
-                monthStr = "Dec";
-            } 
+            case 1 -> monthStr = "Jan";
+            case 2 -> monthStr = "Feb";
+            case 3 -> monthStr = "Mar";
+            case 4 -> monthStr = "Apr";
+            case 5 -> monthStr = "May";
+            case 6 -> monthStr = "Jun";
+            case 7 -> monthStr = "Jul";
+            case 8 -> monthStr = "Aug";
+            case 9 -> monthStr = "Sep";
+            case 10 -> monthStr = "Oct";
+            case 11 -> monthStr = "Nov";
+            case 12 -> monthStr = "Dec";
         }
         return monthStr;
     }
 
     public static List<String> getXAxisMonthYear (int month, int year) {
 
-            List<String> xAxisMonthYear = new ArrayList<>();
+        List<String> xAxisMonthYear = new ArrayList<>();
 
+        for (int i = 0; i < 12; i++){
+            String monthYear = getStrMonth(month) + " " + year;
+            xAxisMonthYear.add(monthYear);
+            month++;
 
-            for (int i = 0; i < 12; i++){
-                String monthYear = getStrMonth(month) + " " + year;
-                xAxisMonthYear.add(monthYear);
-                month++;
-
-                if(month > 12 ){
-                    month = 1;
-                    year++;
-                }
-
-
+            if(month > 12 ){
+                month = 1;
+                year++;
             }
-            return xAxisMonthYear;
+        }
+        return xAxisMonthYear;
     }
     
     //Spending Trend
@@ -173,10 +187,8 @@ public class data_visualization extends ApplicationFrame {
                 isSavings = true;
                 if (savings > SavingsMonthYear){
                     SavingsMonthYear = savings;
-                }
-                
-            }
-             
+                }       
+            }    
         }
         
         if(!isSavings){
@@ -439,27 +451,22 @@ public class data_visualization extends ApplicationFrame {
         ChartPanel chartPanel = new ChartPanel(lineChart);
         chartPanel.setPreferredSize(new java.awt.Dimension(1200, 1000));
         setContentPane(chartPanel);
-   }
+    }
+   
+    @FXML TextField tfmonthYear = new TextField();
+    @FXML ChoiceBox trend_choice = new ChoiceBox();
+    
+    @FXML Label dataV_info = new Label();
 
-    public static void dataVisualization (int user_id) {
-        
-        Scanner sc = new Scanner(System.in);
-        
-        System.out.println("\n\n== Data visualization ==");
-        System.out.println("Data for the next 12 months will be displayed.");  
-        
+    public void dataVisualization () {
         
         String monthYear;
-        
-        while (true){
-            System.out.print("Enter the starting month and year (MM/YYYY):");
-            monthYear = sc.nextLine();
-            if (monthYear.matches("\\d{2}/\\d{4}")) {
-                break;
-            } else {
-                System.out.println("Invalid format. Hint: DD/MM/YYYY\n");
-            }
+        monthYear = tfmonthYear.getText();
+        if (!monthYear.matches("\\d{2}/\\d{4}")) {
+            dataV_info.setText("Invalid format. Enter with format MM/YYYY");
+            return;
         }
+        
         
         String[] strArrMonthYear = monthYear.split("/");
         int[] arrMonthYear = new int[strArrMonthYear.length];
@@ -470,58 +477,44 @@ public class data_visualization extends ApplicationFrame {
         int year = arrMonthYear[1];
         
         
-       
-        System.out.println("\nPlease select an option to view the trends:");
-        System.out.println("1. Spending trends");
-        System.out.println("2. Savings growth");
-        System.out.println("3. Repayments trend");
-        System.out.println("4. Loan trend");
-        int optionDataVisual = 0;
-        while (true){
-            System.out.print("\nEnter your choice(1-4): ");
-            if (sc.hasNextInt()) {
-                    optionDataVisual = sc.nextInt();
-                    sc.nextLine(); 
-
-                    if (optionDataVisual >= 1 && optionDataVisual <= 4) {
-                        break;
-                    } else {
-                        System.out.println("Invalid option. Please enter a number between 1 and 4.");
-                    }
-                } else {
-                    System.out.println("Invalid input. Please enter a valid number.");
-                    sc.nextLine(); 
-            }
-        }
-        
-        switch(optionDataVisual) {
-            case 1 -> {
-                data_visualization dataVisualization = new data_visualization("Spending Trends Over 12 Months");
+        String optionString = trend_choice.getValue().toString();
+        switch(optionString) {
+            case "Spending" -> {
+                FXdataVisual dataVisualization = new FXdataVisual();
+                dataVisualization.setTitle("Spending Trends Over 12 Months");
                 dataVisualization.displaySpendingTrends(user_id, month, year);
                 dataVisualization.pack();        
                 dataVisualization.setVisible(true); 
+                dataVisualization.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             }
-            case 2 -> {
-                data_visualization dataVisualization = new data_visualization("Saving Growth Over 12 Months");
+            case "Savings" -> {
+                FXdataVisual dataVisualization = new FXdataVisual();
+                dataVisualization.setTitle("Saving Growth Over 12 Months");
                 dataVisualization.displaySavingsGrowth(user_id, month, year);
                 dataVisualization.pack();        
                 dataVisualization.setVisible(true); 
+                dataVisualization.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             }
             
-            case 3 -> {
-                data_visualization dataVisualization = new data_visualization("Repayments Trends Over 12 Months");
+            case "Loan Repayments" -> {
+                FXdataVisual dataVisualization = new FXdataVisual();
+                dataVisualization.setTitle("Repayments Trends Over 12 Months");
                 dataVisualization.displayRepaymentsTrend(user_id, month, year);
                 dataVisualization.pack();        
                 dataVisualization.setVisible(true);
+                dataVisualization.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             }
             
-            case 4 -> {
-                data_visualization dataVisualization = new data_visualization("Loan Trends Over 12 Months");
+            case "Loan" -> {
+                FXdataVisual dataVisualization = new FXdataVisual();
+                dataVisualization.setTitle("Loan Trends Over 12 Months");
                 dataVisualization.displayLoanTrend(user_id, month, year);
                 dataVisualization.pack();        
                 dataVisualization.setVisible(true);
-                
+                dataVisualization.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             }
+            
+            default -> dataV_info.setText("Choose a Trend and Chart.");
         }
             
     }

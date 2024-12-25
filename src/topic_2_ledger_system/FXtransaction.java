@@ -69,6 +69,12 @@ public class FXtransaction {
         
         double amount = 0, toSave = 0;
         String description = "", dateToday = "";
+        
+        // Automatically get date
+        LocalDate date = LocalDate.now();
+        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        dateToday = date.format(pattern);
+        
         if(record_amount.getText().length() == 0){
             trans_info.setText("Please fill in all the section of the form.");
             return;
@@ -112,12 +118,6 @@ public class FXtransaction {
             }
             default -> trans_info.setText("Error!");
         }
-        
-
-        // Automatically get date
-        LocalDate date = LocalDate.now();
-        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        dateToday = date.format(pattern);
 
 
         description = record_descp.getText();

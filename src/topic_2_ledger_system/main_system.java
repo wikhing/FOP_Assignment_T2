@@ -118,6 +118,16 @@ public class main_system extends Application{
                 primStage.setX((bounds.getMaxX() - mainScene.getWidth()) / 2);
                 primStage.setY((bounds.getMaxY() - mainScene.getHeight()) / 2);
             }
+            case "dataVisual" -> {
+                mainScene = new Scene(loadFXML("dataVisual"), 340, 390);
+                primStage.setMinWidth(340);
+                primStage.setMaxWidth(340);
+                primStage.setMinHeight(390);
+                primStage.setMaxHeight(390);
+                primStage.setScene(mainScene);
+                primStage.setX((bounds.getMaxX() - mainScene.getWidth()) / 2);
+                primStage.setY((bounds.getMaxY() - mainScene.getHeight()) / 2);
+            }
         }
     }
     

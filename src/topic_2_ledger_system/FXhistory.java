@@ -181,8 +181,8 @@ public class FXhistory {
         
         // Display each transaction
         for (String[] transaction : allTransactions) {
-            if(transaction.length != 6) continue;
-            data.add(new Transaction(df.format(Double.parseDouble(transaction[3])), transaction[2], transaction[4], transaction[5]));
+            if(transaction.length != 7) continue;
+            data.add(new Transaction(df.format(Double.parseDouble(transaction[3])), transaction[2], transaction[5], transaction[6]));
         }  
     }
     
@@ -300,11 +300,11 @@ public class FXhistory {
                 }
             }
             
-            if(endDate.isBefore(LocalDate.parse("01/" + monthYear, DateTimeFormatter.ofPattern("dd/MM/yyyy")))){
+            if(monthYear.equals("//") && endDate.isBefore(LocalDate.parse("01/" + monthYear, DateTimeFormatter.ofPattern("dd/MM/yyyy")))){
                 histories.getItems().clear();
                 histories.setPlaceholder(new Label("Your filter is before the monthly transaction."));
                 return;
-            }else if(startDate.isAfter(LocalDate.parse("31/" + monthYear, DateTimeFormatter.ofPattern("dd/MM/yyyy")))){
+            }else if(monthYear.equals("//") && startDate.isAfter(LocalDate.parse("31/" + monthYear, DateTimeFormatter.ofPattern("dd/MM/yyyy")))){
                 histories.getItems().clear();
                 histories.setPlaceholder(new Label("Your filter is after the monthly transaction."));
                 return;
@@ -321,12 +321,12 @@ public class FXhistory {
         for (String[] transaction : transactionsToFilter) {
             try {
                 // Ensure the transaction has at least 6 elements (e.g., date, amount, type)
-                if (transaction.length < 6) {
+                if (transaction.length < 7) {
                     continue;
                 }
 
                 // Parsing date and amount for comparison
-                LocalDate transactionDate = LocalDate.parse(transaction[5], DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                LocalDate transactionDate = LocalDate.parse(transaction[6], DateTimeFormatter.ofPattern("dd/MM/yyyy"));
                 double amount = Double.parseDouble(transaction[3]);  // Converts string to double
                 String type = transaction[2].toLowerCase();
 
@@ -367,8 +367,8 @@ public class FXhistory {
             histories.setPlaceholder(new Label("No transactions found matching the criteria."));
         } else {
             for (String[] transaction : filteredTransactions) {
-                if (transaction.length == 6) {
-                    data.add(new Transaction(df.format(Double.parseDouble(transaction[3])), transaction[2], transaction[4], transaction[5]));
+                if (transaction.length == 7) {
+                    data.add(new Transaction(df.format(Double.parseDouble(transaction[3])), transaction[2], transaction[5], transaction[6]));
                 }
             }
         }
@@ -403,12 +403,12 @@ public class FXhistory {
 
             // Write each transaction row
             for (String[] transaction : transactions) {
-                if (transaction.length>=6){
+                if (transaction.length>=7){
                 writer.printf("%s, %s, %s, %s%n",
                             df.format(Double.parseDouble(transaction[3])), // Amount
                             transaction[2], // Type
-                            transaction[4], // Description
-                            transaction[5]  // Date
+                            transaction[5], // Description
+                            transaction[6]  // Date
                     ); 
                 }
             }

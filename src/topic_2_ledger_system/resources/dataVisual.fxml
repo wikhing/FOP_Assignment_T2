@@ -41,6 +41,16 @@
             </FXCollections>
         </items>
     </ChoiceBox>
+    
+<!--    <ChoiceBox fx:id="graph_choice" value="Choose Graph" GridPane.rowIndex="3" GridPane.columnIndex="1" prefWidth="130">
+        <items>
+            <FXCollections fx:factory="observableArrayList">
+                <String fx:value="Bar Graph" />
+                <String fx:value="Line Graph" />
+                <String fx:value="Pie Graph" />
+            </FXCollections>
+        </items>
+    </ChoiceBox>-->
 
     <Button text="Submit" GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="CENTER" prefWidth="90" onAction="#dataVisualization"/>
     <Label fx:id="dataV_info" GridPane.rowIndex="6" GridPane.columnIndex="0" GridPane.columnSpan="4"/>

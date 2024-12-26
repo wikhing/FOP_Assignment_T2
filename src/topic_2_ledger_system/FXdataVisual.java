@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
 import javafx.collections.ObservableList;
@@ -142,7 +143,7 @@ public class FXdataVisual extends JFrame{
     
     public void displaySpendingTrends(int user_id, int month, int year) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-
+//        PieDataSet dataset = new PieDataSet();
         
         List<String> xAxisMonthYear = getXAxisMonthYear (month, year);
         List<Double> monthlyDebit = getDebitfor12Months(user_id, month, year);
@@ -151,7 +152,8 @@ public class FXdataVisual extends JFrame{
         for (int i = 0; i < monthlyDebit.size(); i++) {
             dataset.addValue(monthlyDebit.get(i), "Spending", xAxisMonthYear.get(i));
         }
-
+        
+//        JFreeChart pieChart = ChartFactory.createPieChart("Spending Trends in 12 Months", dataset, true, true, false);
         JFreeChart barChart = ChartFactory.createBarChart(
                 "Spending Trends Over Time",   // Chart title
                 "Month",                       // X-axis label

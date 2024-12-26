@@ -40,6 +40,11 @@ public class FXcreditLoan {
         FXcreditLoan.user_id = user_id;
     }
     
+    private static double toPay = -1;
+    public static void set_payment(double toPay){
+        FXcreditLoan.toPay = toPay;
+    }
+    
     @FXML
     public void initialize(){
         loanSet();
@@ -83,9 +88,14 @@ public class FXcreditLoan {
             loan_infos.getChildren().add(lT1);
         }
 
-        if (dateNow.isAfter(dateNow.plusMonths(period))) {
-            lT1.setText("Loan repayment period has ended. Further debits and credits are not allowed.");
-            loan_infos.getChildren().add(lT1);
+//        if (dateNow.isAfter(dateNow.plusMonths(period))) {
+//            lT2.setText("Loan repayment period has ended. Further debits and credits are not allowed.");
+//            loan_infos.getChildren().add(lT2);
+//        }
+        
+        if(toPay != -1){
+            payAmount.setText(df.format(toPay));
+            toPay = -1;
         }
     }
     
@@ -182,6 +192,13 @@ public class FXcreditLoan {
         
         if(loanPrincipal.getText().matches("[a-z]+") || loanInterest.getText().matches("[a-z]+") || loanPeriod.getText().matches("[a-z]+")) {
             lT1.setText("Invalid input, please retry.");
+            loan_infos.getChildren().add(lT1);
+            return;
+        }
+        
+        if (activeLoan) {
+            lT1.setWrapText(true);
+            lT1.setText("You already have an active loan.\nPlease repay it before applying for another.");
             loan_infos.getChildren().add(lT1);
             return;
         }

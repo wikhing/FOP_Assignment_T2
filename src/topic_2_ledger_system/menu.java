@@ -30,6 +30,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
@@ -205,6 +206,11 @@ public class menu {
         }
     }
     
+    private static boolean isOverdue = false;
+    public static void set_overdue(boolean isOverdue){
+        menu.isOverdue = isOverdue;
+    }
+    
     public void ReminderSystem(int user_id){
    
         boolean activeLoan = FXcreditLoan.getActiveLoan(user_id);
@@ -221,6 +227,10 @@ public class menu {
         LocalDate startDate = LocalDate.parse(loan_csv[7], DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         double totalLoanAmount = Double.parseDouble(loan_csv[2]);
         double monthlyRepayment = totalLoanAmount / period;
+        if(totalLoanAmount != Double.parseDouble(loan_csv[5])){
+            monthlyRepayment = Double.parseDouble(loan_csv[5]) - ((int)(Double.parseDouble(loan_csv[5]) / monthlyRepayment) * monthlyRepayment);
+        }
+        double currentBalance = FXcreditLoan.getBalance(user_id);
 
         //Create a list that collect duedates and expectedbalances every month
         String[][] scheduledExpectation = new String[period][2];
@@ -276,12 +286,50 @@ public class menu {
         Label lab2 = new Label();
         Label lab3 = new Label();
         Label lab4 = new Label();
+        Label lab5 = new Label();
+        
+        HBox hb = new HBox();
+        hb.getChildren().clear();
+        hb.setSpacing(10);
+        hb.setAlignment(Pos.CENTER);
+        hb.setPadding(new Insets(15, 15, 15, 15));
 
         Button close = new Button("Close");
         close.setPrefWidth(80);
         close.setOnAction(e -> {
             popup.close();
         });
+        
+        Button paynow = new Button("Pay now");
+        paynow.setPrefWidth(80);
+        paynow.setOnAction(e -> {
+            FXcreditLoan.set_user(user_id);
+            double mp = totalLoanAmount / period;
+            mp = Double.parseDouble(loan_csv[5]) - ((int)(Double.parseDouble(loan_csv[5]) / mp) * mp);
+            FXcreditLoan.set_payment(mp);
+            try {
+                main_system.setScene("creditloan");
+            } catch (IOException ex) {
+                System.out.println("Error setting up transaction scene.");
+            }
+            popup.close();
+        });
+        hb.getChildren().addAll(close, paynow);
+        
+        if(monthlyRepayment == 0){
+            lab1.setText("You have paid the loan for this month.");
+            lab2.setText("Due date: " + nextDueDate);
+            lab3.setText("Your current total loan: RM" + df.format(currentBalance));
+            
+            vb.getChildren().addAll(lab1, lab2, lab3, lab4, close);
+            Scene notify = new Scene(vb, 280, 180);
+
+            popup.setScene(notify);
+            popup.setAlwaysOnTop(true);
+            popup.show(); 
+            
+            return;
+        }
         
         // If no valid lastduedate is found (First month of loan repayment)
         if (lastDueDate == null) {
@@ -292,15 +340,14 @@ public class menu {
             if(daysUntilDue<=5){
                 lab2.setText("Your loan will due on "+daysUntilDue+" days.");
                 lab3.setText("Due date: " + nextDueDate);
-                
             }else{
                 lab2.setText("Due Date: "+nextDueDate);
                 lab3.setText("Amount of monthly repayment: RM" + df.format(monthlyRepayment));    
             }
             
-            vb.getChildren().addAll(lab1, lab2, lab3, close);
+            vb.getChildren().addAll(lab1, lab2, lab3, hb);
             
-            Scene notify = new Scene(vb, 320, 180);
+            Scene notify = new Scene(vb, 340, 230);
 
             popup.setScene(notify);
             popup.setAlwaysOnTop(true);
@@ -311,7 +358,6 @@ public class menu {
         
         //Compare the balances, then determine is user 
         //overdue//has upcoming loan repayment(<=5days)//has no upcoming loan repayment(<=5days)
-        double currentBalance = FXcreditLoan.getBalance(user_id);
         //System.out.println("lastduedate: "+lastDueDate);
         //System.out.println("lastexpectedbalance: "+lastExpectedBalance);
         //System.out.println("nextdueddate: "+nextDueDate);
@@ -320,8 +366,20 @@ public class menu {
         if (currentBalance >lastExpectedBalance) {
             lab1.setText("Reminder: Your loan is overdue!");
             lab2.setText("Last due date: " + lastDueDate);
-            lab3.setText("Expected balance by this date: RM" + df.format(lastExpectedBalance));
-            lab4.setText("Your current balance(loan): RM" + df.format(currentBalance));
+            lab3.setText("Expected payment by this date: RM" + df.format(monthlyRepayment));
+            lab4.setText("Your current total loan: RM" + df.format(currentBalance));
+            lab5.setText("Futher Debits and Credits \nTransaction are not allowed!");
+            
+            set_overdue(true);
+            
+            vb.getChildren().addAll(lab1, lab2, lab3, lab4, lab5, hb);
+            Scene notify = new Scene(vb, 340, 260);
+
+            popup.setScene(notify);
+            popup.setAlwaysOnTop(true);
+            popup.show();  
+            
+            return;
             
         } else { //currentbalance <= last expected balance (no overdue)
             long daysUntilDue = ChronoUnit.DAYS.between(today,nextDueDate);
@@ -329,20 +387,20 @@ public class menu {
             if(daysUntilDue<=5){
                 lab1.setText("Alert: Your loan will due on "+daysUntilDue+" day(s)!");
                 lab2.setText("Due date: "+nextDueDate);
-                lab3.setText("Expected balance by this date: RM" + df.format(lastExpectedBalance));
+                lab3.setText("Expected payment by this date: RM" + df.format(monthlyRepayment));
                 lab4.setText("Your current balance(loan): RM" + df.format(currentBalance));
                 
             }else{ // daysUntilDue>5
                 lab1.setText("Your loan repayments are on track.");
                 lab2.setText("Due date: " + nextDueDate);
-                lab3.setText("Expected balance by this date: RM" + df.format(nextExpectedBalance));
+                lab3.setText("Expected payment by this date: RM" + df.format(monthlyRepayment));
                 lab4.setText("Your current balance(loan): RM" + df.format(currentBalance));
             }
         }
         
             
-        vb.getChildren().addAll(lab1, lab2, lab3, lab4, close);
-        Scene notify = new Scene(vb, 320, 180);
+        vb.getChildren().addAll(lab1, lab2, lab3, lab4, hb);
+        Scene notify = new Scene(vb, 340, 230);
 
         popup.setScene(notify);
         popup.setAlwaysOnTop(true);
@@ -359,6 +417,11 @@ public class menu {
     
     
     public void toTransaction() throws IOException{
+        if(isOverdue){
+            ReminderSystem(user_id);
+            return;
+        }
+        
         FXtransaction.set_user(user_id);
         main_system.setScene("transaction");
     }

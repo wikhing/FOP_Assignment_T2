@@ -27,6 +27,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TableColumn;
@@ -200,6 +201,9 @@ public class FXhistory {
     Label laEnd = new Label();
     TextField tfEnd = new TextField();
     
+    DatePicker dateStart = new DatePicker();
+    DatePicker dateEnd = new DatePicker();
+    
     Button submitFilter = new Button("Filter");
     
     ChoiceBox<String> transactionType = new ChoiceBox<String>();
@@ -217,6 +221,13 @@ public class FXhistory {
         tfEnd.clear();
         end.getChildren().addAll(laEnd, tfEnd);
         
+        dateStart.setValue(LocalDate.now());
+        dateStart.setMaxWidth(110);
+        dateStart.setEditable(false);
+        dateEnd.setValue(LocalDate.now());
+        dateEnd.setMaxWidth(110);
+        dateEnd.setEditable(false);
+        
         submitFilter.prefWidth(100);
         submitFilter.setOnAction(e -> {
             filterHistory();
@@ -233,8 +244,13 @@ public class FXhistory {
                 filterBox.getChildren().addAll(start, end, submitFilter);
             }
             case "Filter Date Range" -> {
-                laStart.setText("Start Date(DD/MM/YYYY)");
-                laEnd.setText("End Date(DD/MM/YYYY)");
+                laStart.setText("Start Date");
+                laEnd.setText("End Date");
+                
+                start.getChildren().remove(tfStart);
+                start.getChildren().add(dateStart);
+                end.getChildren().remove(tfEnd);
+                end.getChildren().add(dateEnd);
                 
                 filterBox.getChildren().addAll(start, end, submitFilter);
             }
@@ -273,32 +289,9 @@ public class FXhistory {
 
         // Date Range Filter
         if (filterOption == 2 ) {
-            String startDateInput = tfStart.getText();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-            while (startDate == null) {
-                try {
-                    // Try to parse the date
-                    startDate = LocalDate.parse(startDateInput,formatter);
-                } catch (Exception e) {
-                    // If the date format is invalid, inform the user and ask again
-                    his_info.setText("Invalid start date. Please use the correct format (DD/MM/YYYY).");
-                    return;
-                }
-            }
-
-            String endDateInput = tfEnd.getText();
-
-            while (endDate == null) {
-                try {
-                    // Try to parse the date
-                    endDate = LocalDate.parse(endDateInput, formatter);
-                } catch (Exception e) {
-                    // If the date format is invalid, inform the user and ask again
-                    his_info.setText("Invalid end date. Please use the correct format (dd/MM/yyyy).");
-                    return;
-                }
-            }
+            
+            startDate = dateStart.getValue();
+            endDate = dateEnd.getValue();
             
             if(monthYear.equals("//") && endDate.isBefore(LocalDate.parse("01/" + monthYear, DateTimeFormatter.ofPattern("dd/MM/yyyy")))){
                 histories.getItems().clear();
@@ -307,6 +300,10 @@ public class FXhistory {
             }else if(monthYear.equals("//") && startDate.isAfter(LocalDate.parse("31/" + monthYear, DateTimeFormatter.ofPattern("dd/MM/yyyy")))){
                 histories.getItems().clear();
                 histories.setPlaceholder(new Label("Your filter is after the monthly transaction."));
+                return;
+            }else if(startDate.isAfter(endDate)){
+                histories.getItems().clear();
+                histories.setPlaceholder(new Label("Your start date is after end date!"));
                 return;
             }
         }

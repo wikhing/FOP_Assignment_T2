@@ -22,30 +22,30 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.geometry.Insets?>
 
-<GridPane GridPane.halignment="CENTER" hgap="15" vgap="15" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="topic_2_ledger_system.menu">
+<GridPane GridPane.halignment="CENTER" hgap="15" vgap="15" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="topic_2_ledger_system.menu" stylesheets="@design.css">
     
-    <Label text="Welcome to The Ledger System" GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
-    <Label fx:id="username" text="USERNAME" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+    <Label fx:id="app_title" text="Welcome to The Ledger System" GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="3"/>
+    <Label fx:id="username" text="USERNAME" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
-    <Label text="Balance:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-    <Label fx:id="balancefx" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+    <Label text="Balance:" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+    <Label fx:id="balancefx" GridPane.rowIndex="3" GridPane.columnIndex="2"/>
 
-    <Label text="Saving:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-    <Label fx:id="savingfx" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+    <Label text="Saving:" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+    <Label fx:id="savingfx" GridPane.rowIndex="4" GridPane.columnIndex="2"/>
 
-    <Label text="Loan:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-    <Label fx:id="loanfx" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+    <Label text="Loan:" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+    <Label fx:id="loanfx" GridPane.rowIndex="5" GridPane.columnIndex="2"/>
 
-    <VBox fx:id="addi_info" GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+    <VBox fx:id="addi_info" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
 
-    <VBox spacing="15" GridPane.rowIndex="6" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="CENTER">
-        <Button text="Transaction" prefWidth="180" onAction="#toTransaction"/>
-        <Button text="Saving" prefWidth="180" onAction="#toSaving"/>
-        <Button text="Credit Loan" prefWidth="180" onAction="#toCreditLoan"/>
-        <Button text="Deposit Interest Predictor" prefWidth="180" onAction="#toDepositInterest"/>
-        <Button text="History" prefWidth="180" onAction="#toHistory"/>
-        <Button text="Data Visualize" prefWidth="180" onAction="#todataVisualization"/>
-        <Button text="Logout" prefWidth="180" onAction="#logOut"/>
+    <VBox spacing="15" GridPane.rowIndex="7" GridPane.columnIndex="0" GridPane.columnSpan="3" GridPane.halignment="CENTER" alignment="CENTER">
+        <Button text="Transaction" prefWidth="220" onAction="#toTransaction"/>
+        <Button text="Saving" prefWidth="220" onAction="#toSaving"/>
+        <Button text="Credit Loan" prefWidth="220" onAction="#toCreditLoan"/>
+        <Button text="Deposit Interest Predictor" prefWidth="220" onAction="#toDepositInterest"/>
+        <Button text="History" prefWidth="220" onAction="#toHistory"/>
+        <Button text="Data Visualize" prefWidth="220" onAction="#todataVisualization"/>
+        <Button text="Logout" prefWidth="220" onAction="#logOut"/>
     </VBox>
     
     <padding>

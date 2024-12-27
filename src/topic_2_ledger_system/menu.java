@@ -5,7 +5,6 @@
 package topic_2_ledger_system;
 
 import java.io.IOException;
-import java.lang.Integer;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -199,20 +198,25 @@ public class menu {
             vb.setAlignment(Pos.CENTER);
             vb.setPadding(new Insets(15, 15, 15, 15));
             Scene notify = new Scene(vb, 570, 180);
+            notify.getStylesheets().add("topic_2_ledger_system/resources/design.css");
             
             popup.setScene(notify);
             popup.setAlwaysOnTop(true);
-            popup.show();   
+            popup.getStyle();
+            popup.show();
         }
     }
     
-    private static boolean isOverdue = false;
+    private static boolean isOverdue;
     public static void set_overdue(boolean isOverdue){
         menu.isOverdue = isOverdue;
     }
     
+    public double lastExpectedBalance;
+    
     public void ReminderSystem(int user_id){
-   
+        isOverdue = false;
+        
         boolean activeLoan = FXcreditLoan.getActiveLoan(user_id);
         if (!activeLoan) {
             Label info = new Label();
@@ -227,8 +231,9 @@ public class menu {
         LocalDate startDate = LocalDate.parse(loan_csv[7], DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         double totalLoanAmount = Double.parseDouble(loan_csv[2]);
         double monthlyRepayment = totalLoanAmount / period;
-        if(totalLoanAmount != Double.parseDouble(loan_csv[5])){
-            monthlyRepayment = Double.parseDouble(loan_csv[5]) - ((int)(Double.parseDouble(loan_csv[5]) / monthlyRepayment) * monthlyRepayment);
+        double paymentThisMonth = paymentThisMonth = Double.parseDouble(loan_csv[5]) - ((int)(Double.parseDouble(loan_csv[5]) / monthlyRepayment) * monthlyRepayment);;
+        if(paymentThisMonth == 0){
+            paymentThisMonth = monthlyRepayment;
         }
         double currentBalance = FXcreditLoan.getBalance(user_id);
 
@@ -245,7 +250,7 @@ public class menu {
         
         LocalDate today = LocalDate.now();
         LocalDate lastDueDate = null;
-        double lastExpectedBalance = 0;        
+        lastExpectedBalance = 0;        
         
         //Find the duedate before today by comparing todaydate and duedates found above
         for (int i = 0; i < period; i++) {
@@ -305,7 +310,10 @@ public class menu {
         paynow.setOnAction(e -> {
             FXcreditLoan.set_user(user_id);
             double mp = totalLoanAmount / period;
-            mp = Double.parseDouble(loan_csv[5]) - ((int)(Double.parseDouble(loan_csv[5]) / mp) * mp);
+            double pTM = Double.parseDouble(loan_csv[5]) - ((int)(Double.parseDouble(loan_csv[5]) / mp) * mp);;
+            if(pTM == 0){
+                pTM = monthlyRepayment;
+            }
             FXcreditLoan.set_payment(mp);
             try {
                 main_system.setScene("creditloan");
@@ -322,8 +330,9 @@ public class menu {
             lab3.setText("Your current total loan: RM" + df.format(currentBalance));
             
             vb.getChildren().addAll(lab1, lab2, lab3, lab4, close);
-            Scene notify = new Scene(vb, 280, 180);
-
+            Scene notify = new Scene(vb, 300, 180);
+            notify.getStylesheets().add("topic_2_ledger_system/resources/design.css");
+            
             popup.setScene(notify);
             popup.setAlwaysOnTop(true);
             popup.show(); 
@@ -342,12 +351,13 @@ public class menu {
                 lab3.setText("Due date: " + nextDueDate);
             }else{
                 lab2.setText("Due Date: "+nextDueDate);
-                lab3.setText("Amount of monthly repayment: RM" + df.format(monthlyRepayment));    
+                lab3.setText("Amount of monthly repayment: RM" + df.format(paymentThisMonth));    
             }
             
             vb.getChildren().addAll(lab1, lab2, lab3, hb);
             
             Scene notify = new Scene(vb, 340, 230);
+            notify.getStylesheets().add("topic_2_ledger_system/resources/design.css");
 
             popup.setScene(notify);
             popup.setAlwaysOnTop(true);
@@ -366,7 +376,7 @@ public class menu {
         if (currentBalance >lastExpectedBalance) {
             lab1.setText("Reminder: Your loan is overdue!");
             lab2.setText("Last due date: " + lastDueDate);
-            lab3.setText("Expected payment by this date: RM" + df.format(monthlyRepayment));
+            lab3.setText("Expected payment by this date: RM" + df.format(paymentThisMonth));
             lab4.setText("Your current total loan: RM" + df.format(currentBalance));
             lab5.setText("Futher Debits and Credits \nTransaction are not allowed!");
             
@@ -374,6 +384,7 @@ public class menu {
             
             vb.getChildren().addAll(lab1, lab2, lab3, lab4, lab5, hb);
             Scene notify = new Scene(vb, 340, 260);
+            notify.getStylesheets().add("topic_2_ledger_system/resources/design.css");
 
             popup.setScene(notify);
             popup.setAlwaysOnTop(true);
@@ -387,13 +398,13 @@ public class menu {
             if(daysUntilDue<=5){
                 lab1.setText("Alert: Your loan will due on "+daysUntilDue+" day(s)!");
                 lab2.setText("Due date: "+nextDueDate);
-                lab3.setText("Expected payment by this date: RM" + df.format(monthlyRepayment));
+                lab3.setText("Expected payment by this date: RM" + df.format(paymentThisMonth));
                 lab4.setText("Your current balance(loan): RM" + df.format(currentBalance));
                 
             }else{ // daysUntilDue>5
                 lab1.setText("Your loan repayments are on track.");
                 lab2.setText("Due date: " + nextDueDate);
-                lab3.setText("Expected payment by this date: RM" + df.format(monthlyRepayment));
+                lab3.setText("Expected payment by this date: RM" + df.format(paymentThisMonth));
                 lab4.setText("Your current balance(loan): RM" + df.format(currentBalance));
             }
         }
@@ -401,6 +412,7 @@ public class menu {
             
         vb.getChildren().addAll(lab1, lab2, lab3, lab4, hb);
         Scene notify = new Scene(vb, 340, 230);
+        notify.getStylesheets().add("topic_2_ledger_system/resources/design.css");
 
         popup.setScene(notify);
         popup.setAlwaysOnTop(true);
@@ -449,7 +461,6 @@ public class menu {
     public void todataVisualization() throws IOException{
         FXdataVisual.set_user(user_id);
         main_system.setScene("dataVisual");
-//        FXdataVisual.dataVisualization(user_id);
     }
     
     public void logOut() throws IOException {

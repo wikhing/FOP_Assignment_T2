@@ -29,7 +29,8 @@ import javafx.scene.layout.VBox;
  */
 public class login_register extends main_system{
     
-    @FXML Button back_btn = new Button();
+    @FXML Button lo_back_btn = new Button();
+    @FXML Button re_back_btn = new Button();
     @FXML VBox main_btn = new VBox();
     @FXML GridPane login = new GridPane();
     @FXML GridPane register = new GridPane();
@@ -39,14 +40,15 @@ public class login_register extends main_system{
         login.setVisible(false);
         register.setVisible(false);
         main_btn.setVisible(true);
-        back_btn.setVisible(false);
+        lo_back_btn.setVisible(false);
+        re_back_btn.setVisible(false);
     }
     
     @FXML 
     private void toLogin() throws IOException{      //go to login form
         main_btn.setVisible(false);
         login.setVisible(true);
-        back_btn.setVisible(true);
+        lo_back_btn.setVisible(true);
         loginFX();
     }
     
@@ -54,7 +56,7 @@ public class login_register extends main_system{
     private void toRegister() throws IOException {  //go to registerform
         main_btn.setVisible(false);
         register.setVisible(true);
-        back_btn.setVisible(true);
+        re_back_btn.setVisible(true);
         registerFX();
     }
     
@@ -137,10 +139,10 @@ public class login_register extends main_system{
         
         if(login_register.equals("login")){
             login.getChildren().remove(error);
-            login.add(error, 0, 6);
+            login.add(error, 0, 3);
         }else if(login_register.equals("register")){
             register.getChildren().remove(error);
-            register.add(error, 0, 9);
+            register.add(error, 0, 6);
         }
     }
     
@@ -193,7 +195,7 @@ public class login_register extends main_system{
             GridPane.setColumnSpan(input_invalid, 2);
 
             register.getChildren().remove(input_invalid);
-            register.add(input_invalid, 0, 7);
+            register.add(input_invalid, 0, 6);
             
             return -1;
         }
@@ -208,7 +210,7 @@ public class login_register extends main_system{
             GridPane.setColumnSpan(input_invalid, 2);
 
             register.getChildren().remove(input_invalid);
-            register.add(input_invalid, 0, 7);
+            register.add(input_invalid, 0, 6);
             
             return -1;
         }
@@ -224,7 +226,7 @@ public class login_register extends main_system{
             GridPane.setHalignment(passesNotSame, HPos.CENTER);
             GridPane.setColumnSpan(passesNotSame, 2);
 
-            register.add(passesNotSame, 0, 7);
+            register.add(passesNotSame, 0, 6);
         }
 
         int user_id = -1;
@@ -253,7 +255,7 @@ public class login_register extends main_system{
             GridPane.setColumnSpan(input_invalid, 2);
 
             login.getChildren().remove(input_invalid);
-            login.add(input_invalid, 0, 4);
+            login.add(input_invalid, 0, 3);
         }
         
         return user_id;

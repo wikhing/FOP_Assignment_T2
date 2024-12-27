@@ -22,36 +22,36 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.geometry.Insets?>
 
-<GridPane GridPane.halignment="CENTER" hgap="15" vgap="15" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="topic_2_ledger_system.FXcreditLoan">
+<GridPane GridPane.halignment="CENTER" hgap="15" vgap="15" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="topic_2_ledger_system.FXcreditLoan" stylesheets="@design.css">
     
     <Label text="Credit Loan" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
     <HBox spacing="10" alignment="CENTER" GridPane.rowIndex="1" GridPane.columnIndex="0">
         <VBox spacing="10" alignment="CENTER">
-            <VBox>
-                <Label text="Loan Amount(RM)"/>
+            <VBox alignment="CENTER">
+                <Label text="Loan Amount(RM)" />
                 <TextField fx:id="loanPrincipal" maxWidth="120"/>
             </VBox>
             
-            <VBox>
+            <VBox alignment="CENTER">
                 <Label text="Interest Rate(%)"/>
                 <TextField fx:id="loanInterest" maxWidth="120"/>
             </VBox>
             
-            <VBox>
+            <VBox alignment="CENTER">
                 <Label text="Period(months)"/>
                 <TextField fx:id="loanPeriod" maxWidth="120"/>
             </VBox>
             
-            <Button fx:id="applyBtn" text="Apply Loan" onAction="#applyLoan" prefWidth="90"/>
+            <Button fx:id="applyBtn" text="Apply Loan" onAction="#applyLoan" prefWidth="90" alignment="CENTER"/>
         </VBox>
         <Separator orientation="VERTICAL"/>
         <VBox spacing="10" alignment="CENTER">
-            <VBox>
+            <VBox alignment="CENTER">
                 <Label text="Payment Amount(RM)"/>
                 <TextField fx:id="payAmount" maxWidth="130"/>
             </VBox>
             
-            <Button fx:id="payBtn" text="Repay Loan" onAction="#repayLoan" prefWidth="90"/>
+            <Button fx:id="payBtn" text="Repay Loan" onAction="#repayLoan" prefWidth="90" alignment="CENTER"/>
             
             <Label fx:id="payLoan_info"/>
         </VBox>

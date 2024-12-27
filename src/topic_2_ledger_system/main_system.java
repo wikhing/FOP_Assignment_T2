@@ -36,11 +36,12 @@ public class main_system extends Application{
     private static Stage primStage;
     @Override
     public void start(Stage stage) throws IOException {
+        
+        stage.setTitle("LEDGER SYSTEM");
         primStage = stage;
-//        mainScene = new Scene(loadFXML("menu"), 230, 540);         // To be commented
-        loginScene = new Scene(loadFXML("login_register"), 640, 480);
-        stage.centerOnScreen();
-        stage.setScene(loginScene);                                  // To be changed to loginscene
+////        mainScene = new Scene(loadFXML("menu"), 230, 540);         // To be commented
+//        loginScene = new Scene(loadFXML("login_register"), 660, 420);
+        setScene("login_register");                                  // To be changed to loginscene
         stage.show();
     }
 
@@ -49,9 +50,9 @@ public class main_system extends Application{
         
         switch(fxml){
             case "login_register" -> {
-                loginScene = new Scene(loadFXML("login_register"), 640, 480);
-                primStage.setMinWidth(640);
-                primStage.setMaxWidth(640);
+                loginScene = new Scene(loadFXML("login_register"), 690, 480);
+                primStage.setMinWidth(690);
+                primStage.setMaxWidth(690);
                 primStage.setMinHeight(480);
                 primStage.setMaxHeight(480);
                 primStage.setScene(loginScene);
@@ -59,19 +60,19 @@ public class main_system extends Application{
                 primStage.setY((bounds.getMaxY() - loginScene.getHeight()) / 2);
             }
             case "menu" -> {
-                mainScene = new Scene(loadFXML("menu"), 230, 540);
-                primStage.setMinWidth(230);
-                primStage.setMaxWidth(230);
-                primStage.setMinHeight(540);
-                primStage.setMaxHeight(540);
+                mainScene = new Scene(loadFXML("menu"), 340, 580);
+                primStage.setMinWidth(340);
+                primStage.setMaxWidth(340);
+                primStage.setMinHeight(580);
+                primStage.setMaxHeight(580);
                 primStage.setScene(mainScene);
                 primStage.setX((bounds.getMaxX() - mainScene.getWidth()) / 2);
                 primStage.setY((bounds.getMaxY() - mainScene.getHeight()) / 2);
             }
             case "transaction" -> {
-                mainScene = new Scene(loadFXML("transaction"), 490, 310);
-                primStage.setMinWidth(490);
-                primStage.setMaxWidth(490);
+                mainScene = new Scene(loadFXML("transaction"), 510, 310);
+                primStage.setMinWidth(510);
+                primStage.setMaxWidth(510);
                 primStage.setMinHeight(310);
                 primStage.setMaxHeight(310);
                 primStage.setScene(mainScene);
@@ -79,51 +80,51 @@ public class main_system extends Application{
                 primStage.setY((bounds.getMaxY() - mainScene.getHeight()) / 2);
             }
             case "saving" -> {
-                mainScene = new Scene(loadFXML("saving"), 320, 250);
-                primStage.setMinWidth(320);
-                primStage.setMaxWidth(320);
-                primStage.setMinHeight(250);
-                primStage.setMaxHeight(250);
+                mainScene = new Scene(loadFXML("saving"), 350, 260);
+                primStage.setMinWidth(350);
+                primStage.setMaxWidth(350);
+                primStage.setMinHeight(260);
+                primStage.setMaxHeight(260);
                 primStage.setScene(mainScene);
                 primStage.setX((bounds.getMaxX() - mainScene.getWidth()) / 2);
                 primStage.setY((bounds.getMaxY() - mainScene.getHeight()) / 2);
             }
             case "creditloan" -> {
-                mainScene = new Scene(loadFXML("creditloan"), 340, 480);
-                primStage.setMinWidth(340);
-                primStage.setMaxWidth(340);
-                primStage.setMinHeight(480);
-                primStage.setMaxHeight(480);
+                mainScene = new Scene(loadFXML("creditloan"), 370, 500);
+                primStage.setMinWidth(370);
+                primStage.setMaxWidth(370);
+                primStage.setMinHeight(500);
+                primStage.setMaxHeight(500);
                 primStage.setScene(mainScene);
                 primStage.setX((bounds.getMaxX() - mainScene.getWidth()) / 2);
                 primStage.setY((bounds.getMaxY() - mainScene.getHeight()) / 2);
             }
             case "depositinterest" -> {
-                mainScene = new Scene(loadFXML("depositinterest"), 300, 270);
-                primStage.setMinWidth(310);
-                primStage.setMaxWidth(310);
-                primStage.setMinHeight(300);
-                primStage.setMaxHeight(300);
+                mainScene = new Scene(loadFXML("depositinterest"), 350, 310);
+                primStage.setMinWidth(350);
+                primStage.setMaxWidth(350);
+                primStage.setMinHeight(310);
+                primStage.setMaxHeight(310);
                 primStage.setScene(mainScene);
                 primStage.setX((bounds.getMaxX() - mainScene.getWidth()) / 2);
                 primStage.setY((bounds.getMaxY() - mainScene.getHeight()) / 2);
             }
             case "history" -> {
-                mainScene = new Scene(loadFXML("history"), 430, 630);
-                primStage.setMinWidth(430);
-                primStage.setMaxWidth(430);
-                primStage.setMinHeight(630);
-                primStage.setMaxHeight(630);
+                mainScene = new Scene(loadFXML("history"), 500, 690);
+                primStage.setMinWidth(500);
+                primStage.setMaxWidth(500);
+                primStage.setMinHeight(690);
+                primStage.setMaxHeight(690);
                 primStage.setScene(mainScene);
                 primStage.setX((bounds.getMaxX() - mainScene.getWidth()) / 2);
                 primStage.setY((bounds.getMaxY() - mainScene.getHeight()) / 2);
             }
             case "dataVisual" -> {
-                mainScene = new Scene(loadFXML("dataVisual"), 340, 350);
-                primStage.setMinWidth(340);
-                primStage.setMaxWidth(340);
-                primStage.setMinHeight(350);
-                primStage.setMaxHeight(350);
+                mainScene = new Scene(loadFXML("dataVisual"), 380, 380);
+                primStage.setMinWidth(380);
+                primStage.setMaxWidth(380);
+                primStage.setMinHeight(380);
+                primStage.setMaxHeight(380);
                 primStage.setScene(mainScene);
                 primStage.setX((bounds.getMaxX() - mainScene.getWidth()) / 2);
                 primStage.setY((bounds.getMaxY() - mainScene.getHeight()) / 2);

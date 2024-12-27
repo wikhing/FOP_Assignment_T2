@@ -292,5 +292,8 @@ public class FXcreditLoan {
         
         updateLoan(user_id, Double.parseDouble(df.format(balance)), period, activeLoan);
         file.set_loanHistory_csv(loanHis);
+        
+        menu m = new menu();
+        m.ReminderSystem(user_id);
     }
 }

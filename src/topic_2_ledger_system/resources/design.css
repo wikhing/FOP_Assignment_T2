@@ -1,0 +1,96 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 27 Dec 2024, 1:08:31 pm
+    Author     : I Khing
+*/
+.root{
+    -fx-padding: 0 25px;
+    -fx-background-color: #fff;
+    -fx-background-radius: 25px;
+}
+
+#mainarea{
+    -fx-background-color: #fff;
+    -fx-background-radius: 25px;
+    -fx-effect: dropshadow(gaussian , rgba(0, 0, 0, 0.3), 10, 0.3, 0.0, 0.0);
+}
+
+
+
+
+/* Buttons */
+.button {
+  -fx-background-color: #fff;
+  -fx-border-color: #000;
+  -fx-border-weight: 2px;
+  -fx-border-radius: 2px;
+  -fx-font-family: Inter,sans-serif;
+  -fx-font-size: 16px;
+  -fx-font-weight: 600;
+  -fx-min-width: 130px;
+  -fx-padding: 0 17px;
+  -fx-effect: dropshadow(gaussian , rgba(0, 0, 0, 0.2), 10, 0.2, 3, 3);
+}
+
+.button:focus {
+  -fx-color: #171e29;
+}
+
+.button:hover {
+  -fx-border-color: #06f;
+  -fx-text-fill: #06f;
+  -fx-fill: #06f;
+  -fx-effect: dropshadow(gaussian , #06f2, 10, 0.2, 3, 3);
+}
+
+.button:active {
+  -fx-border-color: #06f;
+  -fx-text-fill: #06f;
+  -fx-fill: #06f;
+}
+
+
+
+
+
+
+/* Labels */
+.label{
+    -fx-font-family: Inter,sans-serif;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+}
+#app_title{
+    -fx-font-size: 19px;
+}
+#username{
+    -fx-font-size: 17px;
+}
+#laregister{
+    -fx-font-size: 20px;
+}
+#lalogin{
+    -fx-font-size: 20px;
+}
+
+
+
+
+
+/* Text Field */
+.text-field{
+    -fx-font-family: Inter,sans-serif;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-background-color: #000f, #fff ;
+    -fx-background-insets: 0, 0 .5 2 0 ;
+    -fx-background-radius: 0 ;
+    -fx-effect: dropshadow(gaussian , rgba(0, 0, 0, 0.2), 10, 0.2, 5, 5);
+}
+.text-field:focused {
+    -fx-background-color: #06f, #fff;
+    -fx-effect: dropshadow(gaussian , #06f2, 10, 0.2, 5, 5);
+}

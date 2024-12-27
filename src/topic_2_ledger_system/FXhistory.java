@@ -222,10 +222,10 @@ public class FXhistory {
         end.getChildren().addAll(laEnd, tfEnd);
         
         dateStart.setValue(LocalDate.now());
-        dateStart.setMaxWidth(110);
+        dateStart.setMaxWidth(130);
         dateStart.setEditable(false);
         dateEnd.setValue(LocalDate.now());
-        dateEnd.setMaxWidth(110);
+        dateEnd.setMaxWidth(130);
         dateEnd.setEditable(false);
         
         submitFilter.prefWidth(100);

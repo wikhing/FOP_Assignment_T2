@@ -24,7 +24,7 @@
 
 <GridPane GridPane.halignment="CENTER" hgap="15" vgap="15" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="topic_2_ledger_system.FXtransaction" stylesheets="@design.css">
     
-    <Label text="Transaction Record Form" GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="4"/>
+    <Label fx:id="title" text="Transaction Record Form" GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="4"/>
     
     <Label text="Amount(RM):" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
     <TextField fx:id="record_amount" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="100"/>
@@ -42,7 +42,7 @@
     <Label/>
     
     <Label text="Description:" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
-    <ChoiceBox fx:id="desc_choice" value="Choose Description Type" GridPane.rowIndex="2" GridPane.columnIndex="2" prefWidth="180">
+    <ChoiceBox fx:id="desc_choice" value="Choose Description Type" GridPane.rowIndex="2" GridPane.columnIndex="2" minWidth="280">
         <items>
             <FXCollections fx:factory="observableArrayList">
                 <String fx:value="Salary" />
@@ -65,7 +65,7 @@
             </FXCollections>
         </items>
     </ChoiceBox>
-    <TextArea fx:id="record_descp" promptText="Write your transaction description less than 100 characters" wrapText="true" GridPane.rowIndex="3" GridPane.rowSpan="2" GridPane.columnIndex="2" minWidth="200" prefWidth="200" maxWidth="200"/>
+    <TextArea fx:id="record_descp" promptText="Write your transaction description less than 100 characters" wrapText="true" GridPane.rowIndex="3" GridPane.rowSpan="2" GridPane.columnIndex="2" minWidth="220" prefWidth="220" maxWidth="220" minHeight="80" prefHeight="80" maxHeight="80"/>
     
     <Button text="Submit" GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="CENTER" prefWidth="180" onAction="#transaction_record"/>
     <Label fx:id="trans_info" GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.columnSpan="4"/>

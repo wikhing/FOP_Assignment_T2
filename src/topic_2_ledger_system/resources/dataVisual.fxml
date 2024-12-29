@@ -24,7 +24,7 @@
 
 <GridPane GridPane.halignment="CENTER" hgap="15" vgap="15" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="topic_2_ledger_system.FXdataVisual" stylesheets="@design.css">
     
-    <Label text="Data Visualization" GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+    <Label fx:id="title" text="Data Visualization" GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
     
     <Label text="Data for the next 12 months will be displayed" GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
     <Label text="Enter Starting Month and Year(MM/YYYY):" GridPane.rowIndex="2" GridPane.columnIndex="0" wrapText="true" prefWidth="120"/>

@@ -35,7 +35,7 @@ public class FXtransaction {
     
     private static final DecimalFormat df = new DecimalFormat("0.00");
     
-    private static int user_id = 2;
+    private static int user_id;
     public static void set_user(int user_id){
         FXtransaction.user_id = user_id;
     }

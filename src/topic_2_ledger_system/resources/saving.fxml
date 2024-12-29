@@ -24,10 +24,10 @@
 
 <GridPane GridPane.halignment="CENTER" hgap="15" vgap="15" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="topic_2_ledger_system.FXsaving" stylesheets="@design.css">
     
-    <Label text="Saving" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+    <Label fx:id="title" text="Saving" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
     <CheckBox fx:id="user_choice" text="Enable Saving Setting" GridPane.rowIndex="1" GridPane.columnIndex="0" onAction="#saving_setting"/>
     <Label text="Percentage to be Deducted(%):" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-    <Spinner fx:id="sav_percentage" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="70">
+    <Spinner fx:id="sav_percentage" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="80">
         <valueFactory>
             <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="100"/>
         </valueFactory>

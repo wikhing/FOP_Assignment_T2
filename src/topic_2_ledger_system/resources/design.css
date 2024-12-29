@@ -7,15 +7,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     Author     : I Khing
 */
 .root{
-    -fx-padding: 0 25px;
+    -fx-padding: 20 25px;
     -fx-background-color: #fff;
-    -fx-background-radius: 25px;
 }
 
 #mainarea{
     -fx-background-color: #fff;
     -fx-background-radius: 25px;
-    -fx-effect: dropshadow(gaussian , rgba(0, 0, 0, 0.3), 10, 0.3, 0.0, 0.0);
+    -fx-effect: innershadow(gaussian , rgba(0, 0, 0, 0.3), 20, 0.2, 0, 0);
 }
 
 
@@ -25,7 +24,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 .button {
   -fx-background-color: #fff;
   -fx-border-color: #000;
-  -fx-border-weight: 2px;
   -fx-border-radius: 2px;
   -fx-font-family: Inter,sans-serif;
   -fx-font-size: 16px;
@@ -35,21 +33,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
   -fx-effect: dropshadow(gaussian , rgba(0, 0, 0, 0.2), 10, 0.2, 3, 3);
 }
 
-.button:focus {
-  -fx-color: #171e29;
-}
-
 .button:hover {
   -fx-border-color: #06f;
   -fx-text-fill: #06f;
   -fx-fill: #06f;
   -fx-effect: dropshadow(gaussian , #06f2, 10, 0.2, 3, 3);
-}
-
-.button:active {
-  -fx-border-color: #06f;
-  -fx-text-fill: #06f;
-  -fx-fill: #06f;
 }
 
 
@@ -65,6 +53,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 }
 #app_title{
     -fx-font-size: 19px;
+}
+#title{
+    -fx-font-size: 18px;
 }
 #username{
     -fx-font-size: 17px;
@@ -93,4 +84,310 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 .text-field:focused {
     -fx-background-color: #06f, #fff;
     -fx-effect: dropshadow(gaussian , #06f2, 10, 0.2, 5, 5);
+}
+
+/* Text Area */
+.text-area{
+    -fx-font-family: Inter,sans-serif;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-background-color: #000f, #fff ;
+    -fx-background-insets: 0, 0 .5 2 0 ;
+    -fx-background-radius: 0 ;
+    -fx-effect: dropshadow(gaussian , rgba(0, 0, 0, 0.2), 10, 0.2, 5, 5);
+}
+.text-area:focused {
+    -fx-background-color: #06f, #fff;
+    -fx-effect: dropshadow(gaussian , #06f2, 10, 0.2, 5, 5);
+}
+
+
+
+
+/* Choice Box */
+.choice-box{
+    -fx-background-color: #fff;
+    -fx-border-color: #000;
+    -fx-border-radius: 2px;
+    -fx-font-family: Inter,sans-serif;
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+    -fx-min-width: 110px;
+    -fx-mark-color: #171e29;
+    -fx-effect: dropshadow(gaussian , rgba(0, 0, 0, 0.2), 10, 0.2, 3, 3);
+}
+.choice-box:focus {
+    -fx-color: #171e29;
+}
+.choice-box:hover {
+    -fx-border-color: #06f;
+    -fx-text-fill: #06f;
+    -fx-fill: #06f;
+    -fx-mark-color: #06f;
+    -fx-effect: dropshadow(gaussian , #06f2, 10, 0.2, 3, 3);
+}
+
+/* Dropdown of Items in Choice Box */
+.choice-box .menu-item {
+    -fx-background-color: #fff;
+    -fx-min-width: 110px;
+}
+.choice-box .menu-item:focus {
+    -fx-color: #171e29;
+}
+.choice-box .menu-item:hover {
+    -fx-border-color: #06f;
+    -fx-fill: #06f;
+    -fx-effect: innershadow(gaussian , #06f2, 10, 0.4, 0, 0);
+}
+
+/* Dropdown of Items of Labels in Choice Box */
+.choice-box .menu-item > .label{
+    -fx-text-fill: #171e29;
+    -fx-font-family: Inter,sans-serif;
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+}
+.choice-box .menu-item:focus > .label{
+    -fx-color: #171e29;
+}
+.choice-box .menu-item:hover > .label{
+    -fx-text-fill: #06f;
+}
+.choice-box .label{
+    -fx-text-fill: #171e29;
+    -fx-font-family: Inter,sans-serif;
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+}
+.choice-box:focus .label{
+    -fx-color: #171e29;
+}
+.choice-box:hover .label{
+    -fx-text-fill: #06f;
+}
+
+/* Dropdown of Items of Tick in Choice Box */
+.choice-box .radio { 
+    -fx-background-color: #06f; 
+}
+.choice-box:focus .radio { 
+    -fx-background-color: #06f; 
+}
+.choice-box:hover .radio { 
+    -fx-background-color: #171e29; 
+}
+
+
+
+
+.check-box{
+    -fx-background-color: #fff;
+    -fx-font-family: Inter,sans-serif;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-min-width: 130px;
+}
+.check-box .box{
+    -fx-background-color: #fff;
+    -fx-border-color: #000;
+    -fx-border-radius: 2px;
+    -fx-effect: dropshadow(gaussian , rgba(0, 0, 0, 0.2), 10, 0.2, 3, 3);
+}
+.check-box:hover .box{
+    -fx-background-color: #fff;
+    -fx-border-color: #06f;
+    -fx-border-radius: 2px;
+    -fx-effect: dropshadow(gaussian , #06f2, 10, 0.2, 3, 3);
+}
+.check-box:hover .mark{
+    -fx-background-color: #06f;
+}
+
+
+
+.spinner{
+    -fx-background-color: #fff;
+    -fx-font-family: Inter,sans-serif;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-mark-color: #171e29;
+}
+.spinner .increment-arrow-button,
+         .decrement-arrow-button{
+    -fx-background-color: #fff;
+    -fx-border-color: #000;
+    -fx-border-radius: 2px;
+    -fx-font-family: Inter,sans-serif;
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+    -fx-mark-color: #171e29;
+    -fx-effect: dropshadow(gaussian , rgba(0, 0, 0, 0.2), 10, 0.2, 3, 3);
+}
+.spinner .increment-arrow-button:hover,
+         .decrement-arrow-button:hover{
+    -fx-border-color: #06f;
+    -fx-text-fill: #06f;
+    -fx-fill: #06f;
+    -fx-mark-color: #06f;
+    -fx-effect: dropshadow(gaussian , #06f2, 10, 0.2, 3, 3);
+}
+
+
+
+
+/* Date Picker */
+.date-picker .arrow-button {
+    -fx-background-color: #fff;
+    -fx-border-color: #000;
+    -fx-border-radius: 2px;
+    -fx-effect: dropshadow(gaussian , rgba(0, 0, 0, 0.2), 10, 0.2, 3, 3);
+}
+.date-picker:hover .arrow-button {
+    -fx-border-color: #06f;
+    -fx-text-fill: #06f;
+    -fx-fill: #06f;
+    -fx-effect: dropshadow(gaussian , #06f2, 10, 0.2, 3, 3);
+}
+.date-picker .arrow-button .arrow {
+    -fx-background-color: #171e29;
+}
+.date-picker .arrow-button:hover .arrow {
+    -fx-background-color: #06f;
+}
+
+.date-picker .cell {
+    -fx-background-color: white;
+}
+.date-picker .cell:hover {
+    -fx-background-color: #06f;
+    -fx-text-fill: white;
+}
+.date-picker .cell:focused {
+    -fx-background-color: #06f;
+    -fx-text-fill: white;
+}
+
+.date-picker .selected {
+    -fx-background-color: white;
+    -fx-text-fill: #171e29;
+}
+.date-picker .selected:focused {
+    -fx-background-color: #06f;
+    -fx-text-fill: white;
+}
+
+.date-picker-popup  {
+    -fx-border-color: transparent;
+}
+.date-picker-popup .month-year-pane {
+    -fx-background-color: white;
+}
+.date-picker-popup .month-year-pane .label {
+    -fx-text-fill: #171e29;
+}
+.date-picker-popup .spinner .button .left-arrow,
+.date-picker-popup .spinner .button .right-arrow {
+    -fx-background-color: #171e29;
+}
+.date-picker-popup .spinner .button,
+.date-picker-popup .spinner .button {
+    -fx-border-color: transparent;
+    -fx-min-width: 0;
+    -fx-effect: null;
+}
+
+
+
+
+/* Table View */
+.table-view{
+    -fx-background-color: #fff;
+    -fx-border-color: #171e29;
+    -fx-border-radius: 2px;
+}
+
+.table-view .column-header-background{
+    -fx-background-color: #06f;
+    -fx-border-radius: 0px;
+    -fx-border-width: 0 0 2px 0;
+}
+
+.table-view .column-header-background .label{
+    -fx-text-fill: white;
+}
+
+.table-view .column-header {
+    -fx-mark-color: #171e29;
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header:hover {
+    -fx-mark-color: #06f;
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header-background .filler {
+    -fx-background-color: #06f;
+}
+
+.table-view .table-cell{
+    -fx-text-fill: #171e29;
+}
+
+.table-row-cell{
+    -fx-background-color: #fff;
+    -fx-background-insets: 0, 0 0 1 0;
+}
+
+.table-row-cell:odd{
+    -fx-background-color: #eee;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: #06f7;
+    -fx-background-insets: 0;
+    -fx-background-radius: 1;
+}
+
+.table-row-cell:hover .table-cell{
+    -fx-text-fill: white;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #06f;
+    -fx-background-insets: 0;
+    -fx-background-radius: 1;
+}
+
+.table-row-cell:selected .table-cell{
+    -fx-text-fill: white;
+}
+
+/* The increment and decrement button CSS class of scrollbar */
+.table-view .increment-button ,.table-view .decrement-button {
+    -fx-background-color: white;
+	-fx-background-radius: 2em;
+
+}
+
+/* The main scrollbar **track** CSS class  */
+.table-view .scroll-bar:horizontal .track,
+.table-view .scroll-bar:vertical .track{
+	-fx-background-color: whitesmoke;
+	-fx-border-color: #06f;
+
+	-fx-background-radius: 2em;
+	-fx-border-radius:2em;
+}
+
+/* The main scrollbar **thumb** CSS class which we drag every time (movable) */
+.table-view .scroll-bar:horizontal .thumb,
+.table-view .scroll-bar:vertical .thumb {
+    -fx-background-color:derive( #06f,20%);
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 2em;
+
 }

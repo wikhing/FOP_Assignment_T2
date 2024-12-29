@@ -24,7 +24,7 @@
 
 <GridPane GridPane.halignment="CENTER" hgap="15" vgap="15" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="topic_2_ledger_system.FXcreditLoan" stylesheets="@design.css">
     
-    <Label text="Credit Loan" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+    <Label fx:id="title" text="Credit Loan" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
     <HBox spacing="10" alignment="CENTER" GridPane.rowIndex="1" GridPane.columnIndex="0">
         <VBox spacing="10" alignment="CENTER">
             <VBox alignment="CENTER">

@@ -47,7 +47,7 @@ public class FXhistory {
     
     private static final DecimalFormat df = new DecimalFormat("0.00");
     
-    private static int user_id = 2;
+    private static int user_id;
     public static void set_user(int user_id){
         FXhistory.user_id = user_id;
     }
@@ -86,7 +86,6 @@ public class FXhistory {
         });
         typeColumn.setSortable(false);          //Sorting of type not needed
         descriptionColumn.setSortable(false);   //Sorting of description not needed
-        
         
         filterChoice.setOnAction(e -> {
             filterInitialize();
@@ -209,6 +208,8 @@ public class FXhistory {
     ChoiceBox<String> transactionType = new ChoiceBox<String>();
     
     private void filterInitialize(){
+        his_info.setText("");
+        
         filterBox.getChildren().clear();
         start.getChildren().clear();
         end.getChildren().clear();
@@ -272,6 +273,11 @@ public class FXhistory {
             case "Filter Amount Range" -> filterOption = 1;
             case "Filter Date Range" -> filterOption = 2;
             case "Filter Transaction Type" -> filterOption = 3;
+        }
+        
+        if(filterOption == 1 && (tfStart.getText().isEmpty() || tfEnd.getText().isEmpty())){
+            his_info.setText("Please fill in all section.");
+            return;
         }
         
         // Initialize filter variables

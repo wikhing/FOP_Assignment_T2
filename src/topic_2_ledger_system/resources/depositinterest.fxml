@@ -24,10 +24,10 @@
 
 <GridPane GridPane.halignment="CENTER" hgap="15" vgap="15" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="topic_2_ledger_system.FXdepositInterest" stylesheets="@design.css">
 
-    <Label text="Deposit Interest Predictor" GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+    <Label fx:id="title" text="Deposit Interest Predictor" GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
 
     <Label text="Type of Bank:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-    <ChoiceBox fx:id="bank_list" value="Choose a Bank" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="170" onAction="#depositInterestPredictor">
+    <ChoiceBox fx:id="bank_list" value="Choose a Bank" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="230" onAction="#depositInterestPredictor">
         <items>
             <FXCollections fx:factory="observableArrayList">
                 <String fx:value="RHB                          - 2.6%"/>
@@ -41,7 +41,7 @@
     </ChoiceBox>
 
     <Label text="Period:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-    <ChoiceBox fx:id="period_list" value="Choose a Period" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="170" onAction="#depositInterestPredictor">
+    <ChoiceBox fx:id="period_list" value="Choose a Period" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="230" onAction="#depositInterestPredictor">
         <items>
             <FXCollections fx:factory="observableArrayList">
                 <String fx:value="Daily"/>

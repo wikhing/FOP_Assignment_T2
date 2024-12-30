@@ -184,11 +184,11 @@ public class login_register extends main_system{
         boolean passwordIsValid = isPasswordComplex(password);
         boolean hasRegistered = compareUser(e_mail);
         
-        if(!validEmailFormat || !passwordIsValid){
+        if(hasRegistered){
             passesNotSame.setVisible(false);
             input_invalid.setVisible(true);
             
-            String text = "Incorrect E-mail Format or Password Format";
+            String text = "E-mail has been registered.";
             input_invalid.setText(text);
 
             GridPane.setHalignment(input_invalid, HPos.CENTER);
@@ -199,11 +199,11 @@ public class login_register extends main_system{
             
             return -1;
         }
-        if(hasRegistered){
+        if(!validEmailFormat || !passwordIsValid){
             passesNotSame.setVisible(false);
             input_invalid.setVisible(true);
             
-            String text = "E-mail has been registered.";
+            String text = "Incorrect E-mail Format or Password Format";
             input_invalid.setText(text);
 
             GridPane.setHalignment(input_invalid, HPos.CENTER);
@@ -246,7 +246,18 @@ public class login_register extends main_system{
     private int login(String e_mail, String password) throws IOException{
         int user_id = -1;
         user_id = compareUser(new String[]{e_mail, password});
+        boolean hasRegistered = compareUser(e_mail);
+        
+        if(!hasRegistered){
+            input_invalid.setText("E-mail has not been registered.");
+            
+            GridPane.setHalignment(input_invalid, HPos.CENTER);
+            GridPane.setColumnSpan(input_invalid, 2);
 
+            login.getChildren().remove(input_invalid);
+            login.add(input_invalid, 0, 3);
+            return -1;
+        }
         if(user_id == -1){
             String text = "Incorrect E-mail or Password";
             input_invalid.setText(text);

@@ -162,7 +162,7 @@ public class FXdataVisual extends JFrame{
 
                     if (transaction[4].equalsIgnoreCase(category)) {
                         debitPerCategory += Double.parseDouble(transaction[3]);
-                        System.out.println(category + " equal " + debitPerCategory + transaction[6]);
+//                        System.out.println(category + " equal " + debitPerCategory + transaction[6]);
                     }
     //                for (String c : categoryArray) {
     //                    if (transaction[4].equalsIgnoreCase(category)) {
@@ -204,9 +204,9 @@ public class FXdataVisual extends JFrame{
         List<Double> categoricalDebit = new ArrayList<>();
         
         for (int i = 0; i < 17; i++) {
-            System.out.println("work here counter" + categoryArray[i]);
+//            System.out.println("work here counter" + categoryArray[i]);
             categoricalDebit.add(getDebitbyCategory(user_id, month, year, categoryArray[i]));
-            System.out.println("Check " + categoricalDebit.get(i) + categoryArray[i]);
+//            System.out.println("Check " + categoricalDebit.get(i) + categoryArray[i]);
         }
         return categoricalDebit;
     }
@@ -249,7 +249,7 @@ public class FXdataVisual extends JFrame{
         for (int i = 0; i < debitCategory.size(); i++) {
             if (debitCategory.get(i) != 0) {
                 pieDataset.setValue(categoryArray[i], debitCategory.get(i)); 
-                System.out.println(categoryArray[i] + " -> " + debitCategory.get(i));
+//                System.out.println(categoryArray[i] + " -> " + debitCategory.get(i));
             }
         }
         

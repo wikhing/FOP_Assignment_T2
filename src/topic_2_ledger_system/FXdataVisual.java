@@ -1,8 +1,10 @@
+package topic_2_ledger_system;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package topic_2_ledger_system;
+
 
 import java.awt.geom.Ellipse2D;
 import java.io.IOException;
@@ -47,6 +49,25 @@ import org.jfree.data.general.DefaultPieDataset;
 public class FXdataVisual extends JFrame{
     
     private static final DecimalFormat df = new DecimalFormat("0.00");
+    private static final String[] categoryArray = {
+        "Salary",
+        "Business",
+        "Investment",
+        "Dividend",
+        "Pension",
+        "Commission",
+        "Passive Income",
+        "Active Income",
+        "Rent",
+        "Food",
+        "Healthcare",
+        "Transportation",
+        "Debt",
+        "Housing",
+        "Travel",
+        "Insurance",
+        "Other"
+    };
     
     private static int user_id;
     public static void set_user(int user_id){
@@ -124,6 +145,43 @@ public class FXdataVisual extends JFrame{
         }
         return debitMonthYear;
     }
+    
+    public static double getDebitbyCategory(int user_id, int month, int year, String category) {
+        List<String[]> allTransactions = file.get_transactions_csv(user_id);
+        Double debitPerCategory = 0.0;
+        
+        for(int i = 0; i < 12; i++){
+            String monthYear = String.format("%02d/%4d", month, year);
+            
+            for (String[] transaction : allTransactions) {
+                if (transaction.length < 7){
+                    continue;
+                }
+
+                if (transaction[6].endsWith(monthYear) && transaction[2].equalsIgnoreCase("debit")) {
+
+                    if (transaction[4].equalsIgnoreCase(category)) {
+                        debitPerCategory += Double.parseDouble(transaction[3]);
+                        System.out.println(category + " equal " + debitPerCategory + transaction[6]);
+                    }
+    //                for (String c : categoryArray) {
+    //                    if (transaction[4].equalsIgnoreCase(category)) {
+    //                        debitPerCategory += Double.parseDouble(transaction[3]);
+    //                    }
+    //                }
+                }
+            }
+            month++;
+            
+            if(month > 12 ){
+                month = 1;
+                year++;
+            }
+        }
+        
+        
+        return debitPerCategory;
+    }
 
     public static List<Double> getDebitfor12Months(int user_id, int month, int year) {
        
@@ -140,6 +198,17 @@ public class FXdataVisual extends JFrame{
             }
         }
         return monthlyDebit;
+    }
+    
+    public static List<Double> getAllDebitCategory(int user_id, int month, int year) {
+        List<Double> categoricalDebit = new ArrayList<>();
+        
+        for (int i = 0; i < 17; i++) {
+            System.out.println("work here counter" + categoryArray[i]);
+            categoricalDebit.add(getDebitbyCategory(user_id, month, year, categoryArray[i]));
+            System.out.println("Check " + categoricalDebit.get(i) + categoryArray[i]);
+        }
+        return categoricalDebit;
     }
     
     public void displaySpendingTrends(int user_id, int month, int year) {
@@ -174,13 +243,14 @@ public class FXdataVisual extends JFrame{
         DefaultPieDataset pieDataset = new DefaultPieDataset();
         
         List<String> xAxisMonthYear = getXAxisMonthYear (month, year);
-        List<Double> monthlyDebit = getDebitfor12Months(user_id, month, year);
-
+        List<Double> debitCategory = getAllDebitCategory(user_id, month, year);
         
-        for (int i = 0; i < monthlyDebit.size(); i++) {
-            pieDataset.setValue("Test1", Double.valueOf(20));
-            pieDataset.setValue("Test2", Double.valueOf(40));
-            pieDataset.setValue("Test3", Double.valueOf(10));
+        
+        for (int i = 0; i < debitCategory.size(); i++) {
+            if (debitCategory.get(i) != 0) {
+                pieDataset.setValue(categoryArray[i], debitCategory.get(i)); 
+                System.out.println(categoryArray[i] + " -> " + debitCategory.get(i));
+            }
         }
         
         JFreeChart pieChart = ChartFactory.createPieChart("Spending Trends in 12 Months", pieDataset, true, true, false);
@@ -503,7 +573,7 @@ public class FXdataVisual extends JFrame{
             case "Spending" -> {
                 FXdataVisual dataVisualization = new FXdataVisual();
                 dataVisualization.setTitle("Spending Trends Over 12 Months");
-                dataVisualization.displaySpendingTrends(user_id, month, year);
+                dataVisualization.displaySpendingTrendsPie(user_id, month, year);
                 dataVisualization.pack();        
                 dataVisualization.setVisible(true); 
                 dataVisualization.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

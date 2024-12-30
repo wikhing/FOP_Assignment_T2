@@ -144,7 +144,6 @@ public class FXdataVisual extends JFrame{
     
     public void displaySpendingTrends(int user_id, int month, int year) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-//        DefaultPieDataset pieDataset = new DefaultPieDataset();
         
         List<String> xAxisMonthYear = getXAxisMonthYear (month, year);
         List<Double> monthlyDebit = getDebitfor12Months(user_id, month, year);
@@ -152,12 +151,8 @@ public class FXdataVisual extends JFrame{
         
         for (int i = 0; i < monthlyDebit.size(); i++) {
             dataset.addValue(monthlyDebit.get(i), "Spending", xAxisMonthYear.get(i));
-//            pieDataset.setValue("Test1", Double.valueOf(20));
-//            pieDataset.setValue("Test2", Double.valueOf(40));
-//            pieDataset.setValue("Test3", Double.valueOf(10));
         }
         
-//        JFreeChart pieChart = ChartFactory.createPieChart("Spending Trends in 12 Months", pieDataset, true, true, false);
         JFreeChart barChart = ChartFactory.createBarChart(
                 "Spending Trends Over Time",   // Chart title
                 "Month",                       // X-axis label
@@ -168,13 +163,31 @@ public class FXdataVisual extends JFrame{
                 true,                          // Tooltips
                 false                          // URLs
         );
-
-//        ChartPanel pieChartPanel = new ChartPanel(pieChart);
-//        pieChartPanel.setPreferredSize(new java.awt.Dimension(1200, 1000));
-
+        
         ChartPanel chartPanel = new ChartPanel(barChart);
         chartPanel.setPreferredSize(new java.awt.Dimension(1200, 1000));
         setContentPane(chartPanel);
+    }
+    
+    // Pie Chart for spending
+    public void displaySpendingTrendsPie(int user_id, int month, int year) {
+        DefaultPieDataset pieDataset = new DefaultPieDataset();
+        
+        List<String> xAxisMonthYear = getXAxisMonthYear (month, year);
+        List<Double> monthlyDebit = getDebitfor12Months(user_id, month, year);
+
+        
+        for (int i = 0; i < monthlyDebit.size(); i++) {
+            pieDataset.setValue("Test1", Double.valueOf(20));
+            pieDataset.setValue("Test2", Double.valueOf(40));
+            pieDataset.setValue("Test3", Double.valueOf(10));
+        }
+        
+        JFreeChart pieChart = ChartFactory.createPieChart("Spending Trends in 12 Months", pieDataset, true, true, false);
+
+        ChartPanel pieChartPanel = new ChartPanel(pieChart);
+        pieChartPanel.setPreferredSize(new java.awt.Dimension(1200, 1000));
+        setContentPane(pieChartPanel);
     }
     
     //Saving 

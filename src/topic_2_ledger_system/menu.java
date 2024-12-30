@@ -35,20 +35,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import topic_2_ledger_system.FXcreditLoan;
-import topic_2_ledger_system.FXcreditLoan;
-import topic_2_ledger_system.FXdepositInterest;
-import topic_2_ledger_system.FXdepositInterest;
-import topic_2_ledger_system.FXhistory;
-import topic_2_ledger_system.FXhistory;
-import topic_2_ledger_system.FXsaving;
-import topic_2_ledger_system.FXsaving;
-import topic_2_ledger_system.FXtransaction;
-import topic_2_ledger_system.FXtransaction;
-import topic_2_ledger_system.file;
-import topic_2_ledger_system.file;
-import topic_2_ledger_system.main_system;
-import topic_2_ledger_system.main_system;
 
 /**
  *

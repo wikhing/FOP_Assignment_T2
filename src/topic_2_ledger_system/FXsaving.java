@@ -13,7 +13,7 @@ import javafx.scene.control.Spinner;
 
 /**
  *
- * @author I Khing
+ * @author
  */
 public class FXsaving {
     

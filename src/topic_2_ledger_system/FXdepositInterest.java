@@ -13,7 +13,7 @@ import javafx.scene.control.Label;
 
 /**
  *
- * @author I Khing
+ * @author
  */
 public class FXdepositInterest {
     

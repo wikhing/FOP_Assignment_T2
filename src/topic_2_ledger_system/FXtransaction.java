@@ -18,7 +18,7 @@ import javafx.scene.control.TextField;
 
 /**
  *
- * @author I Khing
+ * @author
  */
 public class FXtransaction {
     

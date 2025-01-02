@@ -17,7 +17,7 @@ import javafx.scene.layout.VBox;
 
 /**
  *
- * @author I Khing
+ * @author
  */
 public class FXcreditLoan {
     

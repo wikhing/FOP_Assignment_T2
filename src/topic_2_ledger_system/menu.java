@@ -169,7 +169,7 @@ public class menu {
             vb.getChildren().addAll(lab1, lab2, lab3, lab4, close);
             vb.setAlignment(Pos.CENTER);
             vb.setPadding(new Insets(15, 15, 15, 15));
-            Scene notify = new Scene(vb, 570, 180);
+            Scene notify = new Scene(vb, 700, 200);
             notify.getStylesheets().add("topic_2_ledger_system/resources/design.css");
             
             popup.setScene(notify);

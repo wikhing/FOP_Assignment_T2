@@ -28,7 +28,7 @@ import org.jfree.data.general.DefaultPieDataset;
 
 /**
  *
- * @author I Khing
+ * @author 
  */
 public class FXdataVisual extends JFrame{
     

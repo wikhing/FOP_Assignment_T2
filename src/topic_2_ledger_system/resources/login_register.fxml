@@ -11,7 +11,7 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.geometry.Insets?>
 
-<VBox spacing="25" alignment="CENTER" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="topic_2_ledger_system.login_register" stylesheets="@design.css">
+<VBox fx:id="box" spacing="25" alignment="CENTER" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="topic_2_ledger_system.login_register" stylesheets="@design.css">
     
     <BorderPane fx:id="mainarea">
         <top>

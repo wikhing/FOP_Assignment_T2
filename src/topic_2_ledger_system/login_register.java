@@ -6,7 +6,6 @@ package topic_2_ledger_system;
 
 import java.io.IOException;
 import java.util.List;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.scene.control.Button;
@@ -16,9 +15,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.input.KeyEvent;
 
 /**
  * Write your name here
@@ -32,46 +28,6 @@ public class login_register extends main_system{
     @FXML VBox main_btn = new VBox();
     @FXML GridPane login = new GridPane();
     @FXML GridPane register = new GridPane();
-    
-//    @FXML
-//    public void initialize(){
-//        Canvas c = new Canvas(200, 200);
-//        GraphicsContext cc = c.getGraphicsContext2D();
-//        
-//        
-//        c.setOnKeyPressed(new EventHandler<KeyEvent>() {
-//            @Override
-//            public void handle(KeyEvent e) {
-//                cc.clearRect(0, 0, 200, 200);
-//                int xAxis = 0, yAxis = 0;
-//                
-//                String key = e.getCode().toString();
-//            }
-//        });
-//        
-//        
-//        
-//        
-//        main_btn.getChildren().add(c);
-//    }
-    
-//    @FXML
-//    public void update(String key){
-//        switch(key){
-//            case "w" -> {
-//                if(yAxis > 0){
-//                    yAxis--;
-//                }
-//            }
-//            case "s" -> {
-//                if(yAxis < 150){
-//                    yAxis++;
-//                }
-//            }
-//        }
-//
-//        cc.fillRect(5, 5, 5, 5);
-//    }
     
     @FXML
     private void back(){                            //back button

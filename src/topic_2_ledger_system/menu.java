@@ -353,7 +353,7 @@ public class menu {
             set_overdue(true);
             
             vb.getChildren().addAll(lab1, lab2, lab3, lab4, lab5, hb);
-            Scene notify = new Scene(vb, 340, 260);
+            Scene notify = new Scene(vb, 340, 290);
             notify.getStylesheets().add("topic_2_ledger_system/resources/design.css");
 
             popup.setScene(notify);

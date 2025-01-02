@@ -78,6 +78,8 @@ public class login_register extends main_system{
                     
                     menu m = new menu();
                     m.ReminderSystem(user_id);
+                    m.update_by_end_month(user_id);
+                    file.update_login_date(user_id);
                 }
                 
             } catch (IOException ex) {
@@ -114,6 +116,8 @@ public class login_register extends main_system{
 
                     menu.set_user(user_id);
                     main_system.setScene("menu");
+                    
+                    file.update_login_date(user_id);
                 }
                 
             } catch (IOException ex) {

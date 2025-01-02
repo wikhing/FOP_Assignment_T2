@@ -55,8 +55,6 @@ public class menu {
     
     @FXML
     public void update_account_info(){
-        update_by_end_month(user_id);
-        file.update_login_date(user_id);
         
         addi_info.getChildren().clear();
         

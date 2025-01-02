@@ -4,7 +4,6 @@
  */
 package topic_2_ledger_system;
 
-import java.util.Comparator;
 import javafx.beans.property.SimpleStringProperty;
 
 /**

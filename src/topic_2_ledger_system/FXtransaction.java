@@ -8,24 +8,13 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 
 /**
  *

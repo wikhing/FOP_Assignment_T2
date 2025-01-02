@@ -5,14 +5,6 @@
 package topic_2_ledger_system;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.Month;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
@@ -21,7 +13,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
 /**
  * Write your name here

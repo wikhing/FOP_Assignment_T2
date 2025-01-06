@@ -26,6 +26,9 @@ import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 /**
  *
  * @author 
@@ -110,6 +113,28 @@ public class FXdataVisual extends JFrame{
             }
         }
         return xAxisMonthYear;
+    }
+    
+    //to determine if the monthYear in x-axis is in future
+    private static boolean isFutureMonthYear(String monthYear){
+        LocalDate date = LocalDate.now();
+        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String[] dateToday = date.format(pattern).split("/");
+        int monthToday = Integer.parseInt(dateToday[1]);
+        int yearToday = Integer.parseInt(dateToday[2]);
+        
+        String[] monthAndYear = monthYear.split("/");
+        int month = Integer.parseInt(monthAndYear[0]);
+        int year = Integer.parseInt(monthAndYear[1]);
+        
+        if(year > yearToday){
+            return true;
+        }else if(year == yearToday){
+            if(month > monthToday){
+                return true;
+            }
+        }
+        return false;
     }
     
     //Spending Trend
@@ -245,9 +270,14 @@ public class FXdataVisual extends JFrame{
     
     //Saving 
    public static double getSavingsByMonthYear(int user_id, String monthYear) {
+       if(isFutureMonthYear(monthYear)){
+            return -2;
+        }
+       
         List<String[]> allSavingsHis = file.get_savHistory_csv(user_id);
         double SavingsMonthYear = 0.0;
         boolean isSavings = false;
+        
         
         for (String[] savingsHis: allSavingsHis) {
 
@@ -266,11 +296,12 @@ public class FXdataVisual extends JFrame{
         }
         
         if(!isSavings){
-            SavingsMonthYear = -1;
+            return -1;
         }
         
         return SavingsMonthYear;
     }
+   
     public static List<Double> getSavingsFor12Months(int user_id, int month, int year) {
 
         List<Double> Savings = new ArrayList<>();
@@ -293,15 +324,27 @@ public class FXdataVisual extends JFrame{
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
         List<String> xAxisMonthYear = getXAxisMonthYear (month, year);
-        List<Double> SavingsFor12Months = getSavingsFor12Months(user_id, month, year);
+        List<Double> savingsFor12Months = getSavingsFor12Months(user_id, month, year);
         
         Map<String, Double> savingsData = new HashMap<>();
         
+        
         for (int i = 0; i < xAxisMonthYear.size(); i++){
-            if (SavingsFor12Months.get(i) != -1){
-                savingsData.put(xAxisMonthYear.get(i), SavingsFor12Months.get(i));
+            int a = i;
+            if (savingsFor12Months.get(i) >= 0 ){
+                savingsData.put(xAxisMonthYear.get(i), savingsFor12Months.get(i));
+            }else if (savingsFor12Months.get(i) != -2){
+                while(a> 0){
+                    a--;
+                    if(savingsFor12Months.get(a) != -1){
+                        savingsData.put(xAxisMonthYear.get(i), savingsFor12Months.get(a));
+                        break;
+                    }
+                    
+                }
             }
         }
+        
    
 
         for (String monthYear : xAxisMonthYear) {
@@ -342,6 +385,11 @@ public class FXdataVisual extends JFrame{
     }
     
      public static double getRepaymentsByMonthYear(int user_id, String monthYear) {
+         
+         if(isFutureMonthYear(monthYear)){
+            return -2;
+        }
+         
         List<String[]> allLoanHis = file.get_loanHistory_csv(user_id);
         double repaymentsMonthYear = 0.0;
         boolean isRepayments = false;
@@ -362,7 +410,7 @@ public class FXdataVisual extends JFrame{
         }
         
         if(!isRepayments){
-            repaymentsMonthYear = -1;
+            return -1;
         }
         return repaymentsMonthYear;
     }
@@ -396,8 +444,17 @@ public class FXdataVisual extends JFrame{
         
         
         for (int i = 0; i < xAxisMonthYear.size(); i++){
-            if (repaymentsTrendFor12Months.get(i) > 0.0 || repaymentsTrendFor12Months.get(i) == 0.0 && repaymentsTrendFor12Months.get(i + 1) != 0.0){
+            int a = i;
+            if (repaymentsTrendFor12Months.get(i) >= 0 ){
                 repaymentsData.put(xAxisMonthYear.get(i), repaymentsTrendFor12Months.get(i));
+            }else if (repaymentsTrendFor12Months.get(i) != -2){
+                while(a > 0){
+                    a--;
+                    if(repaymentsTrendFor12Months.get(a) != -1){
+                        repaymentsData.put(xAxisMonthYear.get(i), repaymentsTrendFor12Months.get(a));
+                        break;
+                    }
+                }
             }
         }
         
@@ -437,6 +494,11 @@ public class FXdataVisual extends JFrame{
     }
    
    public static double getLoanByMonthYear(int user_id, String monthYear) {
+        
+        if(isFutureMonthYear(monthYear)){
+            return -2;
+        }
+        
         List<String[]> allLoanHis = file.get_loanHistory_csv(user_id);
         double loanMonthYear = Double.MAX_VALUE;
         boolean isLoan = false;
@@ -456,7 +518,7 @@ public class FXdataVisual extends JFrame{
             }
         }
         if(!isLoan){
-            loanMonthYear = -1;
+            return -1;
         }
         return loanMonthYear;
     }
@@ -487,8 +549,17 @@ public class FXdataVisual extends JFrame{
         Map<String, Double> loanData = new HashMap<>();
         
         for (int i = 0; i < xAxisMonthYear.size(); i++){
-            if (loanTrendFor12Months.get(i) > 0 || loanTrendFor12Months.get(i) == 0.0 && loanTrendFor12Months.get(i - 1) != 0.0 ){
+            int a = i;
+            if (loanTrendFor12Months.get(i) >= 0){
                 loanData.put(xAxisMonthYear.get(i), loanTrendFor12Months.get(i));
+            }else if (loanTrendFor12Months.get(i) != -2){
+                while(a > 0){
+                    a--;
+                    if(loanTrendFor12Months.get(a) != -1){
+                        loanData.put(xAxisMonthYear.get(i), loanTrendFor12Months.get(a));
+                        break;
+                    }
+                }
             }
         }
         

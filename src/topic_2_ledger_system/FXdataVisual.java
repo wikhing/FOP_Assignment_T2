@@ -200,15 +200,16 @@ public class FXdataVisual extends JFrame{
         
         List<String> xAxisMonthYear = getXAxisMonthYear (month, year);
         List<Double> monthlyDebit = getDebitfor12Months(user_id, month, year);
+        List<Double> debitCategory = getAllDebitCategory(user_id, month, year);
 
         
         for (int i = 0; i < monthlyDebit.size(); i++) {
-            dataset.addValue(monthlyDebit.get(i), "Spending", xAxisMonthYear.get(i));
+            dataset.addValue(debitCategory.get(i), "Spending", categoryArray[i]);
         }
         
         JFreeChart barChart = ChartFactory.createBarChart(
-                "Spending Trends Over Time",   // Chart title
-                "Month",                       // X-axis label
+                "Spending Trends in 12 Months(Bar Chart)",   // Chart title
+                "Category",                       // X-axis label
                 "Amount (RM)",                 // Y-axis label
                 dataset,                       // Dataset
                 org.jfree.chart.plot.PlotOrientation.VERTICAL,
@@ -218,7 +219,7 @@ public class FXdataVisual extends JFrame{
         );
         
         ChartPanel chartPanel = new ChartPanel(barChart);
-        chartPanel.setPreferredSize(new java.awt.Dimension(1200, 1000));
+        chartPanel.setPreferredSize(new java.awt.Dimension(1500, 1000));
         setContentPane(chartPanel);
     }
     
@@ -226,9 +227,7 @@ public class FXdataVisual extends JFrame{
     public void displaySpendingTrendsPie(int user_id, int month, int year) {
         DefaultPieDataset pieDataset = new DefaultPieDataset();
         
-        List<String> xAxisMonthYear = getXAxisMonthYear (month, year);
         List<Double> debitCategory = getAllDebitCategory(user_id, month, year);
-        
         
         for (int i = 0; i < debitCategory.size(); i++) {
             if (debitCategory.get(i) != 0) {
@@ -237,7 +236,7 @@ public class FXdataVisual extends JFrame{
             }
         }
         
-        JFreeChart pieChart = ChartFactory.createPieChart("Spending Trends in 12 Months", pieDataset, true, true, false);
+        JFreeChart pieChart = ChartFactory.createPieChart("Spending Trends in 12 Months(Pie Chart)", pieDataset, true, true, false);
 
         ChartPanel pieChartPanel = new ChartPanel(pieChart);
         pieChartPanel.setPreferredSize(new java.awt.Dimension(1200, 1000));
@@ -555,9 +554,16 @@ public class FXdataVisual extends JFrame{
         String optionString = trend_choice.getValue().toString();
         switch(optionString) {
             case "Spending" -> {
+                FXdataVisual dataPieVisualization = new FXdataVisual();
+                dataPieVisualization.setTitle("Spending Trends Over 12 Months");
+                dataPieVisualization.displaySpendingTrendsPie(user_id, month, year);
+                dataPieVisualization.pack();        
+                dataPieVisualization.setVisible(true); 
+                dataPieVisualization.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                
                 FXdataVisual dataVisualization = new FXdataVisual();
                 dataVisualization.setTitle("Spending Trends Over 12 Months");
-                dataVisualization.displaySpendingTrendsPie(user_id, month, year);
+                dataVisualization.displaySpendingTrends(user_id, month, year);
                 dataVisualization.pack();        
                 dataVisualization.setVisible(true); 
                 dataVisualization.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

@@ -19,8 +19,8 @@ public class view_export_csv {
         //Filter transactions by month-year
         List<String[]> filteredTransactions = new ArrayList<>();
         for (String[] transaction : allTransactions) {
-            if (transaction.length < 6) continue; // Skip invalid rows
-            String transactionDate = transaction[5]; 
+            if (transaction.length < 7) continue; // Skip invalid rows
+            String transactionDate = transaction[6]; 
             if (transactionDate.endsWith(monthYear)) { 
                 filteredTransactions.add(transaction);
             }

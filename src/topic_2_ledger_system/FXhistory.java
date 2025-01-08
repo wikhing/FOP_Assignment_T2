@@ -137,7 +137,7 @@ public class FXhistory {
 
         // In case no transaction history for specific user at that certain session
         if (transactions.isEmpty()) {
-            histories.setPlaceholder(new Label("No transactions found for the given month and year."));
+            histories.setPlaceholder(new Label("No transactions found for the\ngiven month and year."));
             return;
         }
         
@@ -146,7 +146,7 @@ public class FXhistory {
         
         for (String[] row : transactions) {
             if(row.length == 1) continue;
-            data.add(new Transaction(df.format(Double.parseDouble(row[3])), row[2], row[4], row[5]));
+            data.add(new Transaction(df.format(Double.parseDouble(row[3])), row[2], row[5], row[6]));
         }
     }
     
